@@ -6,6 +6,7 @@ using HarmonyLib;
 using ULTRAKIT.Data;
 using ULTRAKIT.Extensions;
 using UnityEngine.UI;
+using System.Linq;
 
 namespace ULTRAKIT.Loader.Injectors
 {
@@ -54,7 +55,6 @@ namespace ULTRAKIT.Loader.Injectors
 
                         var go = GameObject.Instantiate(variant, __instance.transform);
                         go.SetActive(false);
-                        Debug.Log(go.name);
 
                         foreach (var c in go.GetComponentsInChildren<Renderer>(true))
                         {
@@ -79,8 +79,8 @@ namespace ULTRAKIT.Loader.Injectors
                         wi.weaponIcon = weap.Icons[i];
                         wi.glowIcon = weap.Icons[i];                   
                         wi.variationColor = i;
-                        wi.SetPrivate("variationColoredMaterials", go.GetComponentsInChildren<Material>());
-                        wi.SetPrivate("variationColoredRenderers", go.GetComponentsInChildren<Renderer>());
+                        wi.SetPrivate("variationColoredMaterials", go.GetComponentsInChildren<Material>().Where(k => k.name.Contains(".var")).ToArray() ?? new Material[0]);
+                        wi.SetPrivate("variationColoredRenderers", go.GetComponentsInChildren<Renderer>().Where(k => k.material.name.Contains(".var")).ToArray() ?? new Renderer[0]);
                         wi.SetPrivate("variationColoredImages", new Image[0]);
                         i++;
 
