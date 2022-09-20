@@ -110,6 +110,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Injectors\ShopInjector.cs" />
     <Compile Include="Injectors\WeaponInjector.cs" />
     <Compile Include="WeaponLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

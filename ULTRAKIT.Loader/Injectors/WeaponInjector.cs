@@ -7,6 +7,7 @@ using ULTRAKIT.Data;
 using ULTRAKIT.Extensions;
 using UnityEngine.UI;
 using System.Linq;
+using UMM;
 
 namespace ULTRAKIT.Loader.Injectors
 {
@@ -40,12 +41,29 @@ namespace ULTRAKIT.Loader.Injectors
                 {
                     var slot = new List<GameObject>();
 
-                    int i = 0;
-                    foreach (var variant in weap.Variants)
+                    string loadOrder = string.Join(",", weap.equipOrder);
+                    string equippedStatus = string.Join(",", weap.equipStatus);
+
+                    UKMod.SetPersistentModData($@"{weap.modName}.{weap.id}.load", loadOrder, "ULTRAKIT");
+                    UKMod.SetPersistentModData($@"{weap.modName}.{weap.id}.equip", equippedStatus, "ULTRAKIT");
+
+                    for (int i = 0; i < weap.All_Variants.Length; i++)
                     {
+                        var variant = weap.All_Variants[i];
+
                         if (!equippedDict.ContainsKey(variant))
                         {
-                            equippedDict.Add(variant, true);
+                            int s = (int)Mathf.Repeat(i, 2);
+                            bool equipped = (i < 3 && weap.equipStatus[s] == 1) || (i >= 3 && weap.equipStatus[s] == 2);
+                            equippedDict.Add(variant, equipped);
+                        }
+                    }
+                    for (int i = 0; i < weap.Variants.Length; i++)
+                    {
+                        var variant = weap.All_Variants[weap.equipOrder[i]];
+                        if (weap.equipStatus[weap.equipOrder[i]] == 2)
+                        {
+                            variant = weap.All_Variants[weap.equipOrder[i] + weap.Variants.Length];
                         }
 
                         if (!equippedDict[variant])
@@ -77,12 +95,11 @@ namespace ULTRAKIT.Loader.Injectors
 
                         var wi = go.AddComponent<WeaponIcon>();
                         wi.weaponIcon = weap.Icons[i];
-                        wi.glowIcon = weap.Icons[i];                   
+                        wi.glowIcon = weap.Icons[i];
                         wi.variationColor = i;
                         wi.SetPrivate("variationColoredMaterials", go.GetComponentsInChildren<Material>().Where(k => k.name.Contains(".var")).ToArray() ?? new Material[0]);
                         wi.SetPrivate("variationColoredRenderers", go.GetComponentsInChildren<Renderer>().Where(k => k.material.name.Contains(".var")).ToArray() ?? new Renderer[0]);
                         wi.SetPrivate("variationColoredImages", new Image[0]);
-                        i++;
 
                         var field = typeof(StyleHUD).GetField("weaponFreshness", BindingFlags.NonPublic | BindingFlags.Instance);
                         Dictionary<GameObject, float> freshnessList = field.GetValue(MonoSingleton<StyleHUD>.Instance) as Dictionary<GameObject, float>;
