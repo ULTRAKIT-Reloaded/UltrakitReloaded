@@ -39,6 +39,11 @@ namespace ULTRAKIT.Loader.Injectors
             {
                 foreach (var weap in pair.Value)
                 {
+                    if (!weap.Unlocked)
+                    {
+                        continue;
+                    }
+
                     var slot = new List<GameObject>();
 
                     string loadOrder = string.Join(",", weap.equipOrder);

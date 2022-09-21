@@ -115,6 +115,7 @@
     <Compile Include="ObjectClasses\Cheat.cs" />
     <Compile Include="DazeExtensions.cs" />
     <Compile Include="ObjectExtensions\CheatsManager.cs" />
+    <Compile Include="PeterExtensions.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

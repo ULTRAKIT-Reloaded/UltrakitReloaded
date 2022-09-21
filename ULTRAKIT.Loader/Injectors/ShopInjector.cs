@@ -8,6 +8,7 @@ using ULTRAKIT.Extensions;
 using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 namespace ULTRAKIT.Loader.Injectors
 {
@@ -74,6 +75,11 @@ namespace ULTRAKIT.Loader.Injectors
             res.Add(new List<GameObject>());
             foreach (var weap in allWeaps)
             {
+                if (!weap.Unlocked)
+                {
+                    continue;
+                }
+
                 res[curPage].Add(CreateWeaponButton(parent, weap, curWeap));
 
                 curWeap++;
@@ -142,6 +148,12 @@ namespace ULTRAKIT.Loader.Injectors
                     CreateVariantOption(go, weap, i);
                 }
 
+                Text[] orderInfo = go.GetComponentsInChildren<Text>().Where(k => k.transform.parent.name == "Order").ToArray();
+                for (int n = 0; n < weap.Variants.Length; n++)
+                {
+                    orderInfo[n].text = (weap.equipOrder[n] + 1).ToString();
+                }
+
                 res.Add(weap, go);
             }
 
@@ -163,6 +175,12 @@ namespace ULTRAKIT.Loader.Injectors
             var equipmentStuffs = info.transform.Find("EquipmentStuffs");
             Button lb = equipmentStuffs.Find("PreviousButton").GetComponent<Button>();
             Button rb = equipmentStuffs.Find("NextButton").GetComponent<Button>();
+
+            Transform ord = equipmentStuffs.Find("Order");
+            ord.GetComponent<WeaponOrderController>().enabled = false;
+            GameObject ordUp = ord.Find("UpButton").gameObject;
+            GameObject ordDown = ord.Find("DownButton").gameObject;
+            Image ordIcon = ord.Find("Image").GetComponent<Image>();
 
             Image img = info.equipButton.transform.GetChild(0).GetComponent<Image>();
 
@@ -188,8 +206,52 @@ namespace ULTRAKIT.Loader.Injectors
                 MonoSingleton<GunSetter>.Instance.ResetWeapons();
             };
 
+            UnityAction ordU = () =>
+            {
+                Text[] orderInfo = info.transform.parent.GetComponentsInChildren<Text>().Where(k => k.transform.parent.name == "Order").ToArray();
+                int target = (int)Mathf.Repeat(weapon.equipOrder[i] + 1, weapon.Variants.Length);
+                weapon.equipOrder[weapon.equipOrder.FindIndexOf(target)] = weapon.equipOrder[i];
+                weapon.equipOrder[i] = target;
+                for (int n = 0; n < weapon.Variants.Length; n++)
+                {
+                    orderInfo[n].text = (weapon.equipOrder[n] + 1).ToString();
+                }
+                MonoSingleton<GunSetter>.Instance.ResetWeapons();
+            };
+
+            UnityAction ordD = () =>
+            {
+                Text[] orderInfo = info.transform.parent.GetComponentsInChildren<Text>().Where(k => k.transform.parent.name == "Order").ToArray();
+                int target = (int)Mathf.Repeat(weapon.equipOrder[i] - 1, weapon.Variants.Length);
+                weapon.equipOrder[weapon.equipOrder.FindIndexOf(target)] = weapon.equipOrder[i];
+                weapon.equipOrder[i] = target;
+                Debug.Log(string.Join(",", weapon.equipOrder));
+                for (int n = 0; n < weapon.Variants.Length; n++)
+                {
+                    orderInfo[n].text = (weapon.equipOrder[n] + 1).ToString();
+                }
+                MonoSingleton<GunSetter>.Instance.ResetWeapons();
+            };
+
+            UnityEvent orderClickUp = new UnityEvent();
+            UnityEvent orderClickDown = new UnityEvent();
+            orderClickUp.AddListener(ordU);
+            orderClickDown.AddListener(ordD);
+
+            Type controllerPointer = PeterExtensions.GetInternalType("ControllerPointer");
+            var btu = ordUp.GetComponent(controllerPointer);
+            var field = btu.GetType().GetField("onPressed", BindingFlags.NonPublic | BindingFlags.Instance);
+            field.SetValue(btu, orderClickUp);
+
+            var btd = ordDown.GetComponent(controllerPointer);
+            var field2 = btd.GetType().GetField("onPressed", BindingFlags.NonPublic | BindingFlags.Instance);
+            field2.SetValue(btd, orderClickDown);
+
             lb.onClick.AddListener(delL);
             rb.onClick.AddListener(delR);
+
+            ordIcon.sprite = weapon.Icons[i];
+            ord.gameObject.SetActive(true);
 
             go.GetComponent<RectTransform>().offsetMax = new Vector2(0, 160 - (i * variantHeight));
             go.GetComponent<RectTransform>().offsetMin = new Vector2(-360, 80 - (i * variantHeight));
@@ -204,7 +266,7 @@ namespace ULTRAKIT.Loader.Injectors
             var pageTop = (-10) - (buttonHeight * 4);
             var pageRect = pageGo.GetComponent<RectTransform>();
             pageRect.offsetMax = new Vector2(-100, -130);
-            pageRect.offsetMin = new Vector2(-360, -160);
+            pageRect.offsetMin = new Vector2(-260, -160);
 
             pageGo.GetComponentInChildren<Text>().text = $"PAGE {page + 1}";
 

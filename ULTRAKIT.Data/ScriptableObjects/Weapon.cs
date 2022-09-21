@@ -16,7 +16,7 @@ namespace ULTRAKIT.Data
 
         public Sprite[] Icons;
 
-        public bool EnabledByDefault = true;
+        public bool Unlocked = true;
 
         [HideInInspector]
         public int[] equipOrder;
