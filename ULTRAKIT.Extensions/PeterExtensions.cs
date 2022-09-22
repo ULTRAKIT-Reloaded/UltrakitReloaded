@@ -34,7 +34,7 @@ namespace ULTRAKIT.Extensions
                     returnVal.Add(i);
                 }
             }
-            return returnVal.ToArray();
+            return returnVal?.ToArray() ?? new int[0];
         }
 
         public static Type GetInternalType(string _input)

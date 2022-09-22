@@ -24,7 +24,7 @@ namespace ULTRAKIT.Extensions
             {
                 manager.WrappedSetState(cheats[_id], _state);
                 manager.UpdateCheatState(cheats[_id]);
-                return (cheats[_id].IsActive);
+                return true;
             }
             Debug.LogWarning($"Could not find cheat with id: '{_id}'");
             return false;

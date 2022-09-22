@@ -39,33 +39,29 @@ namespace ULTRAKIT.Extensions
             return assets.ToArray();
         }
 
-        public static object LoadAssetAsync(string filePath, string name)
+        public static AssetBundleRequest LoadAssetAsync(string filePath, string name)
         {
             AssetBundle bundle = AssetBundle.LoadFromFile(filePath);
-            object asset = bundle.LoadAssetAsync(name);
-
-            Debug.Log($"Loaded asset {name} from {filePath}");
-            return asset;
+            return bundle.LoadAssetAsync(name);
         }
 
-        public static object LoadAllAssetsAsync(string filePath)
+        public static AssetBundleRequest LoadAllAssetsAsync(string filePath)
         {
             AssetBundle bundle = AssetBundle.LoadFromFile(filePath);
-            object assets = bundle.LoadAllAssetsAsync();
-            return assets;
+            return bundle.LoadAllAssetsAsync();
         }
 
-        public static List<object> LoadAssetsAsync(string filePath, string[] names)
+        public static List<AssetBundleRequest> LoadAssetsAsync(string filePath, string[] names)
         {
             AssetBundle bundle = AssetBundle.LoadFromFile(filePath);
-            List<object> assets = new List<object>();
+            List<AssetBundleRequest> requests = new List<AssetBundleRequest>();
 
             foreach (string name in names)
             {
-                assets.Add(bundle.LoadAssetAsync(name));
+                requests.Add(bundle.LoadAssetAsync(name));
             }
 
-            return assets;
+            return requests;
         }
 
         public static T[] GetAll<T>(object[] allAssets)

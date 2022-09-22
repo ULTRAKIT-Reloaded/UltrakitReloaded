@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using ULTRAKIT.Data;
+using ULTRAKIT.Extensions;
 using HarmonyLib;
 using UMM;
 
@@ -99,7 +100,21 @@ namespace ULTRAKIT.Loader
 
             weapon.Unlocked = state;
             UKMod.SetPersistentModData($@"{weapon.modName}.{weapon.id}.unlock", state.ToString(), "ULTRAKIT");
-            MonoSingleton<GunSetter>.Instance.ResetWeapons();
+            MonoSingleton<GunSetter>.Instance.RefreshWeapons();
+            return true;
+        }
+
+        public static bool SetWeaponUnlock(Weapon weapon, bool state)
+        {
+            if (weapon == null)
+            {
+                Debug.Log("Weapon not found");
+                return false;
+            }
+
+            weapon.Unlocked = state;
+            UKMod.SetPersistentModData($@"{weapon.modName}.{weapon.id}.unlock", state.ToString(), "ULTRAKIT");
+            MonoSingleton<GunSetter>.Instance.RefreshWeapons();
             return true;
         }
 
