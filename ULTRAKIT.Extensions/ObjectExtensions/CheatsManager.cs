@@ -4,11 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
+using HarmonyLib;
 
 namespace ULTRAKIT.Extensions
 {
     public static class CheatsManagerExtension
-    {
+    {   
+        public static void Initialize()
+        {
+            Harmony harmony = new Harmony("ULTRAKIT.Extensions");
+            harmony.PatchAll();
+        }
+
         public static void PrintCheatIDs(this CheatsManager manager)
         {
             foreach (KeyValuePair<String, ICheat> cheat in manager.GetPrivate<Dictionary<String, ICheat>>("idToCheat"))
@@ -29,16 +37,26 @@ namespace ULTRAKIT.Extensions
             Debug.LogWarning($"Could not find cheat with id: '{_id}'");
             return false;
         }
+    }
 
-        public static bool GetCheatState(this CheatsManager manager, string _id)
+    [HarmonyPatch(typeof(CheatsManager))]
+    public class CheatsManagerPatch
+    {
+        public static UnityEvent CheatStateChanged;
+
+        [HarmonyPatch("Start")]
+        static void StartPrefix()
         {
-            Dictionary<String, ICheat> cheats = manager.GetPrivate<Dictionary<String, ICheat>>("idToCheat");
-            if (cheats.ContainsKey(_id))
+            if (CheatStateChanged == null)
             {
-                return (cheats[_id].IsActive);
+                CheatStateChanged = new UnityEvent();
             }
-            Debug.LogWarning($"Could not find cheat with id: '{_id}'");
-            return false;
+        }
+
+        [HarmonyPatch("WrappedSetState")]
+        static void Postfix(CheatsManager __instance)
+        {
+            CheatStateChanged.Invoke();
         }
     }
 }

@@ -18,6 +18,7 @@ namespace ULTRAKIT
         public override void OnModLoaded()
         {
             WeaponLoader.Initialize();
+            CheatsManagerExtension.Initialize();
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
