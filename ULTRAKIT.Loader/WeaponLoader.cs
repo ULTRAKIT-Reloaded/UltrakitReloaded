@@ -21,14 +21,12 @@ namespace ULTRAKIT.Loader
             string name = bundle.name;
             registry.Add(name, new List<Weapon>());
             Weapon[] weapons = bundle.LoadAllAssets<Weapon>();
-
             foreach (Weapon weapon in weapons)
             {
                 weapon.modName = name;
                 string data = UKMod.RetrieveStringPersistentModData($@"{weapon.modName}.{weapon.id}.load", "ULTRAKIT");
                 string data2 = UKMod.RetrieveStringPersistentModData($@"{weapon.modName}.{weapon.id}.equip", "ULTRAKIT");
                 string unlockData = UKMod.RetrieveStringPersistentModData($@"{weapon.modName}.{weapon.id}.unlock", "ULTRAKIT");
-
                 if (data == null)
                 {
                     data = "0,1,2";
@@ -44,23 +42,34 @@ namespace ULTRAKIT.Loader
                     unlockData = weapon.Unlocked.ToString();
                     UKMod.SetPersistentModData($@"{weapon.modName}.{weapon.id}.unlock", unlockData, "ULTRAKIT");
                 }
-
                 weapon.equipOrder = data.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
                 weapon.equipStatus = data2.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
                 weapon.Unlocked = Convert.ToBoolean(unlockData);
-
                 List<GameObject> variants = new List<GameObject>();
                 variants.AddRange(weapon.Variants);
                 variants.AddRange(weapon.AltVariants);
                 weapon.All_Variants = variants.ToArray();
             }
-
             registry[name].AddRange(weapons);
             allWeapons.AddRange(weapons);
 
             Debug.Log($"Loaded weapons from {name}");
 
             return weapons;
+        }
+
+        public static void UnloadWeapons(string bundleName)
+        {
+            foreach (Weapon weapon in registry[bundleName])
+            {
+                allWeapons.Remove(weapon);
+            }
+            registry.Remove(bundleName);
+            AssetBundle[] bundles = AssetBundle.GetAllLoadedAssetBundles().Where(b => b.name == bundleName).ToArray();
+            foreach (AssetBundle bundle in bundles)
+            {
+                bundle.Unload(true);
+            }
         }
 
         public static Weapon idToWeapon(string bundleName, string weaponId)

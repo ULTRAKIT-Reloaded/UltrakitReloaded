@@ -45,7 +45,8 @@ namespace ULTRAKIT.Extensions
         public static UnityEvent CheatStateChanged;
 
         [HarmonyPatch("Start")]
-        static void StartPrefix()
+        [HarmonyPrefix]
+        static void StartPrefix(CheatsManager __instance)
         {
             if (CheatStateChanged == null)
             {
@@ -54,7 +55,8 @@ namespace ULTRAKIT.Extensions
         }
 
         [HarmonyPatch("WrappedSetState")]
-        static void Postfix(CheatsManager __instance)
+        [HarmonyPostfix]
+        public static void Postfix(CheatsManager __instance)
         {
             CheatStateChanged.Invoke();
         }
