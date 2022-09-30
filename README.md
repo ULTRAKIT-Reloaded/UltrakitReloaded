@@ -25,3 +25,7 @@ Misc. m1ksu
 Original Testing: Cecelune
 
 Rewrite and Additional Testing: PetersonE1
+
+##
+
+If you have any questions, feel free to DM `Agent of Nyarlathotep#7519` on Discord
