@@ -124,7 +124,7 @@ namespace ULTRAKIT.Extensions
             }
             return bundle.LoadAsset<GameObject>(name) ?? new GameObject();
         }
-        private static AssetBundle LoadFromLoaded(this AssetBundle bundle, string name)
+        public static AssetBundle LoadFromLoaded(this AssetBundle bundle, string name)
         {
             foreach (var bndl in AssetBundle.GetAllLoadedAssetBundles())
             {
