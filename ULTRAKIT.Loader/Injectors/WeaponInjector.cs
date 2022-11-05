@@ -58,8 +58,8 @@ namespace ULTRAKIT.Loader.Injectors
 
                         if (!equippedDict.ContainsKey(variant))
                         {
-                            int s = (int)Mathf.Repeat(i, 2);
-                            bool equipped = (i < 3 && weap.equipStatus[s] == 1) || (i >= 3 && weap.equipStatus[s] == 2);
+                            int s = (int)Mathf.Repeat(i, weap.Variants.Length - 1);
+                            bool equipped = (i < weap.Variants.Length && weap.equipStatus[s] == 1) || (i >= weap.Variants.Length && weap.equipStatus[s] == 2);
                             equippedDict.Add(variant, equipped);
                         }
                     }
@@ -95,7 +95,7 @@ namespace ULTRAKIT.Loader.Injectors
                             else
                             {
                                 c.material.shader = Shader.Find(c.material.shader.name);
-                            }
+                            }   
                         }
 
                         var wi = go.AddComponent<WeaponIcon>();
