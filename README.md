@@ -29,3 +29,5 @@ Rewrite and Additional Testing: PetersonE1
 ##
 
 If you have any questions, feel free to DM `Agent of Nyarlathotep#7519` on Discord
+
+***For a reference, a basic mod, asset bundle, and unity asset folder are available at https://github.com/PetersonE1/UltrakitTestMod***
