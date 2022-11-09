@@ -267,6 +267,7 @@ namespace ULTRAKIT.Loader.Injectors
             var pageRect = pageGo.GetComponent<RectTransform>();
             pageRect.offsetMax = new Vector2(-100, -130);
             pageRect.offsetMin = new Vector2(-260, -160);
+            pageRect.SetAsFirstSibling();
 
             pageGo.GetComponentInChildren<Text>().text = $"PAGE {page + 1}";
 
