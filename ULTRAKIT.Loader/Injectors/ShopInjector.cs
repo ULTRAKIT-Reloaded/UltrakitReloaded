@@ -102,6 +102,7 @@ namespace ULTRAKIT.Loader.Injectors
             var rect = go.GetComponent<RectTransform>();
             rect.offsetMax = new Vector2(-100, top);
             rect.offsetMin = new Vector2(-260, top - buttonHeight);
+            rect.SetAsFirstSibling();
 
             go.GetComponentInChildren<Text>().text = weap.Names[i].ToUpper();
 
