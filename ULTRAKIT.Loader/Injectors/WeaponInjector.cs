@@ -58,7 +58,7 @@ namespace ULTRAKIT.Loader.Injectors
 
                         if (!equippedDict.ContainsKey(variant))
                         {
-                            int s = (int)Mathf.Repeat(i, weap.Variants.Length - 1);
+                            int s = (int)Mathf.Repeat(i, weap.Variants.Length);
                             bool equipped = (i < weap.Variants.Length && weap.equipStatus[s] == 1) || (i >= weap.Variants.Length && weap.equipStatus[s] == 2);
                             equippedDict.Add(variant, equipped);
                         }
