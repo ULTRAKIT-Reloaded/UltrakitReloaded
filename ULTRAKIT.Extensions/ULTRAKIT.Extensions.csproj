@@ -119,6 +119,11 @@
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\ULTRAKIT.Data\ULTRAKIT.Data.csproj">
+      <Project>{cef77a9b-383b-4080-aece-6b92dc5bf990}</Project>
+      <Name>ULTRAKIT.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

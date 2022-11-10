@@ -115,12 +115,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScriptableObjects\Weapon.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ULTRAKIT.Extensions\ULTRAKIT.Extensions.csproj">
-      <Project>{456a436c-031e-495d-9c2e-350694b6e3c9}</Project>
-      <Name>ULTRAKIT.Extensions</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

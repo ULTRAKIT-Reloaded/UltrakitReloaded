@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using ULTRAKIT.Data;
 
 namespace ULTRAKIT.Extensions
 {
@@ -41,6 +42,28 @@ namespace ULTRAKIT.Extensions
         {
             Type type = typeof(GunControl).Assembly.GetType(_input);
             return type;
+        }
+
+        public static void RenderObject(GameObject obj, LayerMask layer)
+        {
+            foreach (var c in obj.GetComponentsInChildren<Renderer>(true))
+            {
+                c.gameObject.layer = layer;
+
+                var glow = c.gameObject.GetComponent<Glow>();
+
+                if (glow)
+                {
+                    c.material.shader = Shader.Find("psx/railgun");
+                    c.material.SetFloat("_EmissivePosition", 5);
+                    c.material.SetFloat("_EmissiveStrength", glow.glowIntensity);
+                    c.material.SetColor("_EmissiveColor", glow.glowColor);
+                }
+                else
+                {
+                    c.material.shader = Shader.Find(c.material.shader.name);
+                }
+            }
         }
     }
 }
