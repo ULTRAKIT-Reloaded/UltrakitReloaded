@@ -132,6 +132,7 @@ namespace ULTRAKIT.Loader
         public static void Initialize()
         {
             harmony.PatchAll();
+            HatLoader.Init();
         }
     }
 }

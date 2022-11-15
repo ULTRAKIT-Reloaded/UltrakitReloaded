@@ -111,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssetLoader.cs" />
+    <Compile Include="ObjectClasses\HatsManager.cs" />
     <Compile Include="ObjectExtensions\GunSetter.cs" />
     <Compile Include="ObjectClasses\Cheat.cs" />
     <Compile Include="DazeExtensions.cs" />

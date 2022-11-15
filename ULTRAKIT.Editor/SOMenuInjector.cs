@@ -25,6 +25,18 @@ namespace ULTRAKIT.EditorScripts
             CreateObject<Weapon>("New_Weapon");
         }
 
+        [MenuItem("Assets/ULTRAKIT/New_Hat")]
+        public static void NewHat()
+        {
+            CreateObject<Hat>("New_Hat");
+        }
+
+        [MenuItem("Assets/ULTRAKIT/New_Hat_Registry")]
+        public static void NewHatRegistry()
+        {
+            CreateObject<HatRegistry>("New_Hat_Registry");
+        }
+
         private static void CreateObject<T>(string name) where T : ScriptableObject
         {
             var obj = ScriptableObject.CreateInstance<T>();
