@@ -65,5 +65,17 @@ namespace ULTRAKIT.Extensions
                 }
             }
         }
+
+        public static void RemoveRange<T>(this List<T> list, T[] range)
+        {
+            foreach (T item in range)
+                list.Remove(item);
+        }
+
+        public static void RemoveRange<T>(this List<T> list, List<T> range)
+        {
+            foreach (T item in range)
+                list.Remove(item);
+        }
     }
 }

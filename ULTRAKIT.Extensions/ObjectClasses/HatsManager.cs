@@ -51,7 +51,6 @@ namespace ULTRAKIT.Extensions
         {
             if (!hats.ContainsKey(hatID))
             {
-                Debug.LogWarning($@"Hat ID '{hatID}' not found on {gameObject.name}");
                 return;
             }
             hats[hatID].SetActive(active);

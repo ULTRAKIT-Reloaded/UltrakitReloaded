@@ -10,16 +10,19 @@ using ULTRAKIT.Extensions;
 
 namespace ULTRAKIT.Loader.Injectors
 {
-    [HarmonyPatch(typeof(SeasonalHats), "Start")]
+    [HarmonyPatch(typeof(SeasonalHats))]
     public static class SeasonalHatsPatch
     {
-        static void Prefix(SeasonalHats __instance)
+        [HarmonyPatch("Start")]
+        [HarmonyPrefix]
+        static void StartPrefix(SeasonalHats __instance)
         {
             HatsManager manager = __instance.gameObject.AddComponent<HatsManager>();
             foreach (HatRegistry registry in HatLoader.registries)
             {
                 manager.LoadHat(registry);
             }
+            HatLoader.managerInstances.Add(manager);
         }
     }
 }

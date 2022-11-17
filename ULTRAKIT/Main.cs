@@ -20,6 +20,8 @@ namespace ULTRAKIT
             WeaponLoader.Initialize();
             CheatsManagerExtension.Initialize();
             SceneManager.sceneLoaded += OnSceneLoaded;
+            AssetBundle topHats = AssetBundle.LoadFromMemory(Properties.Resources.ultrakit_tophat);
+            HatLoader.LoadHats(topHats);
         }
 
         public override void OnModUnload()
@@ -31,6 +33,7 @@ namespace ULTRAKIT
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             CheatsManager.Instance.RegisterCheat(Refresher.cheat, "ULTRAKIT");
+            CheatsManager.Instance.RegisterCheat(ActivateHats.cheat, "ULTRAKIT");
             Invoke(GunSetter.Instance.RefreshWeapons, 0.05f);
         }
 
