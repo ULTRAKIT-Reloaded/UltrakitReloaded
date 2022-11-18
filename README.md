@@ -10,7 +10,7 @@
 # Making a mod using ULTRAKIT
 1. Reference ULTRAKIT .dlls within your project to make use of any extensions and functions available.
 2. Register any new cheats on scene load.
-3. Register the asset bundle containing new weapons on mod load.
+3. Register the asset bundle containing new weapons or hats on mod load.
 
 ***Further instructions and API are available in the wiki***
 
