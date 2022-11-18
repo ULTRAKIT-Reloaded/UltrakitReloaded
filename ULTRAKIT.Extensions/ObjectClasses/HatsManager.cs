@@ -29,19 +29,24 @@ namespace ULTRAKIT.Extensions
             try
             {
                 Transform enemy = transform;
-                while (enemy.GetComponent<EnemyIdentifier>() == null)
+                while (enemy.GetComponent<EnemyIdentifier>() == null && enemy.tag != "Player")
                 {
                     enemy = enemy.parent;
                 }
-                hat = registry.hatDict[enemy.GetComponentInChildren<EnemyIdentifier>().enemyType];
+                if (enemy.tag == "Player") hat = registry.hatDict[EnemyType.V2];
+                else hat = registry.hatDict[enemy.GetComponentInChildren<EnemyIdentifier>().enemyType];
+                if (transform.parent.name.Contains("Cancerous Rodent")) hat = registry.hatDict[EnemyType.CancerousRodent];
+                if (transform.parent.name.Contains("Very Cancerous Rodent")) hat = registry.hatDict[EnemyType.VeryCancerousRodent];
+                
             }
             catch
             {
                 return;
             }
             GameObject hatInstance = Instantiate(hat.obj, gameObject.transform);
-            hatInstance.transform.localPosition = hat.transform.position;
-            hatInstance.transform.localRotation = hat.transform.rotation;
+            hatInstance.transform.localPosition = hat.obj.transform.position + hat.position_offset;
+            hatInstance.transform.localRotation = hat.obj.transform.rotation * Quaternion.Euler(hat.rotation_offset);
+            hatInstance.transform.localScale = hat.obj.transform.localScale + hat.scale_offset;
             PeterExtensions.RenderObject(hatInstance, LayerMask.NameToLayer("Limb"));
             hatInstance.SetActive(false);
             hats.Add(registry.hatID, hatInstance);

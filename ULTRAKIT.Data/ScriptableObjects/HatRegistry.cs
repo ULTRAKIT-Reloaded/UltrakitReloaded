@@ -15,7 +15,9 @@ namespace ULTRAKIT.Data
     public class Hat : ScriptableObject
     {
         public GameObject obj;
-        public Transform transform;
+        public Vector3 position_offset;
+        public Vector3 rotation_offset;
+        public Vector3 scale_offset;
         public EnemyType enemyType;
     }
 }

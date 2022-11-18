@@ -12,7 +12,7 @@ using System.Collections;
 
 namespace ULTRAKIT
 {
-    [UKPlugin("Ultrakit Reloaded", "1.2.0B", "A library for weapon loading and common functions", false, false)]
+    [UKPlugin("Ultrakit Reloaded", "1.2.0", "A library for weapon loading and common functions", false, false)]
     public class Plugin : UKMod
     {
         public override void OnModLoaded()
