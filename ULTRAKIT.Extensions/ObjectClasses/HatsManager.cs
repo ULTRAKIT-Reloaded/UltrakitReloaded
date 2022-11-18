@@ -34,10 +34,14 @@ namespace ULTRAKIT.Extensions
                     enemy = enemy.parent;
                 }
                 if (enemy.tag == "Player") hat = registry.hatDict[EnemyType.V2];
-                else hat = registry.hatDict[enemy.GetComponentInChildren<EnemyIdentifier>().enemyType];
+                else 
+                {
+                    EnemyType type = enemy.GetComponentInChildren<EnemyIdentifier>().enemyType;
+                    hat = registry.hatDict[type];
+                    if (type == EnemyType.Drone && enemy.name.Contains("Mandalore")) hat = registry.hatDict[EnemyType.Mandalore];
+                }
                 if (transform.parent.name.Contains("Cancerous Rodent")) hat = registry.hatDict[EnemyType.CancerousRodent];
                 if (transform.parent.name.Contains("Very Cancerous Rodent")) hat = registry.hatDict[EnemyType.VeryCancerousRodent];
-                
             }
             catch
             {
