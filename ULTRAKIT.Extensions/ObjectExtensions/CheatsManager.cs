@@ -11,12 +11,6 @@ namespace ULTRAKIT.Extensions
 {
     public static class CheatsManagerExtension
     {   
-        public static void Initialize()
-        {
-            Harmony harmony = new Harmony("ULTRAKIT.Extensions");
-            harmony.PatchAll();
-        }
-
         public static void PrintCheatIDs(this CheatsManager manager)
         {
             foreach (KeyValuePair<String, ICheat> cheat in manager.GetPrivate<Dictionary<String, ICheat>>("idToCheat"))

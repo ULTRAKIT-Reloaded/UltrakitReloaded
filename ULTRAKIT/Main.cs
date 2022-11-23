@@ -12,14 +12,15 @@ using System.Collections;
 
 namespace ULTRAKIT
 {
-    [UKPlugin("Ultrakit Reloaded", "1.2.0", "A library for weapon loading and common functions", false, false)]
+    [UKPlugin("Ultrakit Reloaded", "1.3.0", "A library for weapon loading and common functions", false, false)]
     public class Plugin : UKMod
     {
         public override void OnModLoaded()
         {
-            WeaponLoader.Initialize();
-            CheatsManagerExtension.Initialize();
+            Loader.Initializer.Initialize();
+            Extensions.Initializer.Initialize();
             SceneManager.sceneLoaded += OnSceneLoaded;
+
             AssetBundle topHats = AssetBundle.LoadFromMemory(Properties.Resources.ultrakit_tophat);
             HatLoader.LoadHats(topHats);
         }

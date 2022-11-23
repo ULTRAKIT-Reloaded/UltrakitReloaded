@@ -126,13 +126,5 @@ namespace ULTRAKIT.Loader
             MonoSingleton<GunSetter>.Instance.RefreshWeapons();
             return true;
         }
-
-        public static Harmony harmony = new Harmony("ULTRAKIT.Loader");
-
-        public static void Initialize()
-        {
-            harmony.PatchAll();
-            HatLoader.Init();
-        }
     }
 }

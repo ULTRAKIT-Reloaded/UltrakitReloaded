@@ -113,7 +113,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuffLoader.cs" />
+    <Compile Include="Initializer.cs" />
     <Compile Include="HatLoader.cs" />
+    <Compile Include="Injectors\BuffsInjector.cs" />
     <Compile Include="Injectors\HatsInjector.cs" />
     <Compile Include="Injectors\ShopInjector.cs" />
     <Compile Include="Injectors\WeaponInjector.cs" />
