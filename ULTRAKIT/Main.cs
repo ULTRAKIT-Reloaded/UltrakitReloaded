@@ -20,6 +20,7 @@ namespace ULTRAKIT
             Loader.Initializer.Initialize();
             Extensions.Initializer.Initialize();
             SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
 
             AssetBundle topHats = AssetBundle.LoadFromMemory(Properties.Resources.ultrakit_tophat);
             HatLoader.LoadHats(topHats);
@@ -29,6 +30,7 @@ namespace ULTRAKIT
         {
             PlayerPrefs.SetInt("CurSlo", 1);
             SceneManager.sceneLoaded -= OnSceneLoaded;
+            SceneManager.sceneUnloaded -= OnSceneUnloaded;
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -36,6 +38,12 @@ namespace ULTRAKIT
             CheatsManager.Instance.RegisterCheat(Refresher.cheat, "ULTRAKIT");
             CheatsManager.Instance.RegisterCheat(ActivateHats.cheat, "ULTRAKIT");
             Invoke(GunSetter.Instance.RefreshWeapons, 0.05f);
+        }
+
+        private void OnSceneUnloaded(Scene scene)
+        {
+            if (!HatLoader.Persistent)
+                HatLoader.activeHats.Clear();
         }
 
         public void Invoke(Action func, float delay)

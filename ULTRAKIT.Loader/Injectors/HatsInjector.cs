@@ -23,6 +23,8 @@ namespace ULTRAKIT.Loader.Injectors
                 manager.LoadHat(registry);
             }
             HatLoader.managerInstances.Add(manager);
+            foreach (string hat in HatLoader.activeHats)
+                manager.SetHatActive(hat, true);
         }
     }
 }

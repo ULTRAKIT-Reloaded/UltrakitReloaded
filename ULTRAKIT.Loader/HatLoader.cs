@@ -16,12 +16,36 @@ namespace ULTRAKIT.Loader
     {
         public static List<HatsManager> managerInstances;
         public static List<HatRegistry> registries;
+        public static List<string> activeHats = new List<string>();
+        public static bool Persistent = false;
 
         internal static void Init()
         {
             SceneManager.sceneUnloaded += ClearInstances;
             if (registries == null) registries = new List<HatRegistry>();
             if (managerInstances == null) managerInstances = new List<HatsManager>();
+
+            DateTime time = DateTime.Now;
+            switch (time.Month)
+            {
+                case 12:
+                    if (time.Day >= 22 && time.Day <= 28)
+                    {
+                        activeHats.Add("christmas");
+                    }
+                    return;
+                case 10:
+                    if (time.Day >= 25 && time.Day <= 31)
+                    {
+                        activeHats.Add("halloween");
+                    }
+                    return;
+            }
+            DateTime dateTime = GetEaster(time.Year);
+            if (time.DayOfYear >= dateTime.DayOfYear - 2 && time.DayOfYear <= dateTime.DayOfYear)
+            {
+                activeHats.Add("easter");
+            }
         }
 
         public static void LoadHats(AssetBundle bundle)
@@ -54,12 +78,29 @@ namespace ULTRAKIT.Loader
                 if (manager.isActiveAndEnabled)
                     manager.SetHatActive(hatID, active);
             }
+            if (active && !activeHats.Contains(hatID))
+                activeHats.Add(hatID);
+            if (!active && activeHats.Contains(hatID))
+                activeHats.Remove(hatID);
+
             managerInstances.RemoveRange(toRemove);
         }
 
         private static void ClearInstances(Scene scene)
         {
             managerInstances.Clear();
+        }
+
+        private static DateTime GetEaster(int year)
+        {
+            int num = year % 19;
+            int num2 = year / 100;
+            int num3 = (num2 - num2 / 4 - (8 * num2 + 13) / 25 + 19 * num + 15) % 30;
+            int num4 = num3 - num3 / 28 * (1 - num3 / 28 * (29 / (num3 + 1)) * ((21 - num) / 11));
+            int num5 = num4 - (year + year / 4 + num4 + 2 - num2 + num2 / 4) % 7;
+            int num6 = 3 + (num5 + 40) / 44;
+            int day = num5 + 28 - 31 * (num6 / 4);
+            return new DateTime(year, num6, day);
         }
     }
 }
