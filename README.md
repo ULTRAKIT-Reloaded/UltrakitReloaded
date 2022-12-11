@@ -1,6 +1,8 @@
 # ULTRAKIT
  A library for UltraModManager (UMM) to add custom content to ULTRAKILL, such as weapons and cheats.
 
+![Sentrat mowing down a crowd of filth](https://media.giphy.com/media/bdYGX0uuREyc1DUwpv/giphy.gif)
+
 # Installation
 1. Download and install [UMM](https://github.com/Temperz87/ultra-mod-manager) using the provided instructions.
 2. Go to the releases page and download ULTRAKIT.zip
