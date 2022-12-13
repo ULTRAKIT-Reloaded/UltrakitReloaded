@@ -54,7 +54,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="UMM">
+    <Reference Include="UMM, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\UMM.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InputSystem">
@@ -120,6 +121,7 @@
     <Compile Include="Injectors\HatsInjector.cs" />
     <Compile Include="Injectors\ShopInjector.cs" />
     <Compile Include="Injectors\WeaponInjector.cs" />
+    <Compile Include="UltrakitInputManager.cs" />
     <Compile Include="WeaponLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

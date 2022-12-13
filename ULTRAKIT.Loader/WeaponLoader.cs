@@ -55,6 +55,7 @@ namespace ULTRAKIT.Loader
 
             Debug.Log($"Loaded weapons from {name}");
 
+            UltrakitInputManager.UpdateKeyBinds();
             return weapons;
         }
 
@@ -70,6 +71,8 @@ namespace ULTRAKIT.Loader
             {
                 bundle.Unload(true);
             }
+
+            UltrakitInputManager.UpdateKeyBinds();
         }
 
         public static Weapon idToWeapon(string bundleName, string weaponId)

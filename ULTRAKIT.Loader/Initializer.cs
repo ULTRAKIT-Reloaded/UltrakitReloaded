@@ -13,6 +13,7 @@ namespace ULTRAKIT.Loader
         {
             Harmony harmony = new Harmony("ULTRAKIT.Loader");
             harmony.PatchAll();
+            UltrakitInputManager.UpdateKeyBinds();
             HatLoader.Init();
         }
     }

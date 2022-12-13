@@ -239,14 +239,11 @@ namespace ULTRAKIT.Loader.Injectors
             orderClickUp.AddListener(ordU);
             orderClickDown.AddListener(ordD);
 
-            Type controllerPointer = PeterExtensions.GetInternalType("ControllerPointer");
-            var btu = ordUp.GetComponent(controllerPointer);
-            var field = btu.GetType().GetField("onPressed", BindingFlags.NonPublic | BindingFlags.Instance);
-            field.SetValue(btu, orderClickUp);
+            var btu = ordUp.GetComponent<ControllerPointer>();
+            btu.onPressed = orderClickUp;
 
-            var btd = ordDown.GetComponent(controllerPointer);
-            var field2 = btd.GetType().GetField("onPressed", BindingFlags.NonPublic | BindingFlags.Instance);
-            field2.SetValue(btd, orderClickDown);
+            var btd = ordDown.GetComponent<ControllerPointer>();
+            btd.onPressed = orderClickDown;
 
             lb.onClick.AddListener(delL);
             rb.onClick.AddListener(delR);
