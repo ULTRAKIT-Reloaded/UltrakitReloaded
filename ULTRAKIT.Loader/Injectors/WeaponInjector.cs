@@ -163,6 +163,14 @@ namespace ULTRAKIT.Loader.Injectors
                     __instance.SwitchWeapon(9, __instance.slots[8]);
                 }
             }
+
+            if (MonoSingleton<InputManager>.Instance.InputSource.Slot0.WasPerformedThisFrame && __instance.slots.Count >= 10 && (__instance.slots[9]?.Count > 0 || __instance.currentSlot != 0))
+            {
+                if (__instance.slots[9]?.Count > 0 && __instance.slots[9][0] != null)
+                {
+                    __instance.SwitchWeapon(10, __instance.slots[9]);
+                }
+            }
         }
     }
 }

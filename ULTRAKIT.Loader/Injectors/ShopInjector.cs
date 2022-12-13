@@ -104,7 +104,7 @@ namespace ULTRAKIT.Loader.Injectors
             rect.offsetMin = new Vector2(-260, top - buttonHeight);
             rect.SetAsFirstSibling();
 
-            go.GetComponentInChildren<Text>().text = weap.Names[i].ToUpper();
+            go.GetComponentInChildren<Text>().text = weap.Names[0].ToUpper();
 
             go.GetComponent<ShopButton>().deactivated = true;
             go.GetComponent<Button>().onClick.AddListener(() =>
