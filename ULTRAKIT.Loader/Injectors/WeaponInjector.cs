@@ -119,7 +119,7 @@ namespace ULTRAKIT.Loader.Injectors
 
                     __instance.gunc.slots.Add(slot);
                     modSlots.Add(slot);
-                    Debug.Log(__instance.gunc.slots.Count);
+                    UltrakitInputManager.UpdateKeyBinds();
                 }
             }
         }

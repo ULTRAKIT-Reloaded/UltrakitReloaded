@@ -38,6 +38,7 @@ namespace ULTRAKIT
             CheatsManager.Instance.RegisterCheat(Refresher.cheat, "ULTRAKIT");
             CheatsManager.Instance.RegisterCheat(ActivateHats.cheat, "ULTRAKIT");
             Invoke(GunSetter.Instance.RefreshWeapons, 0.05f);
+            UltrakitInputManager.UpdateKeyBinds();
         }
 
         private void OnSceneUnloaded(Scene scene)
