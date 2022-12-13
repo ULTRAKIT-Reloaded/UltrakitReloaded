@@ -56,7 +56,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="UMM, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\branch\UMM.dll</HintPath>
+      <HintPath>..\lib\UMM.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InputSystem">
       <HintPath>..\lib\Unity.InputSystem.dll</HintPath>

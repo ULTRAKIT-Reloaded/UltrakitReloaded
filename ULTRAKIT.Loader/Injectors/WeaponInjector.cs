@@ -8,6 +8,7 @@ using ULTRAKIT.Extensions;
 using UnityEngine.UI;
 using System.Linq;
 using UMM;
+using UnityEngine.InputSystem;
 
 namespace ULTRAKIT.Loader.Injectors
 {
@@ -118,6 +119,7 @@ namespace ULTRAKIT.Loader.Injectors
 
                     __instance.gunc.slots.Add(slot);
                     modSlots.Add(slot);
+                    Debug.Log(__instance.gunc.slots.Count);
                 }
             }
         }
@@ -140,7 +142,7 @@ namespace ULTRAKIT.Loader.Injectors
         [HarmonyPostfix]
         static void UpdatePostfix(GunControl __instance)
         {
-            if (MonoSingleton<InputManager>.Instance.InputSource.Slot7.WasPerformedThisFrame && __instance.slots.Count >= 7 && (__instance.slots[6]?.Count > 0 || __instance.currentSlot != 7))
+            if ((UltrakitInputManager.Slot7?.WasPerformedThisFrame ?? false) && __instance.slots.Count >= 7 && (__instance.slots[6]?.Count > 0 || __instance.currentSlot != 7))
             {
                 if (__instance.slots[6]?.Count > 0 && __instance.slots[6][0] != null)
                 {
@@ -148,7 +150,7 @@ namespace ULTRAKIT.Loader.Injectors
                 }
             }
 
-            if (MonoSingleton<InputManager>.Instance.InputSource.Slot8.WasPerformedThisFrame && __instance.slots.Count >= 8 && (__instance.slots[7]?.Count > 0 || __instance.currentSlot != 8))
+            if ((UltrakitInputManager.Slot8?.WasPerformedThisFrame ?? false) && __instance.slots.Count >= 8 && (__instance.slots[7]?.Count > 0 || __instance.currentSlot != 8))
             {
                 if (__instance.slots[7]?.Count > 0 && __instance.slots[7][0] != null)
                 {
@@ -156,7 +158,7 @@ namespace ULTRAKIT.Loader.Injectors
                 }
             }
 
-            if (MonoSingleton<InputManager>.Instance.InputSource.Slot9.WasPerformedThisFrame && __instance.slots.Count >= 9 && (__instance.slots[8]?.Count > 0 || __instance.currentSlot != 9))
+            if ((UltrakitInputManager.Slot9?.WasPerformedThisFrame ?? false) && __instance.slots.Count >= 9 && (__instance.slots[8]?.Count > 0 || __instance.currentSlot != 9))
             {
                 if (__instance.slots[8]?.Count > 0 && __instance.slots[8][0] != null)
                 {
@@ -164,11 +166,91 @@ namespace ULTRAKIT.Loader.Injectors
                 }
             }
 
-            if (MonoSingleton<InputManager>.Instance.InputSource.Slot0.WasPerformedThisFrame && __instance.slots.Count >= 10 && (__instance.slots[9]?.Count > 0 || __instance.currentSlot != 0))
+            if ((UltrakitInputManager.Slot10?.WasPerformedThisFrame ?? false) && __instance.slots.Count >= 10 && (__instance.slots[9]?.Count > 0 || __instance.currentSlot != 10))
             {
                 if (__instance.slots[9]?.Count > 0 && __instance.slots[9][0] != null)
                 {
                     __instance.SwitchWeapon(10, __instance.slots[9]);
+                }
+            }
+
+            if ((UltrakitInputManager.Slot11?.WasPerformedThisFrame ?? false) && __instance.slots.Count >= 11 && (__instance.slots[10]?.Count > 0 || __instance.currentSlot != 11))
+            {
+                if (__instance.slots[10]?.Count > 0 && __instance.slots[10][0] != null)
+                {
+                    __instance.SwitchWeapon(11, __instance.slots[10]);
+                }
+            }
+
+            if ((UltrakitInputManager.Slot12?.WasPerformedThisFrame ?? false) && __instance.slots.Count >= 12 && (__instance.slots[11]?.Count > 0 || __instance.currentSlot != 12))
+            {
+                if (__instance.slots[11]?.Count > 0 && __instance.slots[11][0] != null)
+                {
+                    __instance.SwitchWeapon(12, __instance.slots[11]);
+                }
+            }
+            
+            if ((UltrakitInputManager.Slot13?.WasPerformedThisFrame ?? false) && __instance.slots.Count >= 13 && (__instance.slots[12]?.Count > 0 || __instance.currentSlot != 13))
+            {
+                if (__instance.slots[12]?.Count > 0 && __instance.slots[12][0] != null)
+                {
+                    __instance.SwitchWeapon(13, __instance.slots[12]);
+                }
+            }
+
+            if ((UltrakitInputManager.Slot14?.WasPerformedThisFrame ?? false) && __instance.slots.Count >= 14 && (__instance.slots[13]?.Count > 0 || __instance.currentSlot != 14))
+            {
+                if (__instance.slots[13]?.Count > 0 && __instance.slots[13][0] != null)
+                {
+                    __instance.SwitchWeapon(14, __instance.slots[13]);
+                }
+            }
+
+            if ((UltrakitInputManager.Slot15?.WasPerformedThisFrame ?? false) && __instance.slots.Count >= 15 && (__instance.slots[14]?.Count > 0 || __instance.currentSlot != 15))
+            {
+                if (__instance.slots[14]?.Count > 0 && __instance.slots[14][0] != null)
+                {
+                    __instance.SwitchWeapon(15, __instance.slots[14]);
+                }
+            }
+
+            if ((UltrakitInputManager.Slot16?.WasPerformedThisFrame ?? false) && __instance.slots.Count >= 16 && (__instance.slots[15]?.Count > 0 || __instance.currentSlot != 16))
+            {
+                if (__instance.slots[15]?.Count > 0 && __instance.slots[15][0] != null)
+                {
+                    __instance.SwitchWeapon(16, __instance.slots[15]);
+                }
+            }
+
+            if ((UltrakitInputManager.Slot17?.WasPerformedThisFrame ?? false) && __instance.slots.Count >= 17 && (__instance.slots[16]?.Count > 0 || __instance.currentSlot != 17))
+            {
+                if (__instance.slots[16]?.Count > 0 && __instance.slots[16][0] != null)
+                {
+                    __instance.SwitchWeapon(17, __instance.slots[16]);
+                }
+            }
+
+            if ((UltrakitInputManager.Slot18?.WasPerformedThisFrame ?? false) && __instance.slots.Count >= 18 && (__instance.slots[17]?.Count > 0 || __instance.currentSlot != 18))
+            {
+                if (__instance.slots[17]?.Count > 0 && __instance.slots[17][0] != null)
+                {
+                    __instance.SwitchWeapon(18, __instance.slots[17]);
+                }
+            }
+
+            if ((UltrakitInputManager.Slot19?.WasPerformedThisFrame ?? false) && __instance.slots.Count >= 19 && (__instance.slots[18]?.Count > 0 || __instance.currentSlot != 19))
+            {
+                if (__instance.slots[18]?.Count > 0 && __instance.slots[18][0] != null)
+                {
+                    __instance.SwitchWeapon(19, __instance.slots[18]);
+                }
+            }
+
+            if ((UltrakitInputManager.Slot20?.WasPerformedThisFrame ?? false) && __instance.slots.Count >= 20 && (__instance.slots[19]?.Count > 0 || __instance.currentSlot != 20))
+            {
+                if (__instance.slots[19]?.Count > 0 && __instance.slots[19][0] != null)
+                {
+                    __instance.SwitchWeapon(20, __instance.slots[19]);
                 }
             }
         }
