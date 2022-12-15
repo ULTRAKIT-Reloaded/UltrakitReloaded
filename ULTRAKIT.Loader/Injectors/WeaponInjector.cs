@@ -34,7 +34,7 @@ namespace ULTRAKIT.Loader.Injectors
             {
                 int slot = weapon.Alt ? 1 : 0;
                 weapon.Prefab.SetActive(false);
-                weapon.Prefab.AddComponent<RenderFixer>();
+                weapon.Prefab.AddComponent<RenderFixer>().LayerName = "AlwaysOnTop";
                 switch (weapon.WeaponType)
                 {
                     case WeaponType.Revolver: 

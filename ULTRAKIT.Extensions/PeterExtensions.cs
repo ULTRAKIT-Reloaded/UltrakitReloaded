@@ -90,9 +90,11 @@ namespace ULTRAKIT.Extensions
 
     public class RenderFixer : MonoBehaviour
     {
+        public string LayerName;
+
         public void Start()
         {
-            PeterExtensions.RenderObject(gameObject, LayerMask.NameToLayer("AlwaysOnTop"));
+            PeterExtensions.RenderObject(gameObject, LayerMask.NameToLayer(LayerName));
         }
     }
 }
