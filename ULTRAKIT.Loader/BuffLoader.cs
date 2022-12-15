@@ -14,7 +14,7 @@ namespace ULTRAKIT.Loader
 
         public static void RegisterBuff(IBuff buff)
         {
-            Debug.Log($"Loading buff {buff.id} into {buffRegistry}");
+            UKLogger.Log($"Loading buff {buff.id} into {buffRegistry}");
             buffRegistry.Add(buff);
         }
     }

@@ -9,16 +9,90 @@ using UnityEngine.UI;
 using System.Linq;
 using UMM;
 using UnityEngine.InputSystem;
+using static UnityEditor.UIElements.ToolbarMenu;
 
 namespace ULTRAKIT.Loader.Injectors
 {
-    [HarmonyPatch(typeof(GunSetter), "ResetWeapons")]
+    [HarmonyPatch(typeof(GunSetter))]
     public class GunSetterPatch
     {
+
         public static List<List<GameObject>> modSlots = new List<List<GameObject>>();
         public static Dictionary<GameObject, bool> equippedDict = new Dictionary<GameObject, bool>();
 
-        static void Postfix(GunSetter __instance)
+        static void SetPref(string weapon)
+        {
+            if (!PrefsManager.Instance.prefMap.ContainsKey($"weapon.{weapon}"))
+                PrefsManager.Instance.prefMap.Add($"weapon.{weapon}", 1);
+        }
+
+        [HarmonyPatch("Start")]
+        [HarmonyPrefix]
+        static void StartPrefix(GunSetter __instance)
+        {
+            foreach (ReplacementWeapon weapon in WeaponLoader.replacements.Values)
+            {
+                int slot = weapon.Alt ? 1 : 0;
+                weapon.Prefab.SetActive(false);
+                weapon.Prefab.AddComponent<RenderFixer>();
+                switch (weapon.WeaponType)
+                {
+                    case WeaponType.Revolver: 
+                        {
+                            switch (weapon.Variant)
+                            {
+                                case 0: List<GameObject> buffer1 = __instance.revolverPierce.ToList(); buffer1.ReplaceOrAddTo(weapon.Prefab, slot); __instance.revolverPierce = buffer1.ToArray(); SetPref("rev0"); break;
+                                case 1: List<GameObject> buffer2 = __instance.revolverRicochet.ToList(); buffer2.ReplaceOrAddTo(weapon.Prefab, slot); __instance.revolverRicochet = buffer2.ToArray(); SetPref("rev2"); break;
+                                case 2: List<GameObject> buffer3 = __instance.revolverBerserker.ToList(); buffer3.ReplaceOrAddTo(weapon.Prefab, slot); __instance.revolverBerserker = buffer3.ToArray(); SetPref("rev1"); break;
+                            }
+                        } break;
+                    case WeaponType.Shotgun:
+                        {
+                            switch (weapon.Variant)
+                            {
+                                case 0: List<GameObject> buffer1 = __instance.shotgunGrenade.ToList(); buffer1.ReplaceOrAddTo(weapon.Prefab, slot); __instance.shotgunGrenade = buffer1.ToArray(); SetPref("sho0") ; break;
+                                case 1: List<GameObject> buffer2 = __instance.shotgunPump.ToList(); buffer2.ReplaceOrAddTo(weapon.Prefab, slot); __instance.shotgunPump = buffer2.ToArray(); SetPref("sho1"); break;
+                                case 2: List<GameObject> buffer3 = __instance.shotgunRed.ToList(); buffer3.ReplaceOrAddTo(weapon.Prefab, slot); __instance.shotgunRed = buffer3.ToArray(); SetPref("sho2"); break;
+                            }
+                        }
+                        break;
+                    case WeaponType.Nailgun:
+                        {
+                            switch (weapon.Variant)
+                            {
+                                case 0: List<GameObject> buffer1 = __instance.nailMagnet.ToList(); buffer1.ReplaceOrAddTo(weapon.Prefab, slot); __instance.nailMagnet = buffer1.ToArray(); SetPref("nai0") ; break;
+                                case 1: List<GameObject> buffer2 = __instance.nailOverheat.ToList(); buffer2.ReplaceOrAddTo(weapon.Prefab, slot); __instance.nailOverheat = buffer2.ToArray(); SetPref("nai1") ; break;
+                                case 2: List<GameObject> buffer3 = __instance.nailRed.ToList(); buffer3.ReplaceOrAddTo(weapon.Prefab, slot); __instance.nailRed = buffer3.ToArray(); SetPref("nai2") ; break;
+                            }
+                        }
+                        break;
+                    case WeaponType.Railcannon:
+                        {
+                            switch (weapon.Variant)
+                            {
+                                case 0: List<GameObject> buffer1 = __instance.railCannon.ToList(); buffer1.ReplaceOrAddTo(weapon.Prefab, slot); __instance.railCannon = buffer1.ToArray(); SetPref("rai0") ; break;
+                                case 1: List<GameObject> buffer2 = __instance.railHarpoon.ToList(); buffer2.ReplaceOrAddTo(weapon.Prefab, slot); __instance.railHarpoon = buffer2.ToArray(); SetPref("rai1") ; break;
+                                case 2: List<GameObject> buffer3 = __instance.railMalicious.ToList(); buffer3.ReplaceOrAddTo(weapon.Prefab, slot); __instance.railMalicious = buffer3.ToArray(); SetPref("rai2") ; break;
+                            }
+                        }
+                        break;
+                    case WeaponType.RocketLauncher:
+                        {
+                            switch (weapon.Variant)
+                            {
+                                case 0: List<GameObject> buffer1 = __instance.rocketBlue.ToList(); buffer1.ReplaceOrAddTo(weapon.Prefab, slot); __instance.rocketBlue = buffer1.ToArray(); SetPref("rock0") ; break;
+                                case 1: List<GameObject> buffer2 = __instance.rocketGreen.ToList(); buffer2.ReplaceOrAddTo(weapon.Prefab, slot); __instance.rocketGreen = buffer2.ToArray(); SetPref("rock1") ; break;
+                                case 2: List<GameObject> buffer3 = __instance.rocketRed.ToList(); buffer3.ReplaceOrAddTo(weapon.Prefab, slot); __instance.rocketRed = buffer3.ToArray(); SetPref("rock2") ; break;
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+
+        [HarmonyPatch("ResetWeapons")]
+        [HarmonyPostfix]
+        static void ResetWeaponsPostfix(GunSetter __instance)
         {
             foreach (var slot in modSlots)
             {
@@ -80,25 +154,8 @@ namespace ULTRAKIT.Loader.Injectors
                         var go = GameObject.Instantiate(variant, __instance.transform);
                         go.SetActive(false);
 
-                        foreach (var c in go.GetComponentsInChildren<Renderer>(true))
-                        {
-                            c.gameObject.layer = LayerMask.NameToLayer("AlwaysOnTop");
-
-                            var glow = c.gameObject.GetComponent<Glow>();
-
-                            if (glow)
-                            {
-                                c.material.shader = Shader.Find("psx/railgun");
-                                c.material.SetFloat("_EmissivePosition", 5);
-                                c.material.SetFloat("_EmissiveStrength", glow.glowIntensity);
-                                c.material.SetColor("_EmissiveColor", glow.glowColor);
-                            }
-                            else
-                            {
-                                c.material.shader = Shader.Find(c.material.shader.name);
-                            }   
-                        }
-
+                        PeterExtensions.RenderObject(go, LayerMask.NameToLayer("AlwaysOnTop"));
+                        
                         var wi = go.AddComponent<WeaponIcon>();
                         wi.weaponIcon = weap.Icons[i];
                         wi.glowIcon = weap.Icons[i];
@@ -253,6 +310,18 @@ namespace ULTRAKIT.Loader.Injectors
                     __instance.SwitchWeapon(20, __instance.slots[19]);
                 }
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(GameProgressSaver))]
+    public class GameProgressSaverPatch
+    {
+        [HarmonyPatch("CheckGear")]
+        [HarmonyPostfix]
+        static void ChechGearPostfix(ref object __result, string gear)
+        {
+            if (gear != "arm3")
+                __result = 1;
         }
     }
 }

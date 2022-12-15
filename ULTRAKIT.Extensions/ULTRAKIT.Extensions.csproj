@@ -113,6 +113,7 @@
     <Compile Include="AssetLoader.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="Interfaces\IBuff.cs" />
+    <Compile Include="UKLogger.cs" />
     <Compile Include="ObjectClasses\BuffsManager.cs" />
     <Compile Include="ObjectClasses\Buff.cs" />
     <Compile Include="ObjectClasses\HatsManager.cs" />

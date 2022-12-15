@@ -15,6 +15,8 @@ namespace ULTRAKIT
     [UKPlugin("petersone1.ultrakitreloaded", "Ultrakit Reloaded", "1.3.3", "A library for weapon loading and common functions", false, false)]
     public class Plugin : UKMod
     {
+
+
         public override void OnModLoaded()
         {
             Loader.Initializer.Initialize();
@@ -24,6 +26,7 @@ namespace ULTRAKIT
 
             AssetBundle topHats = AssetBundle.LoadFromMemory(Properties.Resources.ultrakit_tophat);
             HatLoader.LoadHats(topHats);
+            GameConsole.Console.Instance.RegisterCommand(new AltSetter());
         }
 
         public override void OnModUnload()
@@ -38,7 +41,6 @@ namespace ULTRAKIT
             CheatsManager.Instance.RegisterCheat(Refresher.cheat, "ULTRAKIT");
             CheatsManager.Instance.RegisterCheat(ActivateHats.cheat, "ULTRAKIT");
             Invoke(GunSetter.Instance.RefreshWeapons, 0.05f);
-            UltrakitInputManager.UpdateKeyBinds();
         }
 
         private void OnSceneUnloaded(Scene scene)

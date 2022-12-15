@@ -25,4 +25,25 @@ namespace ULTRAKIT.Data
         [HideInInspector]
         public string modName;
     }
+
+    public class ReplacementWeapon : ScriptableObject
+    {
+        public GameObject Prefab;
+        public WeaponType WeaponType;
+        [Range(0, 2)]
+        public int Variant;
+        public bool Alt;
+
+        [HideInInspector]
+        public string modName;
+    }
+
+    public enum WeaponType
+    {
+        Revolver,
+        Shotgun,
+        Nailgun,
+        Railcannon,
+        RocketLauncher
+    }
 }
