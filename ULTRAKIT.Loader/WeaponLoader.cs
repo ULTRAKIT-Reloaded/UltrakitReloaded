@@ -15,6 +15,7 @@ namespace ULTRAKIT.Loader
     {
         public static Dictionary<string, List<Weapon>> registry = new Dictionary<string, List<Weapon>>();
         public static List<Weapon> allWeapons = new List<Weapon>();
+        public static Dictionary<Tuple<WeaponType, int>, ReplacementWeapon> replacements = new Dictionary<Tuple<WeaponType, int>, ReplacementWeapon>();
 
         public static Weapon[] LoadWeapons(AssetBundle bundle)
         {
@@ -53,14 +54,43 @@ namespace ULTRAKIT.Loader
             registry[name].AddRange(weapons);
             allWeapons.AddRange(weapons);
 
-            Debug.Log($"Loaded weapons from {name}");
+            UKLogger.Log($"Loaded weapons from {name}");
 
+            LoadReplacements(bundle);
             UltrakitInputManager.UpdateKeyBinds();
             return weapons;
         }
 
+        public static void LoadReplacements(AssetBundle bundle)
+        {
+            string name = bundle.name;
+            ReplacementWeapon[] weapons = bundle.LoadAllAssets<ReplacementWeapon>();
+            foreach (ReplacementWeapon weapon in weapons)
+            {
+                weapon.modName = name;
+                Tuple<WeaponType, int> key = new Tuple<WeaponType, int>(weapon.WeaponType, weapon.Variant);
+                if (replacements.ContainsKey(key))
+                {
+                    UKLogger.LogWarning($"{{{name}}} Failed to load weapon: {weapon.WeaponType} variant {weapon.Variant} replacement already loaded.");
+                    continue;
+                }
+                replacements.Add(key, weapon);
+            }
+        }
+
         public static void UnloadWeapons(string bundleName)
         {
+            List<Tuple<WeaponType, int>> deletionQueue= new List<Tuple<WeaponType, int>>();
+            foreach (var pair in replacements)
+            {
+                if (pair.Value.modName == bundleName)
+                    deletionQueue.Add(pair.Key);
+            }
+            foreach (var item in deletionQueue)
+            {
+                replacements.Remove(item);
+            }
+
             foreach (Weapon weapon in registry[bundleName])
             {
                 allWeapons.Remove(weapon);
@@ -85,7 +115,7 @@ namespace ULTRAKIT.Loader
             }
             catch (ArgumentOutOfRangeException)
             {
-                Debug.Log($@"No bundle of name {bundleName} found.");
+                UKLogger.LogWarning($@"No bundle of name {bundleName} found.");
                 return null;
             }
 
@@ -97,7 +127,7 @@ namespace ULTRAKIT.Loader
                 }
             }
 
-            Debug.Log($@"No weapon {weaponId} found.");
+            UKLogger.LogWarning($@"No weapon {weaponId} found.");
             return null;
         }
 
@@ -106,7 +136,7 @@ namespace ULTRAKIT.Loader
             Weapon weapon = idToWeapon(bundleName, weaponId);
             if (weapon == null)
             {
-                Debug.Log("Weapon not found");
+                UKLogger.Log("Weapon not found");
                 return false;
             }
 
@@ -120,7 +150,7 @@ namespace ULTRAKIT.Loader
         {
             if (weapon == null)
             {
-                Debug.Log("Weapon not found");
+                UKLogger.Log("Weapon not found");
                 return false;
             }
 

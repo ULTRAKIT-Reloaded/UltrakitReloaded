@@ -62,6 +62,7 @@ namespace ULTRAKIT.Loader
                 }
             }
             registries.AddRange(regis);
+            UKLogger.Log($"Loaded hats from {bundle.name}");
         }
 
         public static void SetAllActive(string hatID, bool active)

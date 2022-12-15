@@ -226,7 +226,6 @@ namespace ULTRAKIT.Loader.Injectors
                 int target = (int)Mathf.Repeat(weapon.equipOrder[i] - 1, weapon.Variants.Length);
                 weapon.equipOrder[weapon.equipOrder.FindIndexOf(target)] = weapon.equipOrder[i];
                 weapon.equipOrder[i] = target;
-                Debug.Log(string.Join(",", weapon.equipOrder));
                 for (int n = 0; n < weapon.Variants.Length; n++)
                 {
                     orderInfo[n].text = (weapon.equipOrder[n] + 1).ToString();

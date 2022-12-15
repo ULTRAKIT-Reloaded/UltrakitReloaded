@@ -13,16 +13,22 @@ namespace ULTRAKIT.EditorScripts
 {
     public class SOMenuInjector
     {
-        [MenuItem("Assets/ULTRAKIT/New_AssetBundle_Data")]
+        [MenuItem("Assets/ULTRAKIT/Exporter")]
         public static void NewAssetBundleData()
         {
-            CreateObject<AssetBundleData>("New_AssetBundle_Data");
+            CreateObject<AssetBundleData>("Exporter");
         }
 
         [MenuItem("Assets/ULTRAKIT/New_Weapon")]
         public static void NewWeapon()
         {
             CreateObject<Weapon>("New_Weapon");
+        }
+
+        [MenuItem("Assets/ULTRAKIT/New_Replacement_Weapon")]
+        public static void NewReplacementWeapon()
+        {
+            CreateObject<ReplacementWeapon>("New_Replacement_Weapon");
         }
 
         [MenuItem("Assets/ULTRAKIT/New_Hat")]

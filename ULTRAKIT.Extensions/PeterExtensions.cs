@@ -77,5 +77,22 @@ namespace ULTRAKIT.Extensions
             foreach (T item in range)
                 list.Remove(item);
         }
+
+        public static void ReplaceOrAddTo<T>(this List<T> list, T item, int index) where T : new()
+        {
+            while (index >= list.Count)
+            {
+                list.Add(new T());
+            }
+            list[index] = item;
+        }
+    }
+
+    public class RenderFixer : MonoBehaviour
+    {
+        public void Start()
+        {
+            PeterExtensions.RenderObject(gameObject, LayerMask.NameToLayer("AlwaysOnTop"));
+        }
     }
 }

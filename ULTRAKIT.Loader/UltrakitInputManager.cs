@@ -35,6 +35,10 @@ namespace ULTRAKIT.Loader
         public static void UpdateKeyBinds()
         {
             int weapons = WeaponLoader.allWeapons.Count + 6;
+            if (GunControl.Instance != null)
+            {
+                weapons = GunControl.Instance.slots.Count;
+            }
 
             if (weapons < 7) return;
             Slot7 = UKAPI.GetKeyBind("Slot 7", KeyCode.Alpha7);

@@ -111,7 +111,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActivateHats.cs" />
+    <Compile Include="Cheats_Commands\ActivateHats.cs" />
+    <Compile Include="Cheats_Commands\AltSetter.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -119,7 +120,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Refresher.cs" />
+    <Compile Include="Cheats_Commands\Refresher.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ULTRAKIT.Data\ULTRAKIT.Data.csproj">
