@@ -32,3 +32,5 @@ Rewrite and Additional Testing: PetersonE1
 If you have any questions, feel free to DM `Agent of Nyarlathotep#7519` on Discord, or join the ULTRAKIT Reloaded Discord server at https://discord.gg/gW7MAZRm7z
 
 ***For a reference, a basic mod, asset bundle, and unity asset folder are available at https://github.com/PetersonE1/UltrakitTestMod***
+
+***A HatLoader mod to easily drag-and-drop hat bundles into the game is available at https://github.com/PetersonE1/HatLoader***
