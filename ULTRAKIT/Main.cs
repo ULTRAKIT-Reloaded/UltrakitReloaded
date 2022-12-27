@@ -17,6 +17,7 @@ namespace ULTRAKIT
     {
         public override void OnModLoaded()
         {
+            Loader.ConsolePatch.ModDirectory = modFolder;
             Loader.Initializer.Initialize();
             Extensions.Initializer.Initialize();
             SceneManager.sceneLoaded += OnSceneLoaded;

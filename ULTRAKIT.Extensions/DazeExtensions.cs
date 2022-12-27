@@ -114,7 +114,7 @@ namespace ULTRAKIT.Extensions
                 if (File.Exists($@"{Application.productName}_Data\StreamingAssets\{bundlename}"))
                 {
                     var data = File.ReadAllBytes($@"{Application.productName}_Data\StreamingAssets\{bundlename}");
-                    bundle = AssetBundle.LoadFromMemory(data) ?? LoadFromLoaded(bundle, "common");
+                    bundle = LoadFromLoaded(bundle, bundlename) ?? AssetBundle.LoadFromMemory(data);
                 }
                 else
                 {
