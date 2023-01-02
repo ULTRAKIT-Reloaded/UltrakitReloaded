@@ -63,9 +63,59 @@ namespace ULTRAKIT.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] fpeye_jpg {
+            get {
+                object obj = ResourceManager.GetObject("fpeye_jpg", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] fpface_jpg {
+            get {
+                object obj = ResourceManager.GetObject("fpface_jpg", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] levi_jpg {
+            get {
+                object obj = ResourceManager.GetObject("levi_jpg", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] minos_jpg {
+            get {
+                object obj = ResourceManager.GetObject("minos_jpg", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] ultrakit_tophat {
             get {
                 object obj = ResourceManager.GetObject("ultrakit_tophat", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] wicked_jpg {
+            get {
+                object obj = ResourceManager.GetObject("wicked_jpg", resourceCulture);
                 return ((byte[])(obj));
             }
         }
