@@ -115,6 +115,7 @@
     <Compile Include="ScriptableObjects\AssetBundleData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScriptableObjects\HatRegistry.cs" />
+    <Compile Include="ScriptableObjects\UKSpawnable.cs" />
     <Compile Include="ScriptableObjects\Weapon.cs" />
   </ItemGroup>
   <ItemGroup />

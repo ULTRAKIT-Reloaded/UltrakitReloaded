@@ -59,8 +59,6 @@ namespace ULTRAKIT.Loader.Injectors
                 spawnable.enemyType = pair.Value;
                 spawnable.spawnableType = SpawnableType.SimpleSpawn;
                 GameObject enemy = GrabEnemy(pair.Key);
-                Debug.Log($"Loading {pair.Key}");
-                Debug.Log(enemy?.gameObject?.name ?? "null");
                 spawnable.gameObject = enemy;
                 spawnable.preview = new GameObject();
                 switch (pair.Key)
@@ -86,7 +84,6 @@ namespace ULTRAKIT.Loader.Injectors
                 try { obj = BossFind(enemy); }
                 catch { Debug.Log("Error"); }
             }
-            Debug.Log(obj?.name ?? "null");
 
             var bhb = obj.GetComponentInChildren<BossHealthBar>();
             if (bhb == null && (enemy == "MinosBoss" || enemy == "Leviathan"))

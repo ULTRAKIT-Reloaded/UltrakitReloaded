@@ -125,6 +125,7 @@
     <Compile Include="Injectors\ShopInjector.cs" />
     <Compile Include="Injectors\SpawnerInjector.cs" />
     <Compile Include="Injectors\WeaponInjector.cs" />
+    <Compile Include="SpawnerArmLoader.cs" />
     <Compile Include="SpawnerArmPatches.cs" />
     <Compile Include="UltrakitInputManager.cs" />
     <Compile Include="WeaponLoader.cs" />

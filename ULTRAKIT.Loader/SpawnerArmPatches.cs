@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ULTRAKIT.Extensions;
 using ULTRAKIT.Loader.Injectors;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -57,14 +58,22 @@ namespace ULTRAKIT.Loader
     [HarmonyPatch(typeof(SpawnMenu))]
     public static class SpawnMenuPatch
     {
-        private static bool init = false;
         [HarmonyPatch("Awake")]
         [HarmonyPrefix]
         public static void AwakePrefix(SpawnMenu __instance, SpawnableObjectsDatabase ___objects)
         {
-            if (init) return;
-            ___objects.enemies = ___objects.enemies.Concat(SpawnerInjector._enemies).ToArray();
-            init = true;
+            if (!SpawnerArmLoader.init)
+            {
+                SpawnerArmLoader.spawnablesDatabase.enemies = ___objects.enemies;
+                SpawnerArmLoader.spawnablesDatabase.objects = ___objects.objects;
+                SpawnerArmLoader.spawnablesDatabase.sandboxTools = ___objects.sandboxTools;
+                SpawnerArmLoader.init = true;
+            }
+
+            SpawnerArmLoader.InjectSpawnables(__instance);
+            ___objects.sandboxTools = SpawnerArmLoader._tools;
+            ___objects.enemies = SpawnerArmLoader._enemies;
+            ___objects.objects = SpawnerArmLoader._objects;
         }
     }
 
@@ -94,11 +103,9 @@ namespace ULTRAKIT.Loader
         [HarmonyPrefix]
         public static void StartPrefix(MinosBoss __instance)
         {
-            Debug.Log("starting");
             var cust = __instance.GetComponentInChildren<CustomHealthbarPos>(true);
             if (cust)
             {
-                Debug.Log("custom");
                 cust.offset = Vector3.up * minosHeight * 1.5f;
                 cust.size = 0.25f;
                 var plr = MonoSingleton<NewMovement>.Instance.transform;
@@ -118,11 +125,9 @@ namespace ULTRAKIT.Loader
         [HarmonyPrefix]
         public static void StartPrefix(LeviathanHead __instance)
         {
-            Debug.Log("starting");
             var cust = __instance.transform.parent.GetComponentInChildren<CustomHealthbarPos>(true);
             if (cust)
             {
-                Debug.Log("custom");
                 cust.offset = Vector3.up * leviHeight * 1.5f;
                 cust.size = 0.25f;
             }
