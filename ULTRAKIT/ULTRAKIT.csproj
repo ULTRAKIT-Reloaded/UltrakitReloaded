@@ -147,7 +147,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\fpeye.jpg.bytes" />
+    <None Include="Resources\fpface.jpg.bytes" />
+    <None Include="Resources\levi.jpg.bytes" />
+    <None Include="Resources\minos.jpg.bytes" />
     <None Include="Resources\ultrakit_tophat.assetBundle" />
+    <None Include="Resources\wicked.jpg.bytes" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

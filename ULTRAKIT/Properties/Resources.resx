@@ -118,7 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="fpeye_jpg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fpeye.jpg.bytes;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="fpface_jpg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\fpface.jpg.bytes;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="levi_jpg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\levi.jpg.bytes;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="minos_jpg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\minos.jpg.bytes;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="ultrakit_tophat" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ultrakit_tophat.assetBundle;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="wicked_jpg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wicked.jpg.bytes;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
