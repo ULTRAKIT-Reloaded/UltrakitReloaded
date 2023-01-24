@@ -17,6 +17,7 @@
 ***Further instructions and API are available in the wiki***
 
 # Credits
+### ORIGINAL
 Loader: Dazegambler
 
 Content Injection: Heckteck
@@ -25,6 +26,7 @@ Misc. m1ksu
 
 Original Testing: Cecelune
 
+### RELOADED
 Rewrite and Additional Testing: PetersonE1
 
 ##
