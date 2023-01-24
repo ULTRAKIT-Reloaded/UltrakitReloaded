@@ -36,18 +36,12 @@ namespace ULTRAKIT.Loader.Injectors
 
         public static void Init()
         {
-            if (File.Exists($@"{Application.productName}_Data\StreamingAssets\acts\act-2"))
-            {
-                var data = File.ReadAllBytes($@"{Application.productName}_Data\StreamingAssets\acts\act-2");
-                Act2 = DazeExtensions.LoadFromLoaded(Act2, @"acts/act-2") ?? AssetBundle.LoadFromMemory(data);
-            }
-            string[] scenePaths = Act2.GetAllScenePaths();
-            foreach (string scenePath in scenePaths)
-                SceneBlackList.Add(Path.GetFileNameWithoutExtension(scenePath));
-            string sceneName = Path.GetFileNameWithoutExtension(scenePaths[10]);
-            SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
-
-            SceneManager.sceneLoaded += OnSceneLoaded;
+            System.Diagnostics.PerformanceCounter counter = new System.Diagnostics.PerformanceCounter();
+            counter.CategoryName = "Memory";
+            counter.CounterName = "Available MBytes";
+            if (counter.NextValue() > 2500)
+                PrepLeviathan();
+            counter.Close();
 
             foreach (var pair in SpawnList)
             {
@@ -71,6 +65,22 @@ namespace ULTRAKIT.Loader.Injectors
 
                 _enemies.Add(spawnable);
             }
+        }
+
+        private static void PrepLeviathan()
+        {
+            if (File.Exists($@"{Application.productName}_Data\StreamingAssets\acts\act-2"))
+            {
+                var data = File.ReadAllBytes($@"{Application.productName}_Data\StreamingAssets\acts\act-2");
+                Act2 = DazeExtensions.LoadFromLoaded(Act2, @"acts/act-2") ?? AssetBundle.LoadFromMemory(data);
+            }
+            string[] scenePaths = Act2.GetAllScenePaths();
+            foreach (string scenePath in scenePaths)
+                SceneBlackList.Add(Path.GetFileNameWithoutExtension(scenePath));
+            string sceneName = Path.GetFileNameWithoutExtension(scenePaths[10]);
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         public static GameObject GrabEnemy(string enemy)
