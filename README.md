@@ -11,6 +11,9 @@
 ### ALTERNATE INSTALLATION
 Download ULTRAKIT Reloaded using [Thunderstore Mod Manager](https://thunderstore.io/c/ultrakill/p/ULTRAKIT/ULTRAKIT_Reloaded/) to automatically install the mod and all required dependencies.
 
+# Editing the config
+The config file is located in the installation directory `BepInEx/UMM Mods/ULTRAKIT/ULTAKIT.cfg`. Open the file, edit the values and save. The config file generates after running the game with ULTRAKIT Reloaded installed for the first time, and changes take effect after restarting the game.
+
 # Making a mod using ULTRAKIT
 1. Reference ULTRAKIT .dlls within your project to make use of any extensions and functions available.
 2. Register any new cheats on scene load.
