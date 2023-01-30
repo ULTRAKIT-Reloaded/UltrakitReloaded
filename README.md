@@ -8,6 +8,8 @@
 2. Go to the releases page and download ULTRAKIT.zip
 3. Extract the contents of ULTRAKIT.zip into [Your ULTRAKILL Directory]\BepInEx\UMM Mods\
 4. Install any mods that require ULTRAKIT to function!
+### ALTERNATE INSTALLATION
+Download ULTRAKIT Reloaded using [Thunderstore Mod Manager](https://thunderstore.io/c/ultrakill/p/ULTRAKIT/ULTRAKIT_Reloaded/) to automatically install the mod and all required dependencies.
 
 # Making a mod using ULTRAKIT
 1. Reference ULTRAKIT .dlls within your project to make use of any extensions and functions available.

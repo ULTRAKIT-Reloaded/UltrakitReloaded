@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using ULTRAKIT.Extensions;
 using static UnityEngine.EventSystems.EventTrigger;
+using UnityEditor;
+using ULTRAKIT.Data;
 
 namespace ULTRAKIT.Loader.Injectors
 {
@@ -20,6 +22,7 @@ namespace ULTRAKIT.Loader.Injectors
         public static Sprite levi;
 
         public static bool _init = false;
+        public static string ConfigPath;
         static AssetBundle Common;
         static AssetBundle Act2;
 
@@ -36,18 +39,9 @@ namespace ULTRAKIT.Loader.Injectors
 
         public static void Init()
         {
-            if (File.Exists($@"{Application.productName}_Data\StreamingAssets\acts\act-2"))
-            {
-                var data = File.ReadAllBytes($@"{Application.productName}_Data\StreamingAssets\acts\act-2");
-                Act2 = DazeExtensions.LoadFromLoaded(Act2, @"acts/act-2") ?? AssetBundle.LoadFromMemory(data);
-            }
-            string[] scenePaths = Act2.GetAllScenePaths();
-            foreach (string scenePath in scenePaths)
-                SceneBlackList.Add(Path.GetFileNameWithoutExtension(scenePath));
-            string sceneName = Path.GetFileNameWithoutExtension(scenePaths[10]);
-            SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
-
-            SceneManager.sceneLoaded += OnSceneLoaded;
+            ConfigFile config = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfigFile>(File.ReadAllText(ConfigPath));
+            if (config.RegisterLeviathan)
+                PrepLeviathan();
 
             foreach (var pair in SpawnList)
             {
@@ -71,6 +65,22 @@ namespace ULTRAKIT.Loader.Injectors
 
                 _enemies.Add(spawnable);
             }
+        }
+
+        private static void PrepLeviathan()
+        {
+            if (File.Exists($@"{Application.productName}_Data\StreamingAssets\acts\act-2"))
+            {
+                var data = File.ReadAllBytes($@"{Application.productName}_Data\StreamingAssets\acts\act-2");
+                Act2 = DazeExtensions.LoadFromLoaded(Act2, @"acts/act-2") ?? AssetBundle.LoadFromMemory(data);
+            }
+            string[] scenePaths = Act2.GetAllScenePaths();
+            foreach (string scenePath in scenePaths)
+                SceneBlackList.Add(Path.GetFileNameWithoutExtension(scenePath));
+            string sceneName = Path.GetFileNameWithoutExtension(scenePaths[10]);
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
         public static GameObject GrabEnemy(string enemy)
