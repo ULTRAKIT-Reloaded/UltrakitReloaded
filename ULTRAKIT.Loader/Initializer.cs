@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ULTRAKIT.Loader.Injectors;
 using UMM;
 
 namespace ULTRAKIT.Loader
@@ -19,6 +20,7 @@ namespace ULTRAKIT.Loader
             harmony.PatchAll();
             UltrakitInputManager.UpdateKeyBinds();
             HatLoader.Init();
+            SpawnerInjector.Init();
         }
     }
 
