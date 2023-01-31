@@ -42,6 +42,8 @@ namespace ULTRAKIT.Loader.Injectors
             ConfigFile config = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfigFile>(File.ReadAllText(ConfigPath));
             if (config.RegisterLeviathan)
                 PrepLeviathan();
+            else
+                _init = true;
 
             foreach (var pair in SpawnList)
             {

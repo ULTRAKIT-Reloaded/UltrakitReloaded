@@ -16,7 +16,7 @@ using ULTRAKIT.Data;
 
 namespace ULTRAKIT
 {
-    [UKPlugin("petersone1.ultrakitreloaded", "Ultrakit Reloaded", "1.5.2", "A library for custom object loading and common functions", false, false)]
+    [UKPlugin("petersone1.ultrakitreloaded", "Ultrakit Reloaded", "1.5.3", "A library for custom object loading and common functions", false, false)]
     public class Plugin : UKMod
     {
         public override void OnModLoaded()
