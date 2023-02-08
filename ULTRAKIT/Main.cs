@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UMM;
+using BepInEx;
 using ULTRAKIT.Loader;
 using ULTRAKIT.Extensions;
 using UnityEngine.SceneManagement;
@@ -13,18 +14,23 @@ using System.IO;
 using UnityEditor;
 using ULTRAKIT.Loader.Injectors;
 using ULTRAKIT.Data;
+using System.Reflection;
 
 namespace ULTRAKIT
 {
-    [UKPlugin("petersone1.ultrakitreloaded", "Ultrakit Reloaded", "1.5.3", "A library for custom object loading and common functions", false, false)]
-    public class Plugin : UKMod
+    [BepInPlugin("petersone1.ultrakitreloaded", "ULTRAKIT Reloaded", "1.5.4")]
+    [BepInDependency("UMM", "0.5.0")]
+    public class Plugin : BaseUnityPlugin
     {
-        public override void OnModLoaded()
+        public static Plugin plugin;
+
+        private void Awake()
         {
-            string configPath = $@"{modFolder}\ULTRAKIT.cfg";
-            SpawnerInjector.ConfigPath = configPath;
-            if (!File.Exists(configPath))
-                SetConfig(configPath);
+            plugin = this;
+
+            string modDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            LoadConfig();
 
             SpawnerInjector.fpeye = SetSprite(Properties.Resources.fpeye_jpg);
             SpawnerInjector.fpface = SetSprite(Properties.Resources.fpface_jpg);
@@ -32,40 +38,55 @@ namespace ULTRAKIT
             SpawnerInjector.minos = SetSprite(Properties.Resources.minos_jpg);
             SpawnerInjector.wicked = SetSprite(Properties.Resources.wicked_jpg);
 
-            ConsolePatch.ModDirectory = modFolder;
-            Loader.Initializer.Initialize();
-            Extensions.Initializer.Initialize();
-            SceneManager.sceneLoaded += OnSceneLoaded;
-            SceneManager.sceneUnloaded += OnSceneUnloaded;
-
             AssetBundle topHats = AssetBundle.LoadFromMemory(Properties.Resources.ultrakit_tophat);
             HatLoader.LoadHats(topHats);
-            GameConsole.Console.Instance.RegisterCommand(new AltSetter());
+
+            ConsolePatch.ModDirectory = modDir;
+
+            plugin.StartCoroutine(InitializeComponents());
         }
 
-        public override void OnModUnload()
+        private static void OnDestroy()
         {
             PlayerPrefs.SetInt("CurSlo", 1);
             SceneManager.sceneLoaded -= OnSceneLoaded;
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
         }
 
-        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
+            UKLogger.Log("Scene loaded");
             CheatsManager.Instance.RegisterCheat(Refresher.cheat, "ULTRAKIT");
             CheatsManager.Instance.RegisterCheat(ActivateHats.cheat, "ULTRAKIT");
             Invoke(GunSetter.Instance.RefreshWeapons, 0.05f);
         }
 
-        private void OnSceneUnloaded(Scene scene)
+        private static void OnSceneUnloaded(Scene scene)
         {
             if (!HatLoader.Persistent)
                 HatLoader.activeHats.Clear();
         }
 
-        public void Invoke(Action func, float delay)
+        public static IEnumerator InitializeComponents()
         {
-            StartCoroutine(Delay());
+            while (!UKAPI.triedLoadingBundle)
+            {
+                yield return new WaitForSeconds(0.2f);
+            }
+            Loader.Initializer.Initialize();
+            Extensions.Initializer.Initialize();
+
+            GameConsole.Console.Instance.RegisterCommand(new AltSetter());
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
+
+            yield return null;
+        }
+
+        public static void Invoke(Action func, float delay)
+        {
+            plugin.StartCoroutine(Delay());
 
             IEnumerator Delay()
             {
@@ -85,6 +106,12 @@ namespace ULTRAKIT
         {
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(InitConfigFile._initConfig);
             File.WriteAllText(path, json);
+        }
+
+        private static void LoadConfig()
+        {
+            ConsolePatch._enabled = plugin.Config.Bind<bool>("Custom Console Logging", "Enabled", false, "Enable custom console log").Value;
+            SpawnerInjector.RegisterLeviathan = plugin.Config.Bind<bool>("Spawner Arm", "RegisterLeviathan", true, "Loads 5-4 in the background to add the leviathan to the spawner arm.").Value;
         }
     }
 }

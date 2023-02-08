@@ -22,7 +22,7 @@ namespace ULTRAKIT.Loader.Injectors
         public static Sprite levi;
 
         public static bool _init = false;
-        public static string ConfigPath;
+        public static bool RegisterLeviathan;
         static AssetBundle Common;
         static AssetBundle Act2;
 
@@ -39,8 +39,7 @@ namespace ULTRAKIT.Loader.Injectors
 
         public static void Init()
         {
-            ConfigFile config = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfigFile>(File.ReadAllText(ConfigPath));
-            if (config.RegisterLeviathan)
+            if (RegisterLeviathan)
                 PrepLeviathan();
             else
                 _init = true;

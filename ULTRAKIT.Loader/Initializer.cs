@@ -28,10 +28,12 @@ namespace ULTRAKIT.Loader
     public class ConsolePatch
     {
         public static string ModDirectory;
+        public static bool _enabled = false;
         [HarmonyPatch("InsertLog")]
         [HarmonyPostfix]
         public static void InsertLogPostfix(CapturedLog log)
         {
+            if (!_enabled) return;
             using (StreamWriter file = new StreamWriter($@"{ModDirectory}\LogOutput.txt", true))
             {
                 file.WriteLine(log.message);
