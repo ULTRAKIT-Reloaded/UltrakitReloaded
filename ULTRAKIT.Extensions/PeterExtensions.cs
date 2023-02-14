@@ -86,6 +86,13 @@ namespace ULTRAKIT.Extensions
             }
             list[index] = item;
         }
+
+        public static Sprite CreateSprite(byte[] bytes)
+        {
+            Texture2D tex = new Texture2D(128, 128);
+            tex.LoadImage(bytes);
+            return Sprite.Create(tex, new Rect(0, 0, 128, 128), new Vector2(64, 64));
+        }
     }
 
     public class RenderFixer : MonoBehaviour

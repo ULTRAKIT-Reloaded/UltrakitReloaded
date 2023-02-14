@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ULTRAKIT.Extensions.Data;
 
 namespace ULTRAKIT.Extensions
 {
@@ -11,6 +12,7 @@ namespace ULTRAKIT.Extensions
     {
         public static void Initialize()
         {
+            ConfigData.LoadConfig();
             Harmony harmony = new Harmony("ULTRAKIT.Extensions");
             harmony.PatchAll();
         }

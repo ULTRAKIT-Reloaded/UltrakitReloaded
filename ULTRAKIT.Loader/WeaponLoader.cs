@@ -8,6 +8,7 @@ using ULTRAKIT.Data;
 using ULTRAKIT.Extensions;
 using HarmonyLib;
 using UMM;
+using ULTRAKIT.Extensions.Data;
 
 namespace ULTRAKIT.Loader
 {
@@ -25,7 +26,15 @@ namespace ULTRAKIT.Loader
             foreach (Weapon weapon in weapons)
             {
                 weapon.modName = name;
-                string data = UKMod.RetrieveStringPersistentModData($@"{weapon.modName}.{weapon.id}.load", "ULTRAKIT");
+                int[] orderData;
+                int[] statusData;
+                bool unlockData = weapon.Unlocked;
+                if (!SaveData.data.weapon_order.TryGetValue($@"{weapon.modName}.{weapon.id}", out orderData))
+                    orderData = new int[] {0, 1, 2};
+                if (!SaveData.data.weapon_status.TryGetValue($@"{weapon.modName}.{weapon.id}", out statusData))
+                    statusData = new int[] {1, 1, 1};
+                SaveData.data.weapon_unlock.TryGetValue($@"{weapon.modName}.{weapon.id}", out unlockData);
+                /*string data = UKMod.RetrieveStringPersistentModData($@"{weapon.modName}.{weapon.id}.load", "ULTRAKIT");
                 string data2 = UKMod.RetrieveStringPersistentModData($@"{weapon.modName}.{weapon.id}.equip", "ULTRAKIT");
                 string unlockData = UKMod.RetrieveStringPersistentModData($@"{weapon.modName}.{weapon.id}.unlock", "ULTRAKIT");
                 if (data == null)
@@ -45,7 +54,10 @@ namespace ULTRAKIT.Loader
                 }
                 weapon.equipOrder = data.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
                 weapon.equipStatus = data2.Split(',').Select(n => Convert.ToInt32(n)).ToArray();
-                weapon.Unlocked = Convert.ToBoolean(unlockData);
+                weapon.Unlocked = Convert.ToBoolean(unlockData);*/
+                weapon.equipOrder = orderData;
+                weapon.equipStatus = statusData;
+                weapon.Unlocked = unlockData;
                 List<GameObject> variants = new List<GameObject>();
                 variants.AddRange(weapon.Variants);
                 variants.AddRange(weapon.AltVariants);
@@ -136,12 +148,13 @@ namespace ULTRAKIT.Loader
             Weapon weapon = idToWeapon(bundleName, weaponId);
             if (weapon == null)
             {
-                UKLogger.Log("Weapon not found");
+                UKLogger.LogWarning("Weapon not found");
                 return false;
             }
 
             weapon.Unlocked = state;
-            UKMod.SetPersistentModData($@"{weapon.modName}.{weapon.id}.unlock", state.ToString(), "ULTRAKIT");
+            //UKMod.SetPersistentModData($@"{weapon.modName}.{weapon.id}.unlock", state.ToString(), "ULTRAKIT");
+            SaveData.SetValue(SaveData.data.weapon_unlock, $@"{weapon.modName}.{weapon.id}", state);
             MonoSingleton<GunSetter>.Instance.RefreshWeapons();
             return true;
         }
@@ -150,12 +163,13 @@ namespace ULTRAKIT.Loader
         {
             if (weapon == null)
             {
-                UKLogger.Log("Weapon not found");
+                UKLogger.LogWarning("Weapon not found");
                 return false;
             }
 
             weapon.Unlocked = state;
-            UKMod.SetPersistentModData($@"{weapon.modName}.{weapon.id}.unlock", state.ToString(), "ULTRAKIT");
+            //UKMod.SetPersistentModData($@"{weapon.modName}.{weapon.id}.unlock", state.ToString(), "ULTRAKIT");
+            SaveData.SetValue(SaveData.data.weapon_unlock, $@"{weapon.modName}.{weapon.id}", state);
             MonoSingleton<GunSetter>.Instance.RefreshWeapons();
             return true;
         }

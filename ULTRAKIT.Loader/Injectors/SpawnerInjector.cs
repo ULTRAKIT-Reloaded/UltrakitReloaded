@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using ULTRAKIT.Extensions;
-using static UnityEngine.EventSystems.EventTrigger;
 using UnityEditor;
 using ULTRAKIT.Data;
+using ULTRAKIT.Extensions.Data;
 
 namespace ULTRAKIT.Loader.Injectors
 {
@@ -22,8 +22,6 @@ namespace ULTRAKIT.Loader.Injectors
         public static Sprite levi;
 
         public static bool _init = false;
-        public static bool RegisterLeviathan;
-        static AssetBundle Common;
         static AssetBundle Act2;
 
         static Dictionary<string, EnemyType> SpawnList = new Dictionary<string, EnemyType> {
@@ -39,7 +37,7 @@ namespace ULTRAKIT.Loader.Injectors
 
         public static void Init()
         {
-            if (RegisterLeviathan)
+            if (ConfigData.Leviathan)
                 PrepLeviathan();
             else
                 _init = true;
@@ -87,7 +85,7 @@ namespace ULTRAKIT.Loader.Injectors
         public static GameObject GrabEnemy(string enemy)
         {
             GameObject obj = new GameObject();
-            GameObject tempObj = Common.PrefabFind("common", enemy);
+            GameObject tempObj = DazeExtensions.PrefabFind(null, "common", enemy);
             if (tempObj != null)
                 obj = tempObj;
             else

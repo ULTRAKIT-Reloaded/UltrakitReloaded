@@ -50,7 +50,6 @@ namespace ULTRAKIT.Loader
 
         public static void LoadHats(AssetBundle bundle)
         {
-            Init();
             Hat[] hats = bundle.LoadAllAssets<Hat>();
             HatRegistry[] regis = bundle.LoadAllAssets<HatRegistry>();
             foreach (HatRegistry hatRegistry in regis)

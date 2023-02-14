@@ -32,7 +32,7 @@ namespace ULTRAKIT.Loader
             }
         }
 
-        public static void UnLoadSpawnables(AssetBundle bundle)
+        public static void UnloadSpawnables(AssetBundle bundle)
         {
             UKSpawnable[] ukS = bundle.LoadAllAssets<UKSpawnable>();
             foreach (UKSpawnable ukSpawnable in ukS)

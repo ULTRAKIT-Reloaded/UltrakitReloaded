@@ -10,6 +10,7 @@ using System.Linq;
 using UMM;
 using UnityEngine.InputSystem;
 using static UnityEditor.UIElements.ToolbarMenu;
+using ULTRAKIT.Extensions.Data;
 
 namespace ULTRAKIT.Loader.Injectors
 {
@@ -121,11 +122,13 @@ namespace ULTRAKIT.Loader.Injectors
 
                     var slot = new List<GameObject>();
 
-                    string loadOrder = string.Join(",", weap.equipOrder);
-                    string equippedStatus = string.Join(",", weap.equipStatus);
+                    //string loadOrder = string.Join(",", weap.equipOrder);
+                    //string equippedStatus = string.Join(",", weap.equipStatus);
 
-                    UKMod.SetPersistentModData($@"{weap.modName}.{weap.id}.load", loadOrder, "ULTRAKIT");
-                    UKMod.SetPersistentModData($@"{weap.modName}.{weap.id}.equip", equippedStatus, "ULTRAKIT");
+                    //UKMod.SetPersistentModData($@"{weap.modName}.{weap.id}.load", loadOrder, "ULTRAKIT");
+                    //UKMod.SetPersistentModData($@"{weap.modName}.{weap.id}.equip", equippedStatus, "ULTRAKIT");
+                    SaveData.SetValue(SaveData.data.weapon_order, $@"{weap.modName}.{weap.id}", weap.equipOrder);
+                    SaveData.SetValue(SaveData.data.weapon_status, $@"{weap.modName}.{weap.id}", weap.equipStatus);
 
                     for (int i = 0; i < weap.All_Variants.Length; i++)
                     {
