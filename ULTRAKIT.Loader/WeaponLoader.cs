@@ -154,7 +154,7 @@ namespace ULTRAKIT.Loader
 
             weapon.Unlocked = state;
             //UKMod.SetPersistentModData($@"{weapon.modName}.{weapon.id}.unlock", state.ToString(), "ULTRAKIT");
-            SaveData.SetValue(SaveData.data.weapon_unlock, $@"{weapon.modName}.{weapon.id}", state);
+            SaveData.Internal_SetValue(SaveData.data.weapon_unlock, $@"{weapon.modName}.{weapon.id}", state);
             MonoSingleton<GunSetter>.Instance.RefreshWeapons();
             return true;
         }
@@ -169,7 +169,7 @@ namespace ULTRAKIT.Loader
 
             weapon.Unlocked = state;
             //UKMod.SetPersistentModData($@"{weapon.modName}.{weapon.id}.unlock", state.ToString(), "ULTRAKIT");
-            SaveData.SetValue(SaveData.data.weapon_unlock, $@"{weapon.modName}.{weapon.id}", state);
+            SaveData.Internal_SetValue(SaveData.data.weapon_unlock, $@"{weapon.modName}.{weapon.id}", state);
             MonoSingleton<GunSetter>.Instance.RefreshWeapons();
             return true;
         }

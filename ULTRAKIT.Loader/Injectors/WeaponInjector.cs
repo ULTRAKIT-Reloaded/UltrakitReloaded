@@ -127,8 +127,8 @@ namespace ULTRAKIT.Loader.Injectors
 
                     //UKMod.SetPersistentModData($@"{weap.modName}.{weap.id}.load", loadOrder, "ULTRAKIT");
                     //UKMod.SetPersistentModData($@"{weap.modName}.{weap.id}.equip", equippedStatus, "ULTRAKIT");
-                    SaveData.SetValue(SaveData.data.weapon_order, $@"{weap.modName}.{weap.id}", weap.equipOrder);
-                    SaveData.SetValue(SaveData.data.weapon_status, $@"{weap.modName}.{weap.id}", weap.equipStatus);
+                    SaveData.Internal_SetValue(SaveData.data.weapon_order, $@"{weap.modName}.{weap.id}", weap.equipOrder);
+                    SaveData.Internal_SetValue(SaveData.data.weapon_status, $@"{weap.modName}.{weap.id}", weap.equipStatus);
                     for (int i = 0; i < weap.All_Variants.Length; i++)
                     {
                         var variant = weap.All_Variants[i];
