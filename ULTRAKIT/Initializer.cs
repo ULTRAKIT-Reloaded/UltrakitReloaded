@@ -18,14 +18,11 @@ namespace ULTRAKIT
 {
     internal class Initializer
     {
-        string mod_directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         public static void Init()
         {
             ConfigData.config = Plugin.plugin.Config;
             Extensions.Initializer.Initialize();
-            Loader.Initializer.Initialize();
             SetSpawnerSprites();
-            LoadHats();
             Plugin.plugin.StartCoroutine(InitializeComponents());
         }
 
@@ -35,8 +32,9 @@ namespace ULTRAKIT
             {
                 yield return new WaitForSeconds(0.2f);
             }
-            
+            Loader.Initializer.Initialize();
             LoadCommands();
+            LoadHats();
 
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;

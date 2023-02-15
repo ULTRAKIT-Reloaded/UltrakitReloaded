@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -11,17 +12,20 @@ namespace ULTRAKIT.Extensions
     {
         public static void Log(object obj)
         {
-            Debug.Log($@"[ULTRAKIT] {obj}");
+            string callName = Assembly.GetCallingAssembly().GetName().Name;
+            Debug.Log($@"[{callName}] {obj}");
         }
 
         public static void LogWarning(object obj)
         {
-            Debug.LogWarning($@"[ULTRAKIT] {obj}");
+            string callName = Assembly.GetCallingAssembly().GetName().Name;
+            Debug.LogWarning($@"[{callName}] {obj}");
         }
 
         public static void LogError(object obj)
         {
-            Debug.LogError($@"[ULTRAKIT] {obj}");
+            string callName = Assembly.GetCallingAssembly().GetName().Name;
+            Debug.LogError($@"[{callName}] {obj}");
         }
     }
 }

@@ -129,7 +129,6 @@ namespace ULTRAKIT.Loader.Injectors
                     //UKMod.SetPersistentModData($@"{weap.modName}.{weap.id}.equip", equippedStatus, "ULTRAKIT");
                     SaveData.SetValue(SaveData.data.weapon_order, $@"{weap.modName}.{weap.id}", weap.equipOrder);
                     SaveData.SetValue(SaveData.data.weapon_status, $@"{weap.modName}.{weap.id}", weap.equipStatus);
-
                     for (int i = 0; i < weap.All_Variants.Length; i++)
                     {
                         var variant = weap.All_Variants[i];
@@ -143,11 +142,7 @@ namespace ULTRAKIT.Loader.Injectors
                     }
                     for (int i = 0; i < weap.Variants.Length; i++)
                     {
-                        var variant = weap.All_Variants[weap.equipOrder[i]];
-                        if (weap.equipStatus[weap.equipOrder[i]] == 2)
-                        {
-                            variant = weap.All_Variants[weap.equipOrder[i] + weap.Variants.Length];
-                        }
+                        var variant = weap.equipStatus[weap.equipOrder.FindIndexOf(i)] == 2 ? weap.AltVariants[weap.equipOrder.FindIndexOf(i)] : weap.Variants[weap.equipOrder.FindIndexOf(i)];
 
                         if (!equippedDict[variant])
                         {

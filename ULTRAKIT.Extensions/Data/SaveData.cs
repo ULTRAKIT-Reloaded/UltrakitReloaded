@@ -56,9 +56,11 @@ namespace ULTRAKIT.Extensions.Data
             if (dict.ContainsKey(key))
             {
                 dict[key] = value;
+                Save();
                 return true;
             }
             dict.Add(key, value);
+            Save();
             return false;
         }
 
@@ -70,7 +72,6 @@ namespace ULTRAKIT.Extensions.Data
             string json = JsonConvert.SerializeObject(_data);
             File.WriteAllText(dataFilePath, json);
             UKLogger.Log("Saved persistent data");
-            
         }
 
         public static void Load()
@@ -96,9 +97,13 @@ namespace ULTRAKIT.Extensions.Data
     [System.Serializable]
     public class PersistentData
     {
+        // Internal Data
         public Dictionary<string, int[]> weapon_order;
         public Dictionary<string, int[]> weapon_status;
         public Dictionary<string, bool> weapon_unlock;
+
+        // External Data
+        
 
         internal static readonly PersistentData Default = new PersistentData()
         {

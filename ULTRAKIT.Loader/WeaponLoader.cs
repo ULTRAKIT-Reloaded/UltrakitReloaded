@@ -28,12 +28,13 @@ namespace ULTRAKIT.Loader
                 weapon.modName = name;
                 int[] orderData;
                 int[] statusData;
-                bool unlockData = weapon.Unlocked;
+                bool unlockData;
                 if (!SaveData.data.weapon_order.TryGetValue($@"{weapon.modName}.{weapon.id}", out orderData))
                     orderData = new int[] {0, 1, 2};
                 if (!SaveData.data.weapon_status.TryGetValue($@"{weapon.modName}.{weapon.id}", out statusData))
                     statusData = new int[] {1, 1, 1};
-                SaveData.data.weapon_unlock.TryGetValue($@"{weapon.modName}.{weapon.id}", out unlockData);
+                if (!SaveData.data.weapon_unlock.TryGetValue($@"{weapon.modName}.{weapon.id}", out unlockData))
+                    unlockData = weapon.Unlocked;
                 /*string data = UKMod.RetrieveStringPersistentModData($@"{weapon.modName}.{weapon.id}.load", "ULTRAKIT");
                 string data2 = UKMod.RetrieveStringPersistentModData($@"{weapon.modName}.{weapon.id}.equip", "ULTRAKIT");
                 string unlockData = UKMod.RetrieveStringPersistentModData($@"{weapon.modName}.{weapon.id}.unlock", "ULTRAKIT");
@@ -68,7 +69,6 @@ namespace ULTRAKIT.Loader
 
             UKLogger.Log($"Loaded weapons from {name}");
 
-            LoadReplacements(bundle);
             UltrakitInputManager.UpdateKeyBinds();
             return weapons;
         }
