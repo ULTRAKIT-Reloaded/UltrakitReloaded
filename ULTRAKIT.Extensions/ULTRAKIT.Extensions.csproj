@@ -114,6 +114,7 @@
   <ItemGroup>
     <Compile Include="AssetLoader.cs" />
     <Compile Include="Data\ConfigData.cs" />
+    <Compile Include="Events.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="Interfaces\IBuff.cs" />
     <Compile Include="Data\SaveData.cs" />

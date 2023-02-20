@@ -36,7 +36,7 @@ namespace ULTRAKIT.Extensions
     [HarmonyPatch(typeof(CheatsManager))]
     public class CheatsManagerPatch
     {
-        public static UnityEvent CheatStateChanged;
+        public static CheatStateChangedEvent CheatStateChanged;
 
         [HarmonyPatch("Start")]
         [HarmonyPrefix]
@@ -44,15 +44,15 @@ namespace ULTRAKIT.Extensions
         {
             if (CheatStateChanged == null)
             {
-                CheatStateChanged = new UnityEvent();
+                CheatStateChanged = new CheatStateChangedEvent();
             }
         }
 
         [HarmonyPatch("WrappedSetState")]
         [HarmonyPostfix]
-        public static void Postfix(CheatsManager __instance)
+        public static void Postfix(CheatsManager __instance, ICheat targetCheat)
         {
-            CheatStateChanged.Invoke();
+            CheatStateChanged.Invoke(targetCheat.Identifier);
         }
     }
 }
