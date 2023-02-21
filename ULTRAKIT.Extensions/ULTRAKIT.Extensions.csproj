@@ -112,14 +112,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssetLoader.cs" />
     <Compile Include="Data\ConfigData.cs" />
     <Compile Include="Events.cs" />
-    <Compile Include="Extensions\AssetLoader.cs" />
+    <Compile Include="AssetLoader.cs" />
+    <Compile Include="Extensions\ComponentExt.cs" />
+    <Compile Include="Extensions\EnumerableExt.cs" />
+    <Compile Include="GraphicsUtilities.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="Interfaces\IBuff.cs" />
     <Compile Include="Data\SaveData.cs" />
     <Compile Include="ObjectClasses\Monobehaviours\CustomHealthBar.cs" />
+    <Compile Include="ObjectClasses\Monobehaviours\RenderFixer.cs" />
     <Compile Include="Patches\CheatsManagerPatch.cs" />
     <Compile Include="UKLogger.cs" />
     <Compile Include="Managers\BuffsManager.cs" />
@@ -127,10 +130,8 @@
     <Compile Include="Managers\HatsManager.cs" />
     <Compile Include="UKClassExtensions\GunSetter.cs" />
     <Compile Include="ObjectClasses\Cheat.cs" />
-    <Compile Include="DazeExtensions.cs" />
     <Compile Include="UKClassExtensions\CheatsManagerExt.cs" />
-    <Compile Include="PeterExtensions.cs" />
-    <Compile Include="ReflectionExtensions.cs" />
+    <Compile Include="Extensions\ReflectionExt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

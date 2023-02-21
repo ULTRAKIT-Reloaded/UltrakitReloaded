@@ -56,11 +56,11 @@ namespace ULTRAKIT
 
         private static void SetSpawnerSprites()
         {
-            SpawnerInjector.fpeye = PeterExtensions.CreateSprite(Properties.Resources.fpeye_jpg);
-            SpawnerInjector.fpface = PeterExtensions.CreateSprite(Properties.Resources.fpface_jpg);
-            SpawnerInjector.levi = PeterExtensions.CreateSprite(Properties.Resources.levi_jpg);
-            SpawnerInjector.minos = PeterExtensions.CreateSprite(Properties.Resources.minos_jpg);
-            SpawnerInjector.wicked = PeterExtensions.CreateSprite(Properties.Resources.wicked_jpg);
+            SpawnerInjector.fpeye = GraphicsUtilities.CreateSprite(Properties.Resources.fpeye_jpg, 128, 128);
+            SpawnerInjector.fpface = GraphicsUtilities.CreateSprite(Properties.Resources.fpface_jpg, 128, 128);
+            SpawnerInjector.levi = GraphicsUtilities.CreateSprite(Properties.Resources.levi_jpg, 128, 128);
+            SpawnerInjector.minos = GraphicsUtilities.CreateSprite(Properties.Resources.minos_jpg, 128, 128);
+            SpawnerInjector.wicked = GraphicsUtilities.CreateSprite(Properties.Resources.wicked_jpg, 128, 128);
         }
 
         // Loaders

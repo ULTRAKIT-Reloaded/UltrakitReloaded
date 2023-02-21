@@ -10,7 +10,7 @@ namespace ULTRAKIT.Extensions
 {
     public static class Events
     {
-        public static CheatStateChangedEvent CheatStateChanged => CheatsManagerPatch.CheatStateChanged;
+        public static CheatStateChangedEvent CheatStateChanged => Patches.CheatsManagerPatch.CheatStateChanged;
     }
 
     // Event Types

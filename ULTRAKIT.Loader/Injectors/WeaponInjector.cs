@@ -11,6 +11,8 @@ using UMM;
 using UnityEngine.InputSystem;
 using static UnityEditor.UIElements.ToolbarMenu;
 using ULTRAKIT.Extensions.Data;
+using ULTRAKIT.Extensions.Extensions;
+using ULTRAKIT.Extensions.ObjectClasses.Monobehaviours;
 
 namespace ULTRAKIT.Loader.Injectors
 {
@@ -152,7 +154,7 @@ namespace ULTRAKIT.Loader.Injectors
                         var go = GameObject.Instantiate(variant, __instance.transform);
                         go.SetActive(false);
 
-                        PeterExtensions.RenderObject(go, LayerMask.NameToLayer("AlwaysOnTop"));
+                        go.transform.RenderObject(LayerMask.NameToLayer("AlwaysOnTop"));
                         
                         var wi = go.AddComponent<WeaponIcon>();
                         wi.weaponIcon = weap.Icons[i];

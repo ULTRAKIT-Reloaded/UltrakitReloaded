@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using ULTRAKIT.Extensions.Extensions;
 
 namespace ULTRAKIT.Loader.Injectors
 {
@@ -238,7 +239,7 @@ namespace ULTRAKIT.Loader.Injectors
             orderClickUp.AddListener(ordU);
             orderClickDown.AddListener(ordD);
 
-            Type controllerPointer = PeterExtensions.GetInternalType("ControllerPointer");
+            Type controllerPointer = ReflectionExt.GetInternalType("ControllerPointer");
             var btu = ordUp.GetComponent(controllerPointer);
             var field = btu.GetType().GetField("onPressed", BindingFlags.NonPublic | BindingFlags.Instance);
             field.SetValue(btu, orderClickUp);

@@ -10,6 +10,7 @@ using ULTRAKIT.Extensions;
 using UnityEditor;
 using ULTRAKIT.Data;
 using ULTRAKIT.Extensions.Data;
+using ULTRAKIT.Extensions.Extensions;
 
 namespace ULTRAKIT.Loader.Injectors
 {
@@ -71,7 +72,8 @@ namespace ULTRAKIT.Loader.Injectors
             if (File.Exists($@"{Application.productName}_Data\StreamingAssets\acts\act-2"))
             {
                 var data = File.ReadAllBytes($@"{Application.productName}_Data\StreamingAssets\acts\act-2");
-                Act2 = DazeExtensions.LoadFromLoaded(Act2, @"acts/act-2") ?? AssetBundle.LoadFromMemory(data);
+                if (!AssetLoader.LoadFromLoaded(@"acts/act-2", out Act2))
+                    Act2 = AssetBundle.LoadFromMemory(data);
             }
             string[] scenePaths = Act2.GetAllScenePaths();
             foreach (string scenePath in scenePaths)
@@ -85,7 +87,7 @@ namespace ULTRAKIT.Loader.Injectors
         public static GameObject GrabEnemy(string enemy)
         {
             GameObject obj = new GameObject();
-            GameObject tempObj = DazeExtensions.PrefabFind(null, "common", enemy);
+            GameObject tempObj = AssetLoader.AssetFind<GameObject>("common", enemy);
             if (tempObj != null)
                 obj = tempObj;
             else

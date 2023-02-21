@@ -51,7 +51,7 @@ namespace ULTRAKIT.Extensions
             hatInstance.transform.localPosition = hat.obj.transform.position + hat.position_offset;
             hatInstance.transform.localRotation = hat.obj.transform.rotation * Quaternion.Euler(hat.rotation_offset);
             hatInstance.transform.localScale = hat.obj.transform.localScale + hat.scale_offset;
-            PeterExtensions.RenderObject(hatInstance, LayerMask.NameToLayer("Limb"));
+            hatInstance.transform.RenderObject(LayerMask.NameToLayer("Limb"));
             hatInstance.SetActive(false);
             hats.Add(registry.hatID, hatInstance);
         }
