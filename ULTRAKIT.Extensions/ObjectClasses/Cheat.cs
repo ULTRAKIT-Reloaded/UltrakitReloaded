@@ -9,7 +9,7 @@ namespace ULTRAKIT.Extensions
 {
 	public class Cheat : ICheat
 	{
-		private static Cheat _lastInstance;
+		public static Cheat _lastInstance;
 
 		private bool active;
 

@@ -32,27 +32,4 @@ namespace ULTRAKIT.Extensions
             return false;
         }
     }
-
-    [HarmonyPatch(typeof(CheatsManager))]
-    public class CheatsManagerPatch
-    {
-        public static CheatStateChangedEvent CheatStateChanged;
-
-        [HarmonyPatch("Start")]
-        [HarmonyPrefix]
-        static void StartPrefix(CheatsManager __instance)
-        {
-            if (CheatStateChanged == null)
-            {
-                CheatStateChanged = new CheatStateChangedEvent();
-            }
-        }
-
-        [HarmonyPatch("WrappedSetState")]
-        [HarmonyPostfix]
-        public static void Postfix(CheatsManager __instance, ICheat targetCheat)
-        {
-            CheatStateChanged.Invoke(targetCheat.Identifier);
-        }
-    }
 }

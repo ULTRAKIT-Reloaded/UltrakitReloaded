@@ -113,21 +113,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArmLoader.cs" />
-    <Compile Include="BuffLoader.cs" />
-    <Compile Include="CustomHealthBar.cs" />
+    <Compile Include="Loaders\ArmLoader.cs" />
+    <Compile Include="Loaders\BuffLoader.cs" />
     <Compile Include="Initializer.cs" />
-    <Compile Include="HatLoader.cs" />
+    <Compile Include="Loaders\HatLoader.cs" />
     <Compile Include="Injectors\ArmInjector.cs" />
     <Compile Include="Injectors\BuffsInjector.cs" />
     <Compile Include="Injectors\HatsInjector.cs" />
     <Compile Include="Injectors\ShopInjector.cs" />
     <Compile Include="Injectors\SpawnerInjector.cs" />
     <Compile Include="Injectors\WeaponInjector.cs" />
-    <Compile Include="SpawnerArmLoader.cs" />
-    <Compile Include="SpawnerArmPatches.cs" />
+    <Compile Include="Registries.cs" />
+    <Compile Include="Loaders\SpawnerArmLoader.cs" />
+    <Compile Include="Patches\SpawnerArmPatch.cs" />
     <Compile Include="UltrakitInputManager.cs" />
-    <Compile Include="WeaponLoader.cs" />
+    <Compile Include="Loaders\WeaponLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

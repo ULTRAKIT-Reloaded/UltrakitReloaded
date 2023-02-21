@@ -118,14 +118,16 @@
     <Compile Include="Initializer.cs" />
     <Compile Include="Interfaces\IBuff.cs" />
     <Compile Include="Data\SaveData.cs" />
+    <Compile Include="ObjectClasses\Monobehaviours\CustomHealthBar.cs" />
+    <Compile Include="Patches\CheatsManagerPatch.cs" />
     <Compile Include="UKLogger.cs" />
-    <Compile Include="ObjectClasses\BuffsManager.cs" />
+    <Compile Include="Managers\BuffsManager.cs" />
     <Compile Include="ObjectClasses\Buff.cs" />
-    <Compile Include="ObjectClasses\HatsManager.cs" />
-    <Compile Include="ObjectExtensions\GunSetter.cs" />
+    <Compile Include="Managers\HatsManager.cs" />
+    <Compile Include="UKClassExtensions\GunSetter.cs" />
     <Compile Include="ObjectClasses\Cheat.cs" />
     <Compile Include="DazeExtensions.cs" />
-    <Compile Include="ObjectExtensions\CheatsManager.cs" />
+    <Compile Include="UKClassExtensions\CheatsManagerExt.cs" />
     <Compile Include="PeterExtensions.cs" />
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -135,6 +137,9 @@
       <Project>{cef77a9b-383b-4080-aece-6b92dc5bf990}</Project>
       <Name>ULTRAKIT.Data</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

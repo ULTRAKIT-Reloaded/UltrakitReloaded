@@ -14,6 +14,7 @@ namespace ULTRAKIT
     {
         private static void Enable()
         {
+            HatLoader.SetAllActive("ultrakit.tophat", true);
         }
 
         private static void Disable()
@@ -21,10 +22,7 @@ namespace ULTRAKIT
             HatLoader.SetAllActive("ultrakit.tophat", false);
         }
 
-        private static void OnUpdate()
-        {
-            HatLoader.SetAllActive("ultrakit.tophat", true);
-        }
+        private static void OnUpdate() { }
 
         public static Cheat cheat = new Cheat
         {

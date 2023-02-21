@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace ULTRAKIT.Loader
+namespace ULTRAKIT.Extensions
 {
     public class CustomHealthbarPos : MonoBehaviour
     {

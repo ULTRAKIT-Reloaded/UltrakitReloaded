@@ -25,10 +25,10 @@ namespace ULTRAKIT.EditorScripts
             CreateObject<Weapon>("New_Weapon");
         }
 
-        [MenuItem("Assets/ULTRAKIT/New Replacement Weapon")]
+        [MenuItem("Assets/ULTRAKIT/New Vanilla Weapon")]
         public static void NewReplacementWeapon()
         {
-            CreateObject<ReplacementWeapon>("New_Replacement_Weapon");
+            CreateObject<ReplacementWeapon>("New_Vanilla_Weapon");
         }
 
         [MenuItem("Assets/ULTRAKIT/New Hat")]
