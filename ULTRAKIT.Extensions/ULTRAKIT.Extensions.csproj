@@ -115,6 +115,7 @@
     <Compile Include="AssetLoader.cs" />
     <Compile Include="Data\ConfigData.cs" />
     <Compile Include="Events.cs" />
+    <Compile Include="Extensions\AssetLoader.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="Interfaces\IBuff.cs" />
     <Compile Include="Data\SaveData.cs" />
@@ -138,8 +139,6 @@
       <Name>ULTRAKIT.Data</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
