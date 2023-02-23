@@ -80,7 +80,10 @@ namespace ULTRAKIT.Loader.Injectors
         {
             GameObject obj = AssetLoader.AssetFind<GameObject>("common", enemy);
             if (obj != null)
+            {
+                SetHealthBar(obj, enemy);
                 return obj;
+            }
             
             obj = BossFind(enemy);
 
@@ -99,7 +102,7 @@ namespace ULTRAKIT.Loader.Injectors
             if (!Act2Scenes.Contains(scene.name))
             {
                 if (Act2 != null)
-                    Act2.Unload(true); // May break things
+                    Act2.Unload(false);
                 SceneManager.sceneLoaded -= OnSceneLoaded;
                 return;
             }

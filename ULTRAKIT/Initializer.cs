@@ -53,7 +53,7 @@ namespace ULTRAKIT
             if (!HatLoader.Persistent)
             {
                 Registries.hat_activeHats.Clear();
-                Registries.hat_activeHats.AddRange(new string[] { "christmas", "halloween", "easter" });
+                HatLoader.SetSeasonals();
             }
         }
 

@@ -103,7 +103,7 @@ namespace ULTRAKIT.Loader
         [HarmonyPrefix]
         public static void StartPrefix(MinosBoss __instance)
         {
-            var cust = __instance.GetComponentInChildren<CustomHealthbarPos>(true);
+            CustomHealthbarPos cust = __instance.GetComponentInChildren<CustomHealthbarPos>(true);
             if (cust)
             {
                 cust.offset = Vector3.up * minosHeight * 1.5f;

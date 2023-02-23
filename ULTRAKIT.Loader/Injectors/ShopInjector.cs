@@ -70,7 +70,7 @@ namespace ULTRAKIT.Loader.Injectors
                 res[0].Add(vanillaButton.gameObject);
             }
 
-            var allWeaps = WeaponLoader.allWeapons;
+            var allWeaps = Registries.weap_allWeapons;
             int curPage = 1;
             int curWeap = 0;
             res.Add(new List<GameObject>());
@@ -136,7 +136,7 @@ namespace ULTRAKIT.Loader.Injectors
         static Dictionary<Weapon, GameObject> CreatePanels(GameObject parent)
         {
             var res = new Dictionary<Weapon, GameObject>();
-            var allWeaps = WeaponLoader.allWeapons;
+            var allWeaps = Registries.weap_allWeapons;
             foreach (var weap in allWeaps)
             {
                 var go = GameObject.Instantiate(panelTemplate, parent.transform);

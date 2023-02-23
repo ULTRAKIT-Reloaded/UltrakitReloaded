@@ -24,28 +24,7 @@ namespace ULTRAKIT.Loader
         {
             SceneManager.sceneUnloaded += ClearInstances;
             if (managerInstances == null) managerInstances = new List<HatsManager>();
-
-            DateTime time = DateTime.Now;
-            switch (time.Month)
-            {
-                case 12:
-                    if (time.Day >= 22 && time.Day <= 28)
-                    {
-                        activeHats.Add("christmas");
-                    }
-                    return;
-                case 10:
-                    if (time.Day >= 25 && time.Day <= 31)
-                    {
-                        activeHats.Add("halloween");
-                    }
-                    return;
-            }
-            DateTime dateTime = GetEaster(time.Year);
-            if (time.DayOfYear >= dateTime.DayOfYear - 2 && time.DayOfYear <= dateTime.DayOfYear)
-            {
-                activeHats.Add("easter");
-            }
+            SetSeasonals();
         }
 
         public static void LoadHats(AssetBundle bundle)
@@ -101,6 +80,31 @@ namespace ULTRAKIT.Loader
             int num6 = 3 + (num5 + 40) / 44;
             int day = num5 + 28 - 31 * (num6 / 4);
             return new DateTime(year, num6, day);
+        }
+
+        public static void SetSeasonals()
+        {
+            DateTime time = DateTime.Now;
+            switch (time.Month)
+            {
+                case 12:
+                    if (time.Day >= 22 && time.Day <= 28)
+                    {
+                        activeHats.Add("christmas");
+                    }
+                    return;
+                case 10:
+                    if (time.Day >= 25 && time.Day <= 31)
+                    {
+                        activeHats.Add("halloween");
+                    }
+                    return;
+            }
+            DateTime dateTime = GetEaster(time.Year);
+            if (time.DayOfYear >= dateTime.DayOfYear - 2 && time.DayOfYear <= dateTime.DayOfYear)
+            {
+                activeHats.Add("easter");
+            }
         }
     }
 }

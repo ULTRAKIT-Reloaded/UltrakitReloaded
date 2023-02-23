@@ -30,7 +30,7 @@ namespace ULTRAKIT.Loader
 
         public static void UpdateKeyBinds()
         {
-            int weapons = WeaponLoader.allWeapons.Count + 6;
+            int weapons = Registries.weap_allWeapons.Count + 6;
             if (GunControl.Instance != null)
             {
                 weapons = GunControl.Instance.slots.Count;
