@@ -18,7 +18,7 @@ namespace ULTRAKIT.Loader
         [HarmonyPrefix]
         public static bool AwakePrefix()
         {
-            if (SpawnerInjector._init)
+            if (SpawnablesInjector._init)
                 return true;
             return false;
         }
@@ -27,7 +27,7 @@ namespace ULTRAKIT.Loader
         [HarmonyPrefix]
         public static bool StartPrefix()
         {
-            if (SpawnerInjector._init)
+            if (SpawnablesInjector._init)
                 return true;
             return false;
         }
@@ -36,7 +36,7 @@ namespace ULTRAKIT.Loader
         [HarmonyPrefix]
         public static bool OnEnablePrefix()
         {
-            if (SpawnerInjector._init)
+            if (SpawnablesInjector._init)
                 return true;
             return false;
         }
@@ -62,18 +62,18 @@ namespace ULTRAKIT.Loader
         [HarmonyPrefix]
         public static void AwakePrefix(SpawnMenu __instance, SpawnableObjectsDatabase ___objects)
         {
-            if (!SpawnerArmLoader.init)
+            if (!SpawnablesLoader.init)
             {
-                SpawnerArmLoader.spawnablesDatabase.enemies = ___objects.enemies;
-                SpawnerArmLoader.spawnablesDatabase.objects = ___objects.objects;
-                SpawnerArmLoader.spawnablesDatabase.sandboxTools = ___objects.sandboxTools;
-                SpawnerArmLoader.init = true;
+                Registries.spawn_spawnablesDatabase.enemies = ___objects.enemies;
+                Registries.spawn_spawnablesDatabase.objects = ___objects.objects;
+                Registries.spawn_spawnablesDatabase.sandboxTools = ___objects.sandboxTools;
+                SpawnablesLoader.init = true;
             }
 
-            SpawnerArmLoader.InjectSpawnables(__instance);
-            ___objects.sandboxTools = SpawnerArmLoader._tools;
-            ___objects.enemies = SpawnerArmLoader._enemies;
-            ___objects.objects = SpawnerArmLoader._objects;
+            SpawnablesLoader.InjectSpawnables(__instance);
+            ___objects.sandboxTools = Registries.spawn_tools;
+            ___objects.enemies = Registries.spawn_enemies;
+            ___objects.objects = Registries.spawn_objects;
         }
     }
 

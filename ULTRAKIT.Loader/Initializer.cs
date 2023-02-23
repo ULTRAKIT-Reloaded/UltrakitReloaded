@@ -21,7 +21,7 @@ namespace ULTRAKIT.Loader
             Harmony harmony = new Harmony("ULTRAKIT.Loader");
             harmony.PatchAll();
             HatLoader.Init();
-            SpawnerInjector.Init();
+            SpawnablesInjector.Init();
             UltrakitInputManager.UpdateKeyBinds();
         }
     }

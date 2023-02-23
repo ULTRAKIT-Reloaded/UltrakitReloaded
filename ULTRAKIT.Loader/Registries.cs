@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ULTRAKIT.Data;
 using ULTRAKIT.Extensions;
+using UnityEngine;
 
 namespace ULTRAKIT.Loader
 {
@@ -21,5 +22,17 @@ namespace ULTRAKIT.Loader
 
         // BuffLoader
         public static List<IBuff> buff_buffRegistry = new List<IBuff>();
+
+        // SpawnablesLoader
+        public static List<UKSpawnable> spawn_spawnables = new List<UKSpawnable>();
+        public static SpawnableObjectsDatabase spawn_spawnablesDatabase = ScriptableObject.CreateInstance<SpawnableObjectsDatabase>();
+
+        public static SpawnableObject[] spawn_tools = new SpawnableObject[0];
+        public static SpawnableObject[] spawn_enemies = new SpawnableObject[0];
+        public static SpawnableObject[] spawn_objects = new SpawnableObject[0];
+
+        // SpawnablesInjector
+        public static Dictionary<string, Sprite> spawn_sprites = new Dictionary<string, Sprite>();
+
     }
 }

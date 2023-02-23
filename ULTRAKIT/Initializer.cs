@@ -51,16 +51,25 @@ namespace ULTRAKIT
         private static void OnSceneUnloaded(Scene scene)
         {
             if (!HatLoader.Persistent)
-                HatLoader.activeHats.Clear();
+            {
+                Registries.hat_activeHats.Clear();
+                Registries.hat_activeHats.AddRange(new string[] { "christmas", "halloween", "easter" });
+            }
         }
 
         private static void SetSpawnerSprites()
         {
-            SpawnerInjector.fpeye = GraphicsUtilities.CreateSprite(Properties.Resources.fpeye_jpg, 128, 128);
-            SpawnerInjector.fpface = GraphicsUtilities.CreateSprite(Properties.Resources.fpface_jpg, 128, 128);
-            SpawnerInjector.levi = GraphicsUtilities.CreateSprite(Properties.Resources.levi_jpg, 128, 128);
-            SpawnerInjector.minos = GraphicsUtilities.CreateSprite(Properties.Resources.minos_jpg, 128, 128);
-            SpawnerInjector.wicked = GraphicsUtilities.CreateSprite(Properties.Resources.wicked_jpg, 128, 128);
+            Sprite fpeye = GraphicsUtilities.CreateSprite(Properties.Resources.fpeye_jpg, 128, 128);
+            Sprite fpface = GraphicsUtilities.CreateSprite(Properties.Resources.fpface_jpg, 128, 128);
+            Sprite levi = GraphicsUtilities.CreateSprite(Properties.Resources.levi_jpg, 128, 128);
+            Sprite minos = GraphicsUtilities.CreateSprite(Properties.Resources.minos_jpg, 128, 128);
+            Sprite wicked = GraphicsUtilities.CreateSprite(Properties.Resources.wicked_jpg, 128, 128);
+
+            Registries.spawn_sprites.Add("DroneFlesh", fpeye);
+            Registries.spawn_sprites.Add("DroneSkull Variant", fpface);
+            Registries.spawn_sprites.Add("MinosBoss", minos);
+            Registries.spawn_sprites.Add("Wicked", wicked);
+            Registries.spawn_sprites.Add("Leviathan", levi);
         }
 
         // Loaders
