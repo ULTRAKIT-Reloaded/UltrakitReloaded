@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using ULTRAKIT.Data;
 using ULTRAKIT.Extensions;
 
-namespace ULTRAKIT
+namespace ULTRAKIT.Core.Commands
 {
     public class AltSetter : ICommand
     {

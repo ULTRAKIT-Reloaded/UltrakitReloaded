@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace ULTRAKIT.Extensions.Extensions
+namespace ULTRAKIT.Extensions
 {
     public static class AssetLoader
     {

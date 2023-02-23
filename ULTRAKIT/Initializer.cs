@@ -13,8 +13,9 @@ using System.IO;
 using ULTRAKIT.Loader.Injectors;
 using System.Reflection;
 using ULTRAKIT.Extensions.Data;
+using ULTRAKIT.Loader.Loaders;
 
-namespace ULTRAKIT
+namespace ULTRAKIT.Core
 {
     internal class Initializer
     {
@@ -81,13 +82,13 @@ namespace ULTRAKIT
 
         private static void LoadCheats()
         {
-            CheatsManager.Instance.RegisterCheat(Refresher.cheat, "ULTRAKIT");
-            CheatsManager.Instance.RegisterCheat(ActivateHats.cheat, "ULTRAKIT");
+            CheatsManager.Instance.RegisterCheat(new Cheats.Refresher(), "ULTRAKIT");
+            CheatsManager.Instance.RegisterCheat(new Cheats.ActivateHats(), "ULTRAKIT");
         }
 
         private static void LoadCommands()
         {
-            GameConsole.Console.Instance.RegisterCommand(new AltSetter());
+            GameConsole.Console.Instance.RegisterCommand(new Commands.AltSetter());
         }
     }
 }

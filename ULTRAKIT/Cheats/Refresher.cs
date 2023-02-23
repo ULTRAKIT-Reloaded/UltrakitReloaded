@@ -6,35 +6,27 @@ using System.Threading.Tasks;
 using UnityEngine;
 using ULTRAKIT.Extensions;
 
-namespace ULTRAKIT
+namespace ULTRAKIT.Core.Cheats
 {
-    public static class Refresher
+    public class Refresher : ICheat
     {
-        private static void Enable()
+        public string LongName => "Refresh Weapons";
+        public string Identifier => "ULTRAKIT.refresh_weapons";
+        public string ButtonEnabledOverride => "Refreshing";
+        public string ButtonDisabledOverride => "Refresh";
+        public bool DefaultState => false;
+        public bool IsActive => false;
+        public string Icon => "warning";
+        public StatePersistenceMode PersistenceMode => StatePersistenceMode.NotPersistent;
+
+        public void Enable()
         {
             GunSetter.Instance.RefreshWeapons();
-            cheat.Disable();
+            Disable();
         }
 
-        private static void Disable()
-        {
-        }
+        public void Disable() { }
 
-        private static void OnUpdate()
-        {
-        }
-
-        public static Cheat cheat = new Cheat
-        {
-            LongName = "Refresh Weapons",
-            Identifier = "ULTRAKIT.refresh_weapons",
-            ButtonEnabledOverride = "Refreshing",
-            ButtonDisabledOverride = "Refresh",
-            DefaultState = false,
-            PersistenceMode = StatePersistenceMode.NotPersistent,
-            EnableScript = Enable,
-            DisableScript = Disable,
-            UpdateScript = OnUpdate,
-        };
+        public void Update() { }
     }
 }

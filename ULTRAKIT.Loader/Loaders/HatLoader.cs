@@ -6,12 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using ULTRAKIT.Data;
 using ULTRAKIT.Extensions;
-using ULTRAKIT.Extensions.Extensions;
+using ULTRAKIT.Extensions.Managers;
 using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace ULTRAKIT.Loader
+namespace ULTRAKIT.Loader.Loaders
 {
     public static class HatLoader
     {

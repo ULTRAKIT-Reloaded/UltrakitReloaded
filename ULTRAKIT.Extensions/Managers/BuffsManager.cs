@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using ULTRAKIT.Extensions.Interfaces;
 
-namespace ULTRAKIT.Extensions
+namespace ULTRAKIT.Extensions.Managers
 {
     public class BuffsManager : MonoBehaviour
     {

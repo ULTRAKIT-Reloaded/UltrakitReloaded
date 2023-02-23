@@ -16,7 +16,7 @@ using ULTRAKIT.Loader.Injectors;
 using ULTRAKIT.Data;
 using System.Reflection;
 
-namespace ULTRAKIT
+namespace ULTRAKIT.Core
 {
     [BepInPlugin("ULTRAKIT.core_module", "ULTRAKIT Reloaded", "2.0.0")]
     [BepInDependency("UMM", "0.5.0")]

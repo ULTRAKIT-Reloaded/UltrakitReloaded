@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ULTRAKIT.Extensions.Extensions
+namespace ULTRAKIT.Extensions
 {
     public static class EnumerableExt
     {

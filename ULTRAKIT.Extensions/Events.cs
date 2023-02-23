@@ -14,6 +14,6 @@ namespace ULTRAKIT.Extensions
     }
 
     // Event Types
-    [System.Serializable]
+    [Serializable]
     public class CheatStateChangedEvent : UnityEvent<string> { }
 }

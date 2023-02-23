@@ -5,11 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ULTRAKIT.Extensions;
+using ULTRAKIT.Extensions.Classes;
 using ULTRAKIT.Loader.Injectors;
+using ULTRAKIT.Loader.Loaders;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace ULTRAKIT.Loader
+namespace ULTRAKIT.Loader.Patches
 {
     [HarmonyPatch(typeof(CameraController))]
     public static class CameraControllerPatch

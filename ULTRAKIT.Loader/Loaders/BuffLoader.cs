@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ULTRAKIT.Extensions;
+using ULTRAKIT.Extensions.Interfaces;
 using UnityEngine;
 
-namespace ULTRAKIT.Loader
+namespace ULTRAKIT.Loader.Loaders
 {
     public static class BuffLoader
     {

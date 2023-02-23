@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ULTRAKIT.Data;
 using UnityEngine;
 
-namespace ULTRAKIT.Extensions
+namespace ULTRAKIT.Extensions.Managers
 {
     public class HatsManager : MonoBehaviour
     {

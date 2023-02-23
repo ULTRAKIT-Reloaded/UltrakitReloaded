@@ -10,7 +10,7 @@ using ULTRAKIT.Extensions;
 using UnityEditor;
 using ULTRAKIT.Data;
 using ULTRAKIT.Extensions.Data;
-using ULTRAKIT.Extensions.Extensions;
+using ULTRAKIT.Extensions.Classes;
 
 namespace ULTRAKIT.Loader.Injectors
 {

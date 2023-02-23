@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ULTRAKIT.Data;
 using ULTRAKIT.Extensions;
+using ULTRAKIT.Extensions.Interfaces;
 using UnityEngine;
 
 namespace ULTRAKIT.Loader

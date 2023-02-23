@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace ULTRAKIT.Extensions.ObjectClasses.Monobehaviours
+namespace ULTRAKIT.Extensions.Classes
 {
     public class RenderFixer : MonoBehaviour
     {

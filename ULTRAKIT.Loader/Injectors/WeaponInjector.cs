@@ -7,18 +7,14 @@ using ULTRAKIT.Data;
 using ULTRAKIT.Extensions;
 using UnityEngine.UI;
 using System.Linq;
-using UMM;
-using UnityEngine.InputSystem;
 using ULTRAKIT.Extensions.Data;
-using ULTRAKIT.Extensions.Extensions;
-using ULTRAKIT.Extensions.ObjectClasses.Monobehaviours;
+using ULTRAKIT.Extensions.Classes;
 
 namespace ULTRAKIT.Loader.Injectors
 {
     [HarmonyPatch(typeof(GunSetter))]
     public class GunSetterPatch
     {
-
         public static List<List<GameObject>> modSlots = new List<List<GameObject>>();
         public static Dictionary<GameObject, bool> equippedDict = new Dictionary<GameObject, bool>();
 

@@ -6,10 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using ULTRAKIT.Data;
 using ULTRAKIT.Extensions;
-using ULTRAKIT.Extensions.ObjectClasses.Monobehaviours;
+using ULTRAKIT.Extensions.Classes;
 using UnityEngine;
 
-namespace ULTRAKIT.Loader
+namespace ULTRAKIT.Loader.Loaders
 {
     public static class SpawnablesLoader
     {

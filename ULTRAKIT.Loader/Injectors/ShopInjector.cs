@@ -8,8 +8,6 @@ using ULTRAKIT.Extensions;
 using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
-using ULTRAKIT.Extensions.Extensions;
 
 namespace ULTRAKIT.Loader.Injectors
 {

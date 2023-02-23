@@ -10,7 +10,7 @@ using HarmonyLib;
 using UMM;
 using ULTRAKIT.Extensions.Data;
 
-namespace ULTRAKIT.Loader
+namespace ULTRAKIT.Loader.Loaders
 {
     public static class WeaponLoader
     {
