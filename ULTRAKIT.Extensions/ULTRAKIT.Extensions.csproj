@@ -124,6 +124,7 @@
     <Compile Include="ObjectClasses\Monobehaviours\CustomHealthBar.cs" />
     <Compile Include="ObjectClasses\Monobehaviours\RenderFixer.cs" />
     <Compile Include="Patches\CheatsManagerPatch.cs" />
+    <Compile Include="Patches\EnemyEventsPatch.cs" />
     <Compile Include="UKLogger.cs" />
     <Compile Include="Managers\BuffsManager.cs" />
     <Compile Include="ObjectClasses\Buff.cs" />
