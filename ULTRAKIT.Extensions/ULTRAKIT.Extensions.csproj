@@ -128,7 +128,7 @@
     <Compile Include="Managers\BuffsManager.cs" />
     <Compile Include="ObjectClasses\Buff.cs" />
     <Compile Include="Managers\HatsManager.cs" />
-    <Compile Include="UKClassExtensions\GunSetter.cs" />
+    <Compile Include="UKClassExtensions\GunSetterExt.cs" />
     <Compile Include="ObjectClasses\Cheat.cs" />
     <Compile Include="UKClassExtensions\CheatsManagerExt.cs" />
     <Compile Include="Extensions\ReflectionExt.cs" />

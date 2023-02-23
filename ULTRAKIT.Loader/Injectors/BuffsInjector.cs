@@ -18,7 +18,7 @@ namespace ULTRAKIT.Loader.Injectors
         {
             BuffsManager manager = __instance.gameObject.AddComponent<BuffsManager>();
             manager.eid = __instance;
-            manager.LoadBuffs(BuffLoader.buffRegistry.ToArray());
+            manager.LoadBuffs(Registries.buff_buffRegistry.ToArray());
         }
     }
 }

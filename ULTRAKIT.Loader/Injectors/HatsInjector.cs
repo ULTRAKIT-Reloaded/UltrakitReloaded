@@ -18,13 +18,21 @@ namespace ULTRAKIT.Loader.Injectors
         static void StartPrefix(SeasonalHats __instance)
         {
             HatsManager manager = __instance.gameObject.AddComponent<HatsManager>();
-            foreach (HatRegistry registry in HatLoader.registries)
+            foreach (HatRegistry registry in Registries.hat_registries)
             {
                 manager.LoadHat(registry);
             }
             HatLoader.managerInstances.Add(manager);
-            foreach (string hat in HatLoader.activeHats)
+            ClearSeasonal(manager);
+            foreach (string hat in Registries.hat_activeHats)
                 manager.SetHatActive(hat, true);
+        }
+
+        private static void ClearSeasonal(HatsManager manager)
+        {
+            manager.SetHatActive("christmas", false);
+            manager.SetHatActive("halloween", false);
+            manager.SetHatActive("easter", false);
         }
     }
 }

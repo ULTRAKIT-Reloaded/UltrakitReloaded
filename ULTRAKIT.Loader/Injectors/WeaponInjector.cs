@@ -33,7 +33,7 @@ namespace ULTRAKIT.Loader.Injectors
         [HarmonyPrefix]
         static void StartPrefix(GunSetter __instance)
         {
-            foreach (ReplacementWeapon weapon in WeaponLoader.replacements.Values)
+            foreach (ReplacementWeapon weapon in Registries.weap_replacements.Values)
             {
                 int slot = weapon.Alt ? 1 : 0;
                 weapon.Prefab.SetActive(false);
@@ -113,7 +113,7 @@ namespace ULTRAKIT.Loader.Injectors
                 }
             }
             modSlots.Clear();
-            foreach (var pair in WeaponLoader.registry)
+            foreach (var pair in Registries.weap_registry)
             {
                 foreach (var weap in pair.Value)
                 {

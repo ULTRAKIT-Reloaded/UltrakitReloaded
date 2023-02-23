@@ -16,14 +16,13 @@ namespace ULTRAKIT.Loader
     public static class HatLoader
     {
         public static List<HatsManager> managerInstances;
-        public static List<HatRegistry> registries;
-        public static List<string> activeHats = new List<string>();
+        //public static List<HatRegistry> registries;
+        //public static List<string> activeHats = new List<string>();
         public static bool Persistent = false;
 
         internal static void Init()
         {
             SceneManager.sceneUnloaded += ClearInstances;
-            if (registries == null) registries = new List<HatRegistry>();
             if (managerInstances == null) managerInstances = new List<HatsManager>();
 
             DateTime time = DateTime.Now;
@@ -32,20 +31,20 @@ namespace ULTRAKIT.Loader
                 case 12:
                     if (time.Day >= 22 && time.Day <= 28)
                     {
-                        activeHats.Add("christmas");
+                        Registries.hat_activeHats.Add("christmas");
                     }
                     return;
                 case 10:
                     if (time.Day >= 25 && time.Day <= 31)
                     {
-                        activeHats.Add("halloween");
+                        Registries.hat_activeHats.Add("halloween");
                     }
                     return;
             }
             DateTime dateTime = GetEaster(time.Year);
             if (time.DayOfYear >= dateTime.DayOfYear - 2 && time.DayOfYear <= dateTime.DayOfYear)
             {
-                activeHats.Add("easter");
+                Registries.hat_activeHats.Add("easter");
             }
         }
 
@@ -61,7 +60,7 @@ namespace ULTRAKIT.Loader
                     hatRegistry.hatDict.Add(hat.enemyType, hat);
                 }
             }
-            registries.AddRange(regis);
+            Registries.hat_registries.AddRange(regis);
             UKLogger.Log($"Loaded hats from {bundle.name}");
         }
 
@@ -79,10 +78,10 @@ namespace ULTRAKIT.Loader
                 if (manager.isActiveAndEnabled)
                     manager.SetHatActive(hatID, active);
             }
-            if (active && !activeHats.Contains(hatID))
-                activeHats.Add(hatID);
-            if (!active && activeHats.Contains(hatID))
-                activeHats.Remove(hatID);
+            if (active && !Registries.hat_activeHats.Contains(hatID))
+                Registries.hat_activeHats.Add(hatID);
+            if (!active && Registries.hat_activeHats.Contains(hatID))
+                Registries.hat_activeHats.Remove(hatID);
 
             managerInstances.RemoveRange(toRemove);
         }

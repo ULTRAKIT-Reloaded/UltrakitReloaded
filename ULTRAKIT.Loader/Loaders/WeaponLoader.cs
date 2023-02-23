@@ -14,14 +14,14 @@ namespace ULTRAKIT.Loader
 {
     public static class WeaponLoader
     {
-        public static Dictionary<string, List<Weapon>> registry = new Dictionary<string, List<Weapon>>();
-        public static List<Weapon> allWeapons = new List<Weapon>();
-        public static Dictionary<Tuple<WeaponType, int>, ReplacementWeapon> replacements = new Dictionary<Tuple<WeaponType, int>, ReplacementWeapon>();
+        //public static Dictionary<string, List<Weapon>> registry = new Dictionary<string, List<Weapon>>();
+        //public static List<Weapon> allWeapons = new List<Weapon>();
+        //public static Dictionary<Tuple<WeaponType, int>, ReplacementWeapon> replacements = new Dictionary<Tuple<WeaponType, int>, ReplacementWeapon>();
 
         public static Weapon[] LoadWeapons(AssetBundle bundle)
         {
             string name = bundle.name;
-            registry.Add(name, new List<Weapon>());
+            Registries.weap_registry.Add(name, new List<Weapon>());
             Weapon[] weapons = bundle.LoadAllAssets<Weapon>();
             foreach (Weapon weapon in weapons)
             {
@@ -64,8 +64,8 @@ namespace ULTRAKIT.Loader
                 variants.AddRange(weapon.AltVariants);
                 weapon.All_Variants = variants.ToArray();
             }
-            registry[name].AddRange(weapons);
-            allWeapons.AddRange(weapons);
+            Registries.weap_registry[name].AddRange(weapons);
+            Registries.weap_allWeapons.AddRange(weapons);
 
             UKLogger.Log($"Loaded weapons from {name}");
 
@@ -81,33 +81,33 @@ namespace ULTRAKIT.Loader
             {
                 weapon.modName = name;
                 Tuple<WeaponType, int> key = new Tuple<WeaponType, int>(weapon.WeaponType, weapon.Variant);
-                if (replacements.ContainsKey(key))
+                if (Registries.weap_replacements.ContainsKey(key))
                 {
                     UKLogger.LogWarning($"{{{name}}} Failed to load weapon: {weapon.WeaponType} variant {weapon.Variant} replacement already loaded.");
                     continue;
                 }
-                replacements.Add(key, weapon);
+                Registries.weap_replacements.Add(key, weapon);
             }
         }
 
         public static void UnloadWeapons(string bundleName)
         {
             List<Tuple<WeaponType, int>> deletionQueue= new List<Tuple<WeaponType, int>>();
-            foreach (var pair in replacements)
+            foreach (var pair in Registries.weap_replacements)
             {
                 if (pair.Value.modName == bundleName)
                     deletionQueue.Add(pair.Key);
             }
             foreach (var item in deletionQueue)
             {
-                replacements.Remove(item);
+                Registries.weap_replacements.Remove(item);
             }
 
-            foreach (Weapon weapon in registry[bundleName])
+            foreach (Weapon weapon in Registries.weap_registry[bundleName])
             {
-                allWeapons.Remove(weapon);
+                Registries.weap_allWeapons.Remove(weapon);
             }
-            registry.Remove(bundleName);
+            Registries.weap_registry.Remove(bundleName);
             AssetBundle[] bundles = AssetBundle.GetAllLoadedAssetBundles().Where(b => b.name == bundleName).ToArray();
             foreach (AssetBundle bundle in bundles)
             {
@@ -123,7 +123,7 @@ namespace ULTRAKIT.Loader
 
             try
             {
-                weapons = registry[bundleName];
+                weapons = Registries.weap_registry[bundleName];
             }
             catch (ArgumentOutOfRangeException)
             {
