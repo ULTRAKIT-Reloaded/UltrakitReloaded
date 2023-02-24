@@ -10,7 +10,11 @@ namespace ULTRAKIT.Extensions.Patches
     [HarmonyPatch(typeof(CheatsManager))]
     public class CheatsManagerPatch
     {
-        public static CheatStateChangedEvent CheatStateChanged;
+        public static CheatStateChangedEvent CheatStateChanged
+        {
+            get { return Events.CheatStateChanged; }
+            set { Events.CheatStateChanged = value; }
+        }
 
         [HarmonyPatch("Start")]
         [HarmonyPrefix]

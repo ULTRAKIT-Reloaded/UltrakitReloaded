@@ -10,9 +10,11 @@ namespace ULTRAKIT.Extensions
 {
     public static class Events
     {
-        public static CheatStateChangedEvent CheatStateChanged => Patches.CheatsManagerPatch.CheatStateChanged;
-        public static EnemySpawnedEvent EnemySpawned => Patches.EnemyTrackerPatch.EnemySpawned;
-        public static EnemyDiedEvent EnemyDied => Patches.EnemyIdentifierPatch.EnemyDied;
+        public static CheatStateChangedEvent CheatStateChanged;
+        public static EnemySpawnedEvent EnemySpawned;
+        public static EnemyDiedEvent EnemyDied;
+        public static UnityEvent ArenaActivated;
+        public static UnityEvent ArenaCompleted;
     }
 
     // Event Types

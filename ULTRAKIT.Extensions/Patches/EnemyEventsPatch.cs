@@ -10,7 +10,11 @@ namespace ULTRAKIT.Extensions.Patches
     [HarmonyPatch(typeof(EnemyTracker))]
     public class EnemyTrackerPatch
     {
-        public static EnemySpawnedEvent EnemySpawned;
+        public static EnemySpawnedEvent EnemySpawned
+        {
+            get { return Events.EnemySpawned; }
+            set { Events.EnemySpawned = value; }
+        }
 
         [HarmonyPatch("AddEnemy"), HarmonyPostfix]
         static void AddEnemyPostfix(EnemyTracker __instance, EnemyIdentifier eid)
@@ -24,7 +28,11 @@ namespace ULTRAKIT.Extensions.Patches
     [HarmonyPatch(typeof(EnemyIdentifier))]
     public class EnemyIdentifierPatch
     {
-        public static EnemyDiedEvent EnemyDied;
+        public static EnemyDiedEvent EnemyDied
+        {
+            get { return Events.EnemyDied; }
+            set { Events.EnemyDied = value; }
+        }
 
         [HarmonyPatch("Death"), HarmonyPostfix]
         static void DeathPostfix(EnemyIdentifier __instance)
