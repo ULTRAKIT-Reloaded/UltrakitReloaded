@@ -22,8 +22,9 @@ namespace ULTRAKIT.Extensions
             T[] allAssets = Resources.FindObjectsOfTypeAll<T>();
 
             foreach (T asset in allAssets)
-                if (asset.name == name) return result;
-            UKLogger.LogWarning($"Could not find asset {name}");
+                if (asset.name == name) result = asset;
+            if (result == default)
+                UKLogger.LogWarning($"Could not find asset {name}");
             return result;
         }
 
