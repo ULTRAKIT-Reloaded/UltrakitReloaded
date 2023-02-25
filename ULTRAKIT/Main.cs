@@ -30,11 +30,17 @@ namespace ULTRAKIT.Core
             Initializer.Init();
         }
 
+        // If the mod is disabled while a modded slot was last selected, the game gets angry, so this avoids that
         private static void OnApplicationQuit()
         {
             PlayerPrefs.SetInt("CurSlo", 1);
         }
 
+        /// <summary>
+        /// Calls a function after the specified delay
+        /// </summary>
+        /// <param name="func"></param>
+        /// <param name="delay"></param>
         public static void Invoke(Action func, float delay)
         {
             plugin.StartCoroutine(Delay());

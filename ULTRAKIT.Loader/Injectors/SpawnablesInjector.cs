@@ -22,6 +22,7 @@ namespace ULTRAKIT.Loader.Injectors
         private static AssetBundle Act2;
         private static List<string> Act2Scenes = new List<string>();
 
+        // ULTRAKILL enemies added to the spawner arm by default
         static Dictionary<string, EnemyType> SpawnList = new Dictionary<string, EnemyType>
         {
             { "DroneFlesh", EnemyType.Drone },
@@ -32,6 +33,7 @@ namespace ULTRAKIT.Loader.Injectors
 
         public static void Init()
         {
+            // Loading an entire bundle and scene in the background can slow things down
             if (ConfigData.Leviathan)
                 PrepLeviathan();
             else
@@ -49,13 +51,6 @@ namespace ULTRAKIT.Loader.Injectors
                 spawnable.gameObject = GrabEnemy(pair.Key);
                 spawnable.preview = new GameObject();
                 spawnable.gridIcon = Registries.spawn_sprites[pair.Key];
-                /*switch (pair.Key)
-                {
-                    case "DroneFlesh": spawnable.gridIcon = fpeye; break;
-                    case "DroneSkull Variant": spawnable.gridIcon = fpface; break;
-                    case "MinosBoss": spawnable.gridIcon = minos; break;
-                    case "Wicked": spawnable.gridIcon = wicked; break;
-                }*/
 
                 _enemies.Add(spawnable);
             }
@@ -63,17 +58,20 @@ namespace ULTRAKIT.Loader.Injectors
 
         private static void PrepLeviathan()
         {
+            // Loads act 2 bundle if it isn't already loaded
             var data = File.ReadAllBytes($@"{Application.productName}_Data\StreamingAssets\acts\act-2");
             if (!AssetLoader.LoadFromLoaded(@"acts/act-2", out Act2))
                 Act2 = AssetBundle.LoadFromMemory(data);
 
+            // Collects a list of all act 2 scenes, then loads Level 5-4 additively
             string[] scenePaths = Act2.GetAllScenePaths();
             foreach (string scenePath in scenePaths)
                 Act2Scenes.Add(Path.GetFileNameWithoutExtension(scenePath));
             string sceneName = Path.GetFileNameWithoutExtension(scenePaths[10]);
-            SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
 
+            // Sets the scene to finish the process when it loads
             SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
         }
 
         public static GameObject GrabEnemy(string enemy)
@@ -99,6 +97,8 @@ namespace ULTRAKIT.Loader.Injectors
 
         private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
+            // If the scene loaded isn't part of act 2, unload the bundle (but keep assets pulled from it, such as the leviathan) and remove this function
+            // Since 5-4 is loaded immediately after subscribing to the event, any other scenes will be loaded after
             if (!Act2Scenes.Contains(scene.name))
             {
                 if (Act2 != null)
@@ -108,7 +108,9 @@ namespace ULTRAKIT.Loader.Injectors
             }
             if (scene.name == "Level 5-4")
             {
+                // Avoids calling it again in case 5-4 is entered normally and the function remains subscribed to sceneLoaded
                 if (_init) return;
+                // Grabs a disabled copy of the leviathan that persists across scenes
                 GameObject[] roots = scene.GetRootGameObjects();
                 GameObject temp_levi = roots.Where(g => g.name == "Surface").First().transform.Find("Stuff/Boss/Leviathan").gameObject;
                 GameObject leviathan = GameObject.Instantiate(temp_levi);
@@ -142,7 +144,7 @@ namespace ULTRAKIT.Loader.Injectors
             {
                 if (obj.gameObject.name == name && (obj.gameObject.tag == "Enemy" || name == "Wicked"))
                 {
-                    if (obj.activeSelf != true) obj.SetActive(true);
+                    if (!obj.activeSelf) obj.SetActive(true);
 
                     // Fix lighting
                     var smrs = obj.GetComponentsInChildren<SkinnedMeshRenderer>(true);
@@ -166,6 +168,7 @@ namespace ULTRAKIT.Loader.Injectors
                 bhb.bossName = "";
             }
 
+            // Sets health bars to remain over the boss's head to avoid covering the entire screen
             CustomHealthbarPos cust = bhb?.gameObject.AddComponent<CustomHealthbarPos>();
             if (cust)
             {

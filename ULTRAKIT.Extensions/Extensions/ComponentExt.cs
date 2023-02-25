@@ -10,6 +10,12 @@ namespace ULTRAKIT.Extensions
 {
     public static class ComponentExt
     {
+        /// <summary>
+        /// Returns all components of type T in an array of components.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static IEnumerable<T> GetComponentsInArray<T>(this Component[] source) where T : Component
         {
             List<T> components = new List<T>();
@@ -23,6 +29,13 @@ namespace ULTRAKIT.Extensions
             return components;
         }
 
+        /// <summary>
+        /// Returns all components of type T in an array of components and their children.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="searchInactive"></param>
+        /// <returns></returns>
         public static IEnumerable<T> GetAllComponentsInArray<T>(this Component[] source, bool searchInactive) where T : Component
         {
             List<T> components = new List<T>();
@@ -37,6 +50,11 @@ namespace ULTRAKIT.Extensions
             return components;
         }
 
+        /// <summary>
+        /// Returns the transforms of all child objects, excluding the parent's transform.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <returns></returns>
         public static IEnumerable<Transform> ListChildren(this Component parent)
         {
             List<Transform> children = new List<Transform>();
@@ -45,6 +63,12 @@ namespace ULTRAKIT.Extensions
             return children;
         }
 
+        /// <summary>
+        /// Finds the first child with the given name of an object, searching recursively.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="name"></param>
+        /// <returns>The transform of the child object, or `null` if none are found.</returns>
         public static Transform FindInChildren(this Component parent, string name)
         {
             foreach (Transform t in parent.GetComponentsInChildren<Transform>())

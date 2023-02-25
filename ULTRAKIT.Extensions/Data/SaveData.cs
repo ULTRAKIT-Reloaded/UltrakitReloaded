@@ -16,6 +16,7 @@ namespace ULTRAKIT.Extensions.Data
         private const string folderName = "data";
         private static string dataFilePath = GetDataPath("save.ultradata");
 
+        // Doesn't save when modifying dictionaries in the data, technically only a get; data setters call Save()
         public static PersistentData data
         {
             get
@@ -37,6 +38,12 @@ namespace ULTRAKIT.Extensions.Data
 
         private static PersistentData _data;
 
+        // Slightly useful, maybe more so in the future, but unlikely
+        /// <summary>
+        /// Gets the (sub)directory of ULTRAKIT Reloaded's data path
+        /// </summary>
+        /// <param name="subpath"></param>
+        /// <returns></returns>
         public static string GetDataPath(params string[] subpath)
         {
             string modDir = Assembly.GetExecutingAssembly().Location;
@@ -52,6 +59,16 @@ namespace ULTRAKIT.Extensions.Data
             return localPath;
         }
 
+        // What all internal functions use, returns true if the data already exists
+        /// <summary>
+        /// Internal data setter, do not use
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dict"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static bool Internal_SetValue<TKey, TValue>(Dictionary<TKey, TValue> dict, TKey key, TValue value)
         {
             if (dict.ContainsKey(key))
@@ -65,6 +82,17 @@ namespace ULTRAKIT.Extensions.Data
             return false;
         }
 
+        // Creates a dictionary for the calling assembly if it doesn't exist, then passes it off to Internal_SetValue()
+        /// <summary>
+        /// Internal private data setter, do not use
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dict"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="assemblyName"></param>
+        /// <returns></returns>
         private static bool Internal_SetPrivateValue<TKey, TValue>(Dictionary<string, Dictionary<TKey, TValue>> dict, TKey key, TValue value, string assemblyName)
         {
             if (dict.ContainsKey(assemblyName))
@@ -76,6 +104,9 @@ namespace ULTRAKIT.Extensions.Data
             return false;
         }
 
+        /// <summary>
+        /// Saves ULTRAKIT Reloaded data to a file
+        /// </summary>
         public static void Save()
         {
             if (!Directory.Exists(GetDataPath()))
@@ -86,6 +117,9 @@ namespace ULTRAKIT.Extensions.Data
             UKLogger.Log("Saved persistent data");
         }
 
+        /// <summary>
+        /// Loads ULTRAKIT Reloaded data from the data file
+        /// </summary>
         public static void Load()
         {
             UKLogger.Log("Loading persistent data...");
@@ -105,6 +139,15 @@ namespace ULTRAKIT.Extensions.Data
             return;
         }
 
+        // Please excuse the following methods, they work the way they do to keep the user from having to call 16 different functions (which honestly wouldn't look much better)
+        /// <summary>
+        /// Saves a value to persistent data,.
+        /// If `global == true` the value will be saved in a dictionary unique to the calling assembly.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="global"></param>
+        /// <returns>`true` if the data already exists in the registry, `false` otherwise.</returns>
         public static bool SetPersistent(string key, object value, bool global)
         {
             if (global)
@@ -147,6 +190,15 @@ namespace ULTRAKIT.Extensions.Data
             return false;
         }
 
+        /// <summary>
+        /// <para>Retrieves a persistent value, passing it to an out value. If `global == true`, it retrieves from a dictionary unique to the calling assembly.</para>
+        /// T must match the type being retrieved, though the out variable must be of type `object` and then cast into the correct type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="global"></param>
+        /// <param name="value"></param>
+        /// <returns>`true` if successful, `false` otherwise (in which case it passes a `default` out value).</returns>
         public static bool GetPersistent<T>(string key, bool global, out object value)
         {
             Type type = typeof(T);

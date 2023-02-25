@@ -18,6 +18,10 @@ namespace ULTRAKIT.Loader.Loaders
 
         public static bool init = false;
 
+        /// <summary>
+        /// Loads spawnables into the spawner arm automatically from a loaded asset bundle.
+        /// </summary>
+        /// <param name="bundle"></param>
         public static void LoadSpawnables(AssetBundle bundle)
         {
             UKSpawnable[] ukS = bundle.LoadAllAssets<UKSpawnable>();
@@ -29,6 +33,10 @@ namespace ULTRAKIT.Loader.Loaders
             }
         }
 
+        /// <summary>
+        /// Removes spawnables from the registry.
+        /// </summary>
+        /// <param name="bundle"></param>
         public static void UnloadSpawnables(AssetBundle bundle)
         {
             UKSpawnable[] ukS = bundle.LoadAllAssets<UKSpawnable>();
@@ -39,6 +47,10 @@ namespace ULTRAKIT.Loader.Loaders
             }
         }
 
+        /// <summary>
+        /// Internal, do not use. Converts UKSpawnables into native SpawnableObjects.
+        /// </summary>
+        /// <param name="spawnMenu"></param>
         public static void InjectSpawnables(SpawnMenu spawnMenu)
         {
             List<SpawnableObject> tools = new List<SpawnableObject>();
@@ -76,6 +88,7 @@ namespace ULTRAKIT.Loader.Loaders
 
             enemies.AddRange(Injectors.SpawnablesInjector._enemies);
 
+            // Adds loaded spawnables onto the pre-existing list
             Registries.spawn_tools = spawnablesDatabase.sandboxTools.Concat(tools).ToArray();
             Registries.spawn_enemies = spawnablesDatabase.enemies.Concat(enemies).ToArray();
             Registries.spawn_objects = spawnablesDatabase.objects.Concat(objects).ToArray();

@@ -11,6 +11,7 @@ namespace ULTRAKIT.Core.Commands
 {
     public class AltSetter : ICommand
     {
+        // ULTRAKILL's internal names
         private string[] weaponNames = new string[]
         {
             "rev0",
@@ -55,6 +56,7 @@ namespace ULTRAKIT.Core.Commands
                 return;
             }
 
+            // How the game stores the weapon variation data
             if (!PrefsManager.Instance.prefMap.ContainsKey($"weapon.{args[0]}"))
                 PrefsManager.Instance.prefMap.Add($"weapon.{args[0]}", state);
             PrefsManager.Instance.prefMap[$"weapon.{args[0]}"] = state;

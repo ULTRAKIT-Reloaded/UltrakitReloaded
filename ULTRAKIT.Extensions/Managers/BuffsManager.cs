@@ -13,6 +13,10 @@ namespace ULTRAKIT.Extensions.Managers
         public Dictionary<string, IBuff> buffs = new Dictionary<string, IBuff>();
         public EnemyIdentifier eid;
 
+        /// <summary>
+        /// Used internally. Loads registered buffs onto an enemy.
+        /// </summary>
+        /// <param name="buffsToLoad"></param>
         public void LoadBuffs(IBuff[] buffsToLoad)
         {
             foreach (IBuff buff in buffsToLoad)
@@ -22,6 +26,11 @@ namespace ULTRAKIT.Extensions.Managers
             }
         }
 
+        /// <summary>
+        /// Enables/disables the buff with the given ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="active"></param>
         public void SetBuffState(string id, bool active)
         {
             if (!buffs.ContainsKey(id)) return;

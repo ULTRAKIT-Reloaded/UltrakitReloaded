@@ -17,6 +17,9 @@ namespace ULTRAKIT.Loader
 {
     public class Initializer
     {
+        /// <summary>
+        /// Internal. Initializes the loaders.
+        /// </summary>
         public static void Initialize()
         {
             Harmony harmony = new Harmony("ULTRAKIT.Loader");

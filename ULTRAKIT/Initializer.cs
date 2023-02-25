@@ -19,6 +19,9 @@ namespace ULTRAKIT.Core
 {
     internal class Initializer
     {
+        /// <summary>
+        /// Internal. Initializes ULTRAKIT Reloaded.
+        /// </summary>
         public static void Init()
         {
             ConfigData.config = Plugin.plugin.Config;
@@ -27,8 +30,13 @@ namespace ULTRAKIT.Core
             Plugin.plugin.StartCoroutine(InitializeComponents());
         }
 
+        /// <summary>
+        /// Internal. Continues initializing the mod after the asset bundle loads.
+        /// </summary>
+        /// <returns></returns>
         public static IEnumerator InitializeComponents()
         {
+            // If done before the bundle loads, patched objects don't exist yet and startup fails
             while (!UKAPI.triedLoadingBundle)
             {
                 yield return new WaitForSeconds(0.2f);
@@ -45,7 +53,10 @@ namespace ULTRAKIT.Core
 
         private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
+            // Loaded cheats don't persist across scenes; each manager is a clean instance
             LoadCheats();
+            // If I don't do this, custom weapons usually (but not always) end up before vanilla weapons
+            // not sure why, since this is the same function that gets patched to load them in the first place (approximately)
             Plugin.Invoke(GunSetter.Instance.RefreshWeapons, 0.05f);
         }
 
@@ -74,6 +85,7 @@ namespace ULTRAKIT.Core
         }
 
         // Loaders
+
         private static void LoadHats()
         {
             AssetBundle topHats = AssetBundle.LoadFromMemory(Properties.Resources.ultrakit_tophat);

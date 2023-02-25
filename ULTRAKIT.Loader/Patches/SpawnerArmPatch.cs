@@ -13,6 +13,8 @@ using UnityEngine.SceneManagement;
 
 namespace ULTRAKIT.Loader.Patches
 {
+    // Prevents the game elements from initializing when loading 5-4 in the background to grab the leviathan
+
     [HarmonyPatch(typeof(CameraController))]
     public static class CameraControllerPatch
     {
@@ -57,6 +59,8 @@ namespace ULTRAKIT.Loader.Patches
         }
     }
 
+    // End of background loading patching
+
     [HarmonyPatch(typeof(SpawnMenu))]
     public static class SpawnMenuPatch
     {
@@ -64,6 +68,8 @@ namespace ULTRAKIT.Loader.Patches
         [HarmonyPrefix]
         public static void AwakePrefix(SpawnMenu __instance, SpawnableObjectsDatabase ___objects)
         {
+            // Creates a constant copy of vanilla database for loader use
+            // The database persists across loads/scenes, so doing otherwise would keep adding spawnables to a list that already has them
             if (!SpawnablesLoader.init)
             {
                 Registries.spawn_spawnablesDatabase.enemies = ___objects.enemies;
@@ -99,6 +105,7 @@ namespace ULTRAKIT.Loader.Patches
     [HarmonyPatch(typeof(MinosBoss))]
     public static class MinosPatch
     {
+        // Keeps Minos from flying high in the sky when spawned and positions the health bar
         static float minosHeight = 600, minosOffset = 200;
 
         [HarmonyPatch("Start")]
@@ -121,6 +128,7 @@ namespace ULTRAKIT.Loader.Patches
     [HarmonyPatch(typeof(LeviathanHead))]
     public static class LeviathanPatch
     {
+        // Positions the leviathan health bar when spawned
         static float leviHeight = 50;
 
         [HarmonyPatch("Start")]
@@ -143,6 +151,7 @@ namespace ULTRAKIT.Loader.Patches
         [HarmonyPrefix]
         public static bool GetHitPrefix(Wicked __instance)
         {
+            // Keeps Something Wicked from getting mad and breaking when there is nowhere to teleport
             if (__instance.patrolPoints[0] == null)
             {
                 var oldAud = __instance.hitSound.GetComponent<AudioSource>();

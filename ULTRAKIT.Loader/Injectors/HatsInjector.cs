@@ -30,6 +30,7 @@ namespace ULTRAKIT.Loader.Injectors
                 manager.SetHatActive(hat, true);
         }
 
+        // Deactivates seasonals, then reactivates them if currently enabled. If persistence is enabled on the manager and you have disabled a seasonal hat, it will stay disabled during the session.
         private static void ClearSeasonal(HatsManager manager)
         {
             manager.SetHatActive("christmas", false);

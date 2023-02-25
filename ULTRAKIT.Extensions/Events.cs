@@ -20,7 +20,6 @@ namespace ULTRAKIT.Extensions
     // Event Types
     [Serializable]
     public class CheatStateChangedEvent : UnityEvent<string> { }
-
     [Serializable]
     public class EnemySpawnedEvent : UnityEvent<EnemyIdentifier> { }
     [Serializable]

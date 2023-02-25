@@ -27,6 +27,10 @@ namespace ULTRAKIT.Loader.Loaders
             SetSeasonals();
         }
 
+        /// <summary>
+        /// Loads hats into the game automatically from a loaded asset bundle.
+        /// </summary>
+        /// <param name="bundle"></param>
         public static void LoadHats(AssetBundle bundle)
         {
             Hat[] hats = bundle.LoadAllAssets<Hat>();
@@ -43,8 +47,14 @@ namespace ULTRAKIT.Loader.Loaders
             UKLogger.Log($"Loaded hats from {bundle.name}");
         }
 
+        /// <summary>
+        /// Enables/disables the hat with the specified ID for all enemies
+        /// </summary>
+        /// <param name="hatID"></param>
+        /// <param name="active"></param>
         public static void SetAllActive(string hatID, bool active)
         {
+            // Can only remove items from a list when not iterating through it and still continue, so it simply skips deleted managers and clears them at the end
             List<HatsManager> toRemove = new List<HatsManager>();
             foreach (HatsManager manager in managerInstances)
             {
@@ -70,6 +80,7 @@ namespace ULTRAKIT.Loader.Loaders
             managerInstances.Clear();
         }
 
+        // Stolen code :(
         private static DateTime GetEaster(int year)
         {
             int num = year % 19;
@@ -82,6 +93,9 @@ namespace ULTRAKIT.Loader.Loaders
             return new DateTime(year, num6, day);
         }
 
+        /// <summary>
+        /// Internal use. Adds the seasonal hats to the active hats registry when the game starts.
+        /// </summary>
         public static void SetSeasonals()
         {
             DateTime time = DateTime.Now;

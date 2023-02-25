@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace ULTRAKIT.Extensions.Classes
 {
+    // Applied using AddComponent<RenderFixer>().LayerName == [name];
     public class RenderFixer : MonoBehaviour
     {
         public string LayerName;

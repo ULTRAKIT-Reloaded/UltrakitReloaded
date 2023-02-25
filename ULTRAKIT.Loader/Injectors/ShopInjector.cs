@@ -42,6 +42,7 @@ namespace ULTRAKIT.Loader.Injectors
             {
                 page = 0;
 
+                // Initializes templates
                 buttonTemplate = __instance.GetComponentInChildren<ShopButton>(true).gameObject;
                 variantTemplate = __instance.GetComponentInChildren<VariationInfo>(true).gameObject;
                 panelTemplate = variantTemplate.transform.parent.gameObject;
@@ -61,6 +62,7 @@ namespace ULTRAKIT.Loader.Injectors
             res.Add(new List<GameObject>());
             foreach (var vanillaButton in parent.gameObject.GetComponentsInChildren<ShopButton>())
             {
+                // Sets vanilla buttons to also disable modded panels
                 foreach (var panel in panels.Values)
                 {
                     vanillaButton.toDeactivate = vanillaButton.toDeactivate.AddItem(panel).ToArray();
@@ -74,13 +76,16 @@ namespace ULTRAKIT.Loader.Injectors
             res.Add(new List<GameObject>());
             foreach (var weap in allWeaps)
             {
+                // Skips locked weapons
                 if (!weap.Unlocked)
                 {
                     continue;
                 }
-
+                
+                // Adds a button for each new weapon
                 res[curPage].Add(CreateWeaponButton(parent, weap, curWeap));
 
+                // Loops over to new page
                 curWeap++;
                 if (curWeap > 5)
                 {
@@ -101,13 +106,16 @@ namespace ULTRAKIT.Loader.Injectors
             var rect = go.GetComponent<RectTransform>();
             rect.offsetMax = new Vector2(-100, top);
             rect.offsetMin = new Vector2(-260, top - buttonHeight);
+            // Puts the button behind panels
             rect.SetAsFirstSibling();
 
+            // Base panel is labelled using the first weapon name
             go.GetComponentInChildren<Text>().text = weap.Names[0].ToUpper();
 
             go.GetComponent<ShopButton>().deactivated = true;
             go.GetComponent<Button>().onClick.AddListener(() =>
             {
+                // Deactivates base panel on the right holding variant panels for all weapons, except enables for the clicked weapon button
                 foreach (var pair in panels)
                 {
                     pair.Value.SetActive(panels[weap] == pair.Value);
@@ -120,6 +128,7 @@ namespace ULTRAKIT.Loader.Injectors
                         continue;
                     }
 
+                    // Deactates variant panels for all weapons, except enabled for the clicked weapon button
                     if (obj.GetComponentInChildren<VariationInfo>(true) != null)
                     {
                         obj.gameObject.SetActive(panels[weap] == obj.gameObject);
@@ -140,6 +149,7 @@ namespace ULTRAKIT.Loader.Injectors
                 var go = GameObject.Instantiate(panelTemplate, parent.transform);
                 foreach (Transform child in go.transform)
                 {
+                    // Clears the revolver variants from the cloned template
                     GameObject.Destroy(child.gameObject);
                 }
 
@@ -148,6 +158,7 @@ namespace ULTRAKIT.Loader.Injectors
                     CreateVariantOption(go, weap, i);
                 }
 
+                // Searches about four steps down the heirarchy of each variant panel for the equip order text, then sets it to the weapon's saved order data
                 Text[] orderInfo = go.GetComponentsInChildren<Text>().Where(k => k.transform.parent.name == "Order").ToArray();
                 for (int n = 0; n < weap.Variants.Length; n++)
                 {
@@ -169,13 +180,19 @@ namespace ULTRAKIT.Loader.Injectors
             var cbget = info.GetComponentInChildren<ColorBlindGet>();
             cbget.GetComponent<Image>().sprite = weapon.Icons[i];
             cbget.variationNumber = i;
+
+            // Sets variant name
             info.transform.Find("Text").GetComponent<Text>().text = weapon.Names[i];
+            // Disables "Already Owned" text - Possible use in future
             info.transform.Find("Text (1)").gameObject.SetActive(false);
 
+            // Equip/Alt buttons
             var equipmentStuffs = info.transform.Find("EquipmentStuffs");
             Button lb = equipmentStuffs.Find("PreviousButton").GetComponent<Button>();
             Button rb = equipmentStuffs.Find("NextButton").GetComponent<Button>();
 
+            // Order buttons
+            // Disables WeaponOrderController to manage it internally
             Transform ord = equipmentStuffs.Find("Order");
             ord.GetComponent<WeaponOrderController>().enabled = false;
             GameObject ordUp = ord.Find("UpButton").gameObject;
@@ -184,51 +201,74 @@ namespace ULTRAKIT.Loader.Injectors
 
             Image img = info.equipButton.transform.GetChild(0).GetComponent<Image>();
 
+            // Equipped, Alternate, Unequipped
             img.sprite = info.equipSprites[weapon.equipStatus[i]];
 
+            // Left equip button
             UnityAction delL = () =>
             {
+                // Loops equipped status, checking if an alternate exists
                 int add = (weapon.AltVariants.Length > i) && (weapon.AltVariants[i] != null) ? 1 : 0;
                 weapon.equipStatus[i] = (int)Mathf.Repeat(weapon.equipStatus[i] - 1, 2 + add);
+
+                // Equips a standard variant if set to standard, or disables it otherwise.
+                // Then checks the alternate variant and equips it if set to alt, or disables it otherwise.
                 GunSetterPatch.equippedDict[weapon.All_Variants[i]] = weapon.equipStatus[i] == 1;
                 if (add == 1) GunSetterPatch.equippedDict[weapon.All_Variants[i + weapon.Variants.Length]] = weapon.equipStatus[i] == 2;
                 img.sprite = info.equipSprites[weapon.equipStatus[i]];
+
                 MonoSingleton<GunSetter>.Instance.ResetWeapons();
             };
 
+            // Right equip button
             UnityAction delR = () =>
             {
+                // Loops equipped status, checking if an alternate exists
                 int add = (weapon.AltVariants.Length > i) && (weapon.AltVariants[i] != null) ? 1 : 0;
                 weapon.equipStatus[i] = (int)Mathf.Repeat(weapon.equipStatus[i] + 1, 2 + add);
+
+                // Equips a standard variant if set to standard, or disables it otherwise.
+                // Then checks the alternate variant and equips it if set to alt, or disables it otherwise.
                 GunSetterPatch.equippedDict[weapon.All_Variants[i]] = weapon.equipStatus[i] == 1;
                 if (add == 1) GunSetterPatch.equippedDict[weapon.All_Variants[i + weapon.Variants.Length]] = weapon.equipStatus[i] == 2;
                 img.sprite = info.equipSprites[weapon.equipStatus[i]];
+
                 MonoSingleton<GunSetter>.Instance.ResetWeapons();
             };
 
+            // Top order button
             UnityAction ordU = () =>
             {
                 Text[] orderInfo = info.transform.parent.GetComponentsInChildren<Text>().Where(k => k.transform.parent.name == "Order").ToArray();
+
+                // Finds the target number (current + 1), sets the weapon currently at the target number to current number, then sets current to the target number
                 int target = (int)Mathf.Repeat(weapon.equipOrder[i] + 1, weapon.Variants.Length);
                 weapon.equipOrder[weapon.equipOrder.FindIndexOf(target)] = weapon.equipOrder[i];
                 weapon.equipOrder[i] = target;
+
                 for (int n = 0; n < weapon.Variants.Length; n++)
                 {
                     orderInfo[n].text = (weapon.equipOrder[n] + 1).ToString();
                 }
+
                 MonoSingleton<GunSetter>.Instance.ResetWeapons();
             };
 
+            // Bottom order button
             UnityAction ordD = () =>
             {
                 Text[] orderInfo = info.transform.parent.GetComponentsInChildren<Text>().Where(k => k.transform.parent.name == "Order").ToArray();
+
+                // Finds the target number (current - 1), sets the weapon currently at the target number to current number, then sets current to the target number
                 int target = (int)Mathf.Repeat(weapon.equipOrder[i] - 1, weapon.Variants.Length);
                 weapon.equipOrder[weapon.equipOrder.FindIndexOf(target)] = weapon.equipOrder[i];
                 weapon.equipOrder[i] = target;
+
                 for (int n = 0; n < weapon.Variants.Length; n++)
                 {
                     orderInfo[n].text = (weapon.equipOrder[n] + 1).ToString();
                 }
+
                 MonoSingleton<GunSetter>.Instance.ResetWeapons();
             };
 
@@ -237,6 +277,7 @@ namespace ULTRAKIT.Loader.Injectors
             orderClickUp.AddListener(ordU);
             orderClickDown.AddListener(ordD);
 
+            // Reflects the internal ControllerPointer component to replace its function with internal order management
             Type controllerPointer = ReflectionExt.GetInternalType("ControllerPointer");
             var btu = ordUp.GetComponent(controllerPointer);
             var field = btu.GetType().GetField("onPressed", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -249,7 +290,9 @@ namespace ULTRAKIT.Loader.Injectors
             lb.onClick.AddListener(delL);
             rb.onClick.AddListener(delR);
 
+            // Sets each variant panel to display variant icon
             ordIcon.sprite = weapon.Icons[i];
+            ordIcon.color = new Color(MonoSingleton<ColorBlindSettings>.Instance.variationColors[i].r, MonoSingleton<ColorBlindSettings>.Instance.variationColors[i].g, MonoSingleton<ColorBlindSettings>.Instance.variationColors[i].b, ordIcon.color.a);
             ord.gameObject.SetActive(true);
 
             go.GetComponent<RectTransform>().offsetMax = new Vector2(0, 160 - (i * variantHeight));
@@ -266,10 +309,12 @@ namespace ULTRAKIT.Loader.Injectors
             var pageRect = pageGo.GetComponent<RectTransform>();
             pageRect.offsetMax = new Vector2(-100, -130);
             pageRect.offsetMin = new Vector2(-260, -160);
+            // Keeps the button behind popup panels
             pageRect.SetAsFirstSibling();
 
             pageGo.GetComponentInChildren<Text>().text = $"PAGE {page + 1}";
 
+            // Replaces button template function
             pageGo.GetComponent<ShopButton>().deactivated = true;
             pageGo.GetComponent<Button>().onClick.AddListener(() =>
             {
@@ -283,6 +328,7 @@ namespace ULTRAKIT.Loader.Injectors
 
         static void UpdatePage()
         {
+            // Loops page if necessary
             page = (int)Mathf.Repeat(page, pages.Count);
 
             pageButton.GetComponentInChildren<Text>().text = $"PAGE {page + 1}";
