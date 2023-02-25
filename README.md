@@ -42,6 +42,6 @@ If you have any questions, feel free to DM `Agent of Nyarlathotep#7519` on Disco
 
 A development roadmap is available in the Projects tab.
 
-***For a reference, a basic mod, asset bundle, and unity asset folder are available at https://github.com/PetersonE1/UltrakitTestMod*** (CURRENTLY REQUIRES UPDATE)
+***For a reference, a basic mod, asset bundle, and unity asset folder are available at https://github.com/PetersonE1/UltrakitTestMod***
 
 ***A HatLoader mod to easily drag-and-drop hat bundles into the game is available at https://github.com/PetersonE1/HatLoader***
