@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ULTRAKIT.Extensions;
+using ULTRAKIT.Extensions.Managers;
 using UnityEngine;
 
 namespace ULTRAKIT.Loader.Injectors
@@ -18,7 +19,7 @@ namespace ULTRAKIT.Loader.Injectors
         {
             BuffsManager manager = __instance.gameObject.AddComponent<BuffsManager>();
             manager.eid = __instance;
-            manager.LoadBuffs(BuffLoader.buffRegistry.ToArray());
+            manager.LoadBuffs(Registries.buff_buffRegistry.ToArray());
         }
     }
 }

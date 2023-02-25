@@ -6,51 +6,33 @@ using System.Text;
 using System.Threading.Tasks;
 using ULTRAKIT.Data;
 using ULTRAKIT.Extensions;
+using ULTRAKIT.Extensions.Managers;
 using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace ULTRAKIT.Loader
+namespace ULTRAKIT.Loader.Loaders
 {
     public static class HatLoader
     {
         public static List<HatsManager> managerInstances;
-        public static List<HatRegistry> registries;
-        public static List<string> activeHats = new List<string>();
+        private static List<HatRegistry> registries => Registries.hat_registries;
+        private static List<string> activeHats => Registries.hat_activeHats;
         public static bool Persistent = false;
 
         internal static void Init()
         {
             SceneManager.sceneUnloaded += ClearInstances;
-            if (registries == null) registries = new List<HatRegistry>();
             if (managerInstances == null) managerInstances = new List<HatsManager>();
-
-            DateTime time = DateTime.Now;
-            switch (time.Month)
-            {
-                case 12:
-                    if (time.Day >= 22 && time.Day <= 28)
-                    {
-                        activeHats.Add("christmas");
-                    }
-                    return;
-                case 10:
-                    if (time.Day >= 25 && time.Day <= 31)
-                    {
-                        activeHats.Add("halloween");
-                    }
-                    return;
-            }
-            DateTime dateTime = GetEaster(time.Year);
-            if (time.DayOfYear >= dateTime.DayOfYear - 2 && time.DayOfYear <= dateTime.DayOfYear)
-            {
-                activeHats.Add("easter");
-            }
+            SetSeasonals();
         }
 
+        /// <summary>
+        /// Loads hats into the game automatically from a loaded asset bundle.
+        /// </summary>
+        /// <param name="bundle"></param>
         public static void LoadHats(AssetBundle bundle)
         {
-            Init();
             Hat[] hats = bundle.LoadAllAssets<Hat>();
             HatRegistry[] regis = bundle.LoadAllAssets<HatRegistry>();
             foreach (HatRegistry hatRegistry in regis)
@@ -65,8 +47,14 @@ namespace ULTRAKIT.Loader
             UKLogger.Log($"Loaded hats from {bundle.name}");
         }
 
+        /// <summary>
+        /// Enables/disables the hat with the specified ID for all enemies
+        /// </summary>
+        /// <param name="hatID"></param>
+        /// <param name="active"></param>
         public static void SetAllActive(string hatID, bool active)
         {
+            // Can only remove items from a list when not iterating through it and still continue, so it simply skips deleted managers and clears them at the end
             List<HatsManager> toRemove = new List<HatsManager>();
             foreach (HatsManager manager in managerInstances)
             {
@@ -92,6 +80,7 @@ namespace ULTRAKIT.Loader
             managerInstances.Clear();
         }
 
+        // Stolen code :(
         private static DateTime GetEaster(int year)
         {
             int num = year % 19;
@@ -102,6 +91,34 @@ namespace ULTRAKIT.Loader
             int num6 = 3 + (num5 + 40) / 44;
             int day = num5 + 28 - 31 * (num6 / 4);
             return new DateTime(year, num6, day);
+        }
+
+        /// <summary>
+        /// Internal use. Adds the seasonal hats to the active hats registry when the game starts.
+        /// </summary>
+        public static void SetSeasonals()
+        {
+            DateTime time = DateTime.Now;
+            switch (time.Month)
+            {
+                case 12:
+                    if (time.Day >= 22 && time.Day <= 28)
+                    {
+                        activeHats.Add("christmas");
+                    }
+                    return;
+                case 10:
+                    if (time.Day >= 25 && time.Day <= 31)
+                    {
+                        activeHats.Add("halloween");
+                    }
+                    return;
+            }
+            DateTime dateTime = GetEaster(time.Year);
+            if (time.DayOfYear >= dateTime.DayOfYear - 2 && time.DayOfYear <= dateTime.DayOfYear)
+            {
+                activeHats.Add("easter");
+            }
         }
     }
 }

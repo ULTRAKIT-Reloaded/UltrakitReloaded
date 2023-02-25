@@ -1,15 +1,10 @@
-﻿using UnityEngine;
-using System;
-using System.Collections;
-using UnityEngine.Events;
-using ULTRAKILL.Cheats;
+﻿using System;
 
-
-namespace ULTRAKIT.Extensions
+namespace ULTRAKIT.Extensions.Classes
 {
 	public class Cheat : ICheat
 	{
-		private static Cheat _lastInstance;
+		public static Cheat _lastInstance;
 
 		private bool active;
 

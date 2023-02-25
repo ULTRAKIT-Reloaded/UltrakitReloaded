@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ULTRAKIT.Data;
 using UnityEngine;
 
-namespace ULTRAKIT.Extensions
+namespace ULTRAKIT.Extensions.Managers
 {
     public class HatsManager : MonoBehaviour
     {
@@ -23,18 +23,24 @@ namespace ULTRAKIT.Extensions
             hats.Add("easter", sh.GetPrivate<GameObject>("easter"));
         }
 
+        /// <summary>
+        /// Used internally. Loads a registered set of hats onto an enemy.
+        /// </summary>
+        /// <param name="registry"></param>
         public void LoadHat(HatRegistry registry)
         {
             Hat hat = ScriptableObject.CreateInstance<Hat>();
             try
             {
+                // Starts wherever SeasonalHats is placed on an enemy, steps back until it find their root
                 Transform enemy = transform;
                 while (enemy.GetComponent<EnemyIdentifier>() == null && enemy.tag != "Player")
                 {
                     enemy = enemy.parent;
                 }
                 if (enemy.tag == "Player") hat = registry.hatDict[EnemyType.V2];
-                else 
+                // Mandalore, Cancerous Rodent and Very Cancerous Rodent, despite having their own EnemyTypes, use Drone, Husk, and Cerberus, respectively, so I am forced to check their gameObject names.
+                else
                 {
                     EnemyType type = enemy.GetComponentInChildren<EnemyIdentifier>().enemyType;
                     hat = registry.hatDict[type];
@@ -43,6 +49,7 @@ namespace ULTRAKIT.Extensions
                 if (transform.parent.name.Contains("Cancerous Rodent")) hat = registry.hatDict[EnemyType.CancerousRodent];
                 if (transform.parent.name.Contains("Very Cancerous Rodent")) hat = registry.hatDict[EnemyType.VeryCancerousRodent];
             }
+            // Skips enemies with no matching hat
             catch
             {
                 return;
@@ -51,11 +58,16 @@ namespace ULTRAKIT.Extensions
             hatInstance.transform.localPosition = hat.obj.transform.position + hat.position_offset;
             hatInstance.transform.localRotation = hat.obj.transform.rotation * Quaternion.Euler(hat.rotation_offset);
             hatInstance.transform.localScale = hat.obj.transform.localScale + hat.scale_offset;
-            PeterExtensions.RenderObject(hatInstance, LayerMask.NameToLayer("Limb"));
+            hatInstance.transform.RenderObject(LayerMask.NameToLayer("Limb"));
             hatInstance.SetActive(false);
             hats.Add(registry.hatID, hatInstance);
         }
 
+        /// <summary>
+        /// Enables/disables the hat with the given ID. Ignores invalid IDs.
+        /// </summary>
+        /// <param name="hatID"></param>
+        /// <param name="active"></param>
         public void SetHatActive(string hatID, bool active)
         {
             if (!hats.ContainsKey(hatID))

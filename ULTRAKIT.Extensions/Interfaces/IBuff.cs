@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using UnityEngine.Events;
 
-namespace ULTRAKIT.Extensions
+namespace ULTRAKIT.Extensions.Interfaces
 {
 	public interface IBuff
 	{

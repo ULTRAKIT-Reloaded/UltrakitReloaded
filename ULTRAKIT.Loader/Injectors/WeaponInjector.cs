@@ -7,19 +7,18 @@ using ULTRAKIT.Data;
 using ULTRAKIT.Extensions;
 using UnityEngine.UI;
 using System.Linq;
-using UMM;
-using UnityEngine.InputSystem;
-using static UnityEditor.UIElements.ToolbarMenu;
+using ULTRAKIT.Extensions.Data;
+using ULTRAKIT.Extensions.Classes;
 
 namespace ULTRAKIT.Loader.Injectors
 {
     [HarmonyPatch(typeof(GunSetter))]
     public class GunSetterPatch
     {
-
         public static List<List<GameObject>> modSlots = new List<List<GameObject>>();
         public static Dictionary<GameObject, bool> equippedDict = new Dictionary<GameObject, bool>();
 
+        // Registers variants in the prefs manager
         static void SetPref(string weapon)
         {
             if (!PrefsManager.Instance.prefMap.ContainsKey($"weapon.{weapon}"))
@@ -30,11 +29,13 @@ namespace ULTRAKIT.Loader.Injectors
         [HarmonyPrefix]
         static void StartPrefix(GunSetter __instance)
         {
-            foreach (ReplacementWeapon weapon in WeaponLoader.replacements.Values)
+            foreach (ReplacementWeapon weapon in Registries.weap_replacements.Values)
             {
                 int slot = weapon.Alt ? 1 : 0;
                 weapon.Prefab.SetActive(false);
                 weapon.Prefab.AddComponent<RenderFixer>().LayerName = "AlwaysOnTop";
+                // Finds the correct weapon type, then the correct variant array, copies it, replaces the prefab with the replacement (or adds it if missing), then puts it back into the gun setter
+                // The gun control will now grab the replacement prefab from the gun setter registry
                 switch (weapon.WeaponType)
                 {
                     case WeaponType.Revolver: 
@@ -94,6 +95,7 @@ namespace ULTRAKIT.Loader.Injectors
         [HarmonyPostfix]
         static void ResetWeaponsPostfix(GunSetter __instance)
         {
+            // Clears the slots and refreshes anew; used mostly in case a weapon is removed (i.e. the source mod is disabled)
             foreach (var slot in modSlots)
             {
                 foreach (var item in slot)
@@ -110,7 +112,7 @@ namespace ULTRAKIT.Loader.Injectors
                 }
             }
             modSlots.Clear();
-            foreach (var pair in WeaponLoader.registry)
+            foreach (var pair in Registries.weap_registry)
             {
                 foreach (var weap in pair.Value)
                 {
@@ -121,11 +123,9 @@ namespace ULTRAKIT.Loader.Injectors
 
                     var slot = new List<GameObject>();
 
-                    string loadOrder = string.Join(",", weap.equipOrder);
-                    string equippedStatus = string.Join(",", weap.equipStatus);
-
-                    UKMod.SetPersistentModData($@"{weap.modName}.{weap.id}.load", loadOrder, "ULTRAKIT");
-                    UKMod.SetPersistentModData($@"{weap.modName}.{weap.id}.equip", equippedStatus, "ULTRAKIT");
+                    // Saves the weapon equip data to a persistent file (changed in the ShopInjector)
+                    SaveData.Internal_SetValue(SaveData.data.weapon_order, $@"{weap.modName}.{weap.id}", weap.equipOrder);
+                    SaveData.Internal_SetValue(SaveData.data.weapon_status, $@"{weap.modName}.{weap.id}", weap.equipStatus);
 
                     for (int i = 0; i < weap.All_Variants.Length; i++)
                     {
@@ -133,18 +133,19 @@ namespace ULTRAKIT.Loader.Injectors
 
                         if (!equippedDict.ContainsKey(variant))
                         {
+                            // Alt weapons are placed in the array after standard weapons; this reads the same variant order for standard and alts (i.e. standard 1 is 1, alt 1 is 1, alt 2 is 2, etc.)
                             int s = (int)Mathf.Repeat(i, weap.Variants.Length);
+                            // Checks to see if this is standard and standard is equipped, this is alt and alt is equipped, or neither
                             bool equipped = (i < weap.Variants.Length && weap.equipStatus[s] == 1) || (i >= weap.Variants.Length && weap.equipStatus[s] == 2);
                             equippedDict.Add(variant, equipped);
                         }
                     }
                     for (int i = 0; i < weap.Variants.Length; i++)
                     {
-                        var variant = weap.All_Variants[weap.equipOrder[i]];
-                        if (weap.equipStatus[weap.equipOrder[i]] == 2)
-                        {
-                            variant = weap.All_Variants[weap.equipOrder[i] + weap.Variants.Length];
-                        }
+                        // Searches for the index of the weapon whos equip order is `i` (starting at 0, then 1, then 2) to grab that variant
+                        int index = weap.equipOrder.FindIndexOf(i);
+                        // Checks the equip status to grab either the standard or alt
+                        var variant = weap.equipStatus[index] == 2 ? weap.AltVariants[index] : weap.Variants[index];
 
                         if (!equippedDict[variant])
                         {
@@ -154,16 +155,20 @@ namespace ULTRAKIT.Loader.Injectors
                         var go = GameObject.Instantiate(variant, __instance.transform);
                         go.SetActive(false);
 
-                        PeterExtensions.RenderObject(go, LayerMask.NameToLayer("AlwaysOnTop"));
+                        go.transform.RenderObject(LayerMask.NameToLayer("AlwaysOnTop"));
                         
+                        // Sets the weapon icon to the icon specified in the editor and sets the variation color.
+                        // Grabs any variant color materials/renderers by searching for ".var" in the name, gives it an empty array if none found. Necessary to prevent null reference exceptions.
                         var wi = go.AddComponent<WeaponIcon>();
                         wi.weaponIcon = weap.Icons[i];
                         wi.glowIcon = weap.Icons[i];
                         wi.variationColor = i;
                         wi.SetPrivate("variationColoredMaterials", go.GetComponentsInChildren<Material>().Where(k => k.name.Contains(".var")).ToArray() ?? new Material[0]);
                         wi.SetPrivate("variationColoredRenderers", go.GetComponentsInChildren<Renderer>().Where(k => k.material.name.Contains(".var")).ToArray() ?? new Renderer[0]);
+                        // Likely used for the shop, though the color setting is done manually in the ShopInjector
                         wi.SetPrivate("variationColoredImages", new Image[0]);
 
+                        // Adds weapons to the style freshness list, which makes freshness functional and keeps the game from throwing a warning every frame
                         var field = typeof(StyleHUD).GetField("weaponFreshness", BindingFlags.NonPublic | BindingFlags.Instance);
                         Dictionary<GameObject, float> freshnessList = field.GetValue(MonoSingleton<StyleHUD>.Instance) as Dictionary<GameObject, float>;
                         freshnessList.Add(go, 10f);
@@ -189,6 +194,7 @@ namespace ULTRAKIT.Loader.Injectors
         [HarmonyPrefix]
         static void StartPrefix(GunControl __instance)
         {
+            // Helps keep the gun control from trying to equip a weapon that doesn't exist
             if (PlayerPrefs.GetInt("CurSlo", 1) > __instance.slots.Count)
             {
                 PlayerPrefs.SetInt("CurSlo", 1);
@@ -199,6 +205,8 @@ namespace ULTRAKIT.Loader.Injectors
         [HarmonyPostfix]
         static void UpdatePostfix(GunControl __instance)
         {
+            // Just doing the same thing the game does but with some extra null checking, manually for each slot :(
+
             if ((UltrakitInputManager.Slot7?.WasPerformedThisFrame ?? false) && __instance.slots.Count >= 7 && (__instance.slots[6]?.Count > 0 || __instance.currentSlot != 7))
             {
                 if (__instance.slots[6]?.Count > 0 && __instance.slots[6][0] != null)
@@ -320,6 +328,7 @@ namespace ULTRAKIT.Loader.Injectors
         [HarmonyPostfix]
         static void ChechGearPostfix(ref object __result, string gear)
         {
+            // Tricks the game into thinking everything is unlocked so you can equip modded variants for vanilla weapons
             if (gear != "arm3")
                 __result = 1;
         }

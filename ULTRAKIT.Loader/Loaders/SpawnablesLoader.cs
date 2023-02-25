@@ -6,21 +6,22 @@ using System.Text;
 using System.Threading.Tasks;
 using ULTRAKIT.Data;
 using ULTRAKIT.Extensions;
+using ULTRAKIT.Extensions.Classes;
 using UnityEngine;
 
-namespace ULTRAKIT.Loader
+namespace ULTRAKIT.Loader.Loaders
 {
-    public static class SpawnerArmLoader
+    public static class SpawnablesLoader
     {
-        public static List<UKSpawnable> spawnables = new List<UKSpawnable>();
-        public static SpawnableObjectsDatabase spawnablesDatabase = ScriptableObject.CreateInstance<SpawnableObjectsDatabase>();
-
-        public static SpawnableObject[] _tools = new SpawnableObject[0];
-        public static SpawnableObject[] _enemies = new SpawnableObject[0];
-        public static SpawnableObject[] _objects = new SpawnableObject[0];
+        private static List<UKSpawnable> spawnables => Registries.spawn_spawnables;
+        private static SpawnableObjectsDatabase spawnablesDatabase => Registries.spawn_spawnablesDatabase;
 
         public static bool init = false;
 
+        /// <summary>
+        /// Loads spawnables into the spawner arm automatically from a loaded asset bundle.
+        /// </summary>
+        /// <param name="bundle"></param>
         public static void LoadSpawnables(AssetBundle bundle)
         {
             UKSpawnable[] ukS = bundle.LoadAllAssets<UKSpawnable>();
@@ -32,7 +33,11 @@ namespace ULTRAKIT.Loader
             }
         }
 
-        public static void UnLoadSpawnables(AssetBundle bundle)
+        /// <summary>
+        /// Removes spawnables from the registry.
+        /// </summary>
+        /// <param name="bundle"></param>
+        public static void UnloadSpawnables(AssetBundle bundle)
         {
             UKSpawnable[] ukS = bundle.LoadAllAssets<UKSpawnable>();
             foreach (UKSpawnable ukSpawnable in ukS)
@@ -42,15 +47,19 @@ namespace ULTRAKIT.Loader
             }
         }
 
+        /// <summary>
+        /// Internal, do not use. Converts UKSpawnables into native SpawnableObjects.
+        /// </summary>
+        /// <param name="spawnMenu"></param>
         public static void InjectSpawnables(SpawnMenu spawnMenu)
         {
             List<SpawnableObject> tools = new List<SpawnableObject>();
             List<SpawnableObject> enemies = new List<SpawnableObject>();
             List<SpawnableObject> objects = new List<SpawnableObject>();
 
-            foreach (UKSpawnable ukSpawnable in spawnables)
+            foreach (UKSpawnable ukSpawnable in Registries.spawn_spawnables)
             {
-                SpawnableObject spawnable = SpawnableObject.CreateInstance<SpawnableObject>();
+                SpawnableObject spawnable = ScriptableObject.CreateInstance<SpawnableObject>();
                 spawnable.identifier = ukSpawnable.identifier;
                 spawnable.spawnableObjectType = ukSpawnable.type;
                 spawnable.objectName = ukSpawnable.identifier;
@@ -59,6 +68,7 @@ namespace ULTRAKIT.Loader
                 spawnable.gameObject = ukSpawnable.prefab;
                 spawnable.preview = new GameObject();
                 spawnable.gridIcon = ukSpawnable.icon;
+
                 switch (ukSpawnable.type)
                 {
                     case SpawnableObject.SpawnableObjectDataType.Tool: 
@@ -76,11 +86,12 @@ namespace ULTRAKIT.Loader
                 }
             }
 
-            enemies.AddRange(Injectors.SpawnerInjector._enemies);
+            enemies.AddRange(Injectors.SpawnablesInjector._enemies);
 
-            _tools = spawnablesDatabase.sandboxTools.Concat(tools).ToArray();
-            _enemies = spawnablesDatabase.enemies.Concat(enemies).ToArray();
-            _objects = spawnablesDatabase.objects.Concat(objects).ToArray();
+            // Adds loaded spawnables onto the pre-existing list
+            Registries.spawn_tools = spawnablesDatabase.sandboxTools.Concat(tools).ToArray();
+            Registries.spawn_enemies = spawnablesDatabase.enemies.Concat(enemies).ToArray();
+            Registries.spawn_objects = spawnablesDatabase.objects.Concat(objects).ToArray();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
+using ULTRAKIT.Extensions.Interfaces;
 
-namespace ULTRAKIT.Extensions
+namespace ULTRAKIT.Extensions.Classes
 {
 	public class Buff : IBuff
 	{

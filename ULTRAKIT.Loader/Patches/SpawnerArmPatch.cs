@@ -5,12 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ULTRAKIT.Extensions;
+using ULTRAKIT.Extensions.Classes;
 using ULTRAKIT.Loader.Injectors;
+using ULTRAKIT.Loader.Loaders;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace ULTRAKIT.Loader
+namespace ULTRAKIT.Loader.Patches
 {
+    // Prevents the game elements from initializing when loading 5-4 in the background to grab the leviathan
+
     [HarmonyPatch(typeof(CameraController))]
     public static class CameraControllerPatch
     {
@@ -18,7 +22,7 @@ namespace ULTRAKIT.Loader
         [HarmonyPrefix]
         public static bool AwakePrefix()
         {
-            if (SpawnerInjector._init)
+            if (SpawnablesInjector._init)
                 return true;
             return false;
         }
@@ -27,7 +31,7 @@ namespace ULTRAKIT.Loader
         [HarmonyPrefix]
         public static bool StartPrefix()
         {
-            if (SpawnerInjector._init)
+            if (SpawnablesInjector._init)
                 return true;
             return false;
         }
@@ -36,7 +40,7 @@ namespace ULTRAKIT.Loader
         [HarmonyPrefix]
         public static bool OnEnablePrefix()
         {
-            if (SpawnerInjector._init)
+            if (SpawnablesInjector._init)
                 return true;
             return false;
         }
@@ -55,6 +59,8 @@ namespace ULTRAKIT.Loader
         }
     }
 
+    // End of background loading patching
+
     [HarmonyPatch(typeof(SpawnMenu))]
     public static class SpawnMenuPatch
     {
@@ -62,18 +68,20 @@ namespace ULTRAKIT.Loader
         [HarmonyPrefix]
         public static void AwakePrefix(SpawnMenu __instance, SpawnableObjectsDatabase ___objects)
         {
-            if (!SpawnerArmLoader.init)
+            // Creates a constant copy of vanilla database for loader use
+            // The database persists across loads/scenes, so doing otherwise would keep adding spawnables to a list that already has them
+            if (!SpawnablesLoader.init)
             {
-                SpawnerArmLoader.spawnablesDatabase.enemies = ___objects.enemies;
-                SpawnerArmLoader.spawnablesDatabase.objects = ___objects.objects;
-                SpawnerArmLoader.spawnablesDatabase.sandboxTools = ___objects.sandboxTools;
-                SpawnerArmLoader.init = true;
+                Registries.spawn_spawnablesDatabase.enemies = ___objects.enemies;
+                Registries.spawn_spawnablesDatabase.objects = ___objects.objects;
+                Registries.spawn_spawnablesDatabase.sandboxTools = ___objects.sandboxTools;
+                SpawnablesLoader.init = true;
             }
 
-            SpawnerArmLoader.InjectSpawnables(__instance);
-            ___objects.sandboxTools = SpawnerArmLoader._tools;
-            ___objects.enemies = SpawnerArmLoader._enemies;
-            ___objects.objects = SpawnerArmLoader._objects;
+            SpawnablesLoader.InjectSpawnables(__instance);
+            ___objects.sandboxTools = Registries.spawn_tools;
+            ___objects.enemies = Registries.spawn_enemies;
+            ___objects.objects = Registries.spawn_objects;
         }
     }
 
@@ -97,13 +105,14 @@ namespace ULTRAKIT.Loader
     [HarmonyPatch(typeof(MinosBoss))]
     public static class MinosPatch
     {
+        // Keeps Minos from flying high in the sky when spawned and positions the health bar
         static float minosHeight = 600, minosOffset = 200;
 
         [HarmonyPatch("Start")]
         [HarmonyPrefix]
         public static void StartPrefix(MinosBoss __instance)
         {
-            var cust = __instance.GetComponentInChildren<CustomHealthbarPos>(true);
+            CustomHealthbarPos cust = __instance.GetComponentInChildren<CustomHealthbarPos>(true);
             if (cust)
             {
                 cust.offset = Vector3.up * minosHeight * 1.5f;
@@ -119,6 +128,7 @@ namespace ULTRAKIT.Loader
     [HarmonyPatch(typeof(LeviathanHead))]
     public static class LeviathanPatch
     {
+        // Positions the leviathan health bar when spawned
         static float leviHeight = 50;
 
         [HarmonyPatch("Start")]
@@ -141,6 +151,7 @@ namespace ULTRAKIT.Loader
         [HarmonyPrefix]
         public static bool GetHitPrefix(Wicked __instance)
         {
+            // Keeps Something Wicked from getting mad and breaking when there is nowhere to teleport
             if (__instance.patrolPoints[0] == null)
             {
                 var oldAud = __instance.hitSound.GetComponent<AudioSource>();

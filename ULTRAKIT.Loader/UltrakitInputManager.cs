@@ -6,10 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using UMM;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.InputSystem.Controls;
-using UnityEngine.InputSystem;
-using NewBlood;
 using ULTRAKIT.Data;
 using ULTRAKIT.Extensions;
 
@@ -17,6 +13,8 @@ namespace ULTRAKIT.Loader
 {
     public static class UltrakitInputManager
     {
+        // Reserves these keybinds for weapon swapping (no one should end up with more weapons than this at once)
+        // Works with UFG as well
         public static UKKeyBind Slot7;
         public static UKKeyBind Slot8;
         public static UKKeyBind Slot9;
@@ -32,14 +30,19 @@ namespace ULTRAKIT.Loader
         public static UKKeyBind Slot19;
         public static UKKeyBind Slot20;
 
+        /// <summary>
+        /// Internal. Refreshes keybinds based on the currently equipped weapons. Registers only as many slots as are needed to avoid spamming the controls menu.
+        /// </summary>
         public static void UpdateKeyBinds()
         {
-            int weapons = WeaponLoader.allWeapons.Count + 6;
+            int weapons = Registries.weap_allWeapons.Count + 6;
             if (GunControl.Instance != null)
             {
                 weapons = GunControl.Instance.slots.Count;
             }
 
+            // How I wish I could make a loop; damn you keycodes
+            // I mean I could just make an array of keycodes but that's not really much better
             if (weapons < 7) return;
             Slot7 = UKAPI.GetKeyBind("Slot 7", KeyCode.Alpha7);
             if (weapons < 8) return;

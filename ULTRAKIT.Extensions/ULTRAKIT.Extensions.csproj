@@ -40,6 +40,14 @@
     <Reference Include="BCE">
       <HintPath>..\lib\BCE.dll</HintPath>
     </Reference>
+    <Reference Include="BepInEx, Version=5.4.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\BepInEx.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -104,19 +112,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\ConfigData.cs" />
+    <Compile Include="Events.cs" />
     <Compile Include="AssetLoader.cs" />
+    <Compile Include="Extensions\ComponentExt.cs" />
+    <Compile Include="Extensions\EnumerableExt.cs" />
+    <Compile Include="GraphicsUtilities.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="Interfaces\IBuff.cs" />
+    <Compile Include="Data\SaveData.cs" />
+    <Compile Include="ObjectClasses\Monobehaviours\CustomHealthBar.cs" />
+    <Compile Include="ObjectClasses\Monobehaviours\RenderFixer.cs" />
+    <Compile Include="Patches\ArenaEventsPatch.cs" />
+    <Compile Include="Patches\CheatsManagerPatch.cs" />
+    <Compile Include="Patches\EnemyEventsPatch.cs" />
     <Compile Include="UKLogger.cs" />
-    <Compile Include="ObjectClasses\BuffsManager.cs" />
+    <Compile Include="Managers\BuffsManager.cs" />
     <Compile Include="ObjectClasses\Buff.cs" />
-    <Compile Include="ObjectClasses\HatsManager.cs" />
-    <Compile Include="ObjectExtensions\GunSetter.cs" />
+    <Compile Include="Managers\HatsManager.cs" />
+    <Compile Include="UKClassExtensions\GunSetterExt.cs" />
     <Compile Include="ObjectClasses\Cheat.cs" />
-    <Compile Include="DazeExtensions.cs" />
-    <Compile Include="ObjectExtensions\CheatsManager.cs" />
-    <Compile Include="PeterExtensions.cs" />
-    <Compile Include="ReflectionExtensions.cs" />
+    <Compile Include="UKClassExtensions\CheatsManagerExt.cs" />
+    <Compile Include="Extensions\ReflectionExt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -125,5 +142,6 @@
       <Name>ULTRAKIT.Data</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
