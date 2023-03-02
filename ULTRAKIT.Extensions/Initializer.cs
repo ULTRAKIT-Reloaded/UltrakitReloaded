@@ -16,8 +16,18 @@ namespace ULTRAKIT.Extensions
         public static void Initialize()
         {
             ConfigData.LoadConfig();
+            CreateEvents();
             Harmony harmony = new Harmony("ULTRAKIT.Extensions");
             harmony.PatchAll();
+        }
+
+        private static void CreateEvents()
+        {
+            Events.CheatStateChanged = new CheatStateChangedEvent();
+            Events.EnemySpawned = new EnemySpawnedEvent();
+            Events.EnemyDied = new EnemyDiedEvent();
+            Events.ArenaActivated = new UnityEngine.Events.UnityEvent();
+            Events.ArenaCompleted = new UnityEngine.Events.UnityEvent();
         }
     }
 }

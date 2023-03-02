@@ -38,8 +38,6 @@ namespace ULTRAKIT.Extensions.Patches
         [HarmonyPatch("EndWaves"), HarmonyPostfix]
         static void EndWavesPostfix()
         {
-            if (ArenaCompleted == null)
-                ArenaCompleted = new UnityEvent();
             ArenaCompleted.Invoke();
         }
     }
@@ -56,8 +54,6 @@ namespace ULTRAKIT.Extensions.Patches
         [HarmonyPatch("EndWaves"), HarmonyPostfix]
         static void EndWavesPostfix()
         {
-            if (ArenaCompleted == null)
-                ArenaCompleted = new UnityEvent();
             ArenaCompleted.Invoke();
         }
     }
