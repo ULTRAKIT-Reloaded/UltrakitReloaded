@@ -18,7 +18,7 @@ using System.Reflection;
 
 namespace ULTRAKIT.Core
 {
-    [BepInPlugin("ULTRAKIT.core_module", "ULTRAKIT Reloaded", "2.0.0")]
+    [BepInPlugin("ULTRAKIT.core_module", "ULTRAKIT Reloaded", "2.0.1")]
     [BepInDependency("UMM", "0.5.0")]
     public class Plugin : BaseUnityPlugin
     {

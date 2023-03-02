@@ -19,8 +19,6 @@ namespace ULTRAKIT.Extensions.Patches
         [HarmonyPatch("AddEnemy"), HarmonyPostfix]
         static void AddEnemyPostfix(EnemyTracker __instance, EnemyIdentifier eid)
         {
-            if (EnemySpawned == null)
-                EnemySpawned = new EnemySpawnedEvent();
             EnemySpawned.Invoke(eid);
         }
     }
@@ -37,8 +35,6 @@ namespace ULTRAKIT.Extensions.Patches
         [HarmonyPatch("Death"), HarmonyPostfix]
         static void DeathPostfix(EnemyIdentifier __instance)
         {
-            if (EnemyDied == null)
-                EnemyDied = new EnemyDiedEvent();
             EnemyDied.Invoke(__instance);
         }
     }
