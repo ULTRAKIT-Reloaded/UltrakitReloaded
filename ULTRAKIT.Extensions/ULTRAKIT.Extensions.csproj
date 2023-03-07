@@ -123,6 +123,7 @@
     <Compile Include="Data\SaveData.cs" />
     <Compile Include="ObjectClasses\Monobehaviours\CustomHealthBar.cs" />
     <Compile Include="ObjectClasses\Monobehaviours\RenderFixer.cs" />
+    <Compile Include="ObjectClasses\UKSetting.cs" />
     <Compile Include="Patches\ArenaEventsPatch.cs" />
     <Compile Include="Patches\CheatsManagerPatch.cs" />
     <Compile Include="Patches\EnemyEventsPatch.cs" />

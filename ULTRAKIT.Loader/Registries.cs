@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ULTRAKIT.Data;
 using ULTRAKIT.Extensions;
 using ULTRAKIT.Extensions.Interfaces;
+using ULTRAKIT.Extensions.ObjectClasses;
 using UnityEngine;
 
 namespace ULTRAKIT.Loader
@@ -35,5 +36,7 @@ namespace ULTRAKIT.Loader
         // SpawnablesInjector
         public static Dictionary<string, Sprite> spawn_sprites = new Dictionary<string, Sprite>();
 
+        // OptionsLoader
+        public static List<UKSetting> options_registry = new List<UKSetting>();
     }
 }

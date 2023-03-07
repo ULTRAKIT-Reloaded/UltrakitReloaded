@@ -113,6 +113,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Injectors\OptionsInjector.cs" />
     <Compile Include="Loaders\ArmLoader.cs" />
     <Compile Include="Loaders\BuffLoader.cs" />
     <Compile Include="Initializer.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Injectors\ShopInjector.cs" />
     <Compile Include="Injectors\SpawnablesInjector.cs" />
     <Compile Include="Injectors\WeaponInjector.cs" />
+    <Compile Include="Loaders\OptionsLoader.cs" />
     <Compile Include="Registries.cs" />
     <Compile Include="Loaders\SpawnablesLoader.cs" />
     <Compile Include="Patches\SpawnerArmPatch.cs" />
