@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using ULTRAKIT.Extensions.ObjectClasses;
 using UnityEngine;
 
 namespace ULTRAKIT.Extensions.Data
@@ -356,6 +357,7 @@ namespace ULTRAKIT.Extensions.Data
         public Dictionary<string, int[]> weapon_order;
         public Dictionary<string, int[]> weapon_status;
         public Dictionary<string, bool> weapon_unlock;
+        public Dictionary<string, UKSetting> settings;
 
         // External Data - Global
         public Dictionary<string, string> g_string_data;
@@ -382,6 +384,7 @@ namespace ULTRAKIT.Extensions.Data
             weapon_order = new Dictionary<string, int[]>(),
             weapon_status = new Dictionary<string, int[]>(),
             weapon_unlock = new Dictionary<string, bool>(),
+            settings = new Dictionary<string, UKSetting>(),
 
             g_string_data = new Dictionary<string, string>(),
             g_int_data = new Dictionary<string, int>(),

@@ -38,5 +38,8 @@ namespace ULTRAKIT.Loader
 
         // OptionsLoader
         public static List<UKSetting> options_registry = new List<UKSetting>();
+
+        // Keybinds
+        public static Dictionary<string, UKKey> key_registry = new Dictionary<string, UKKey>();
     }
 }
