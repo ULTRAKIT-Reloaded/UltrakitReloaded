@@ -27,6 +27,8 @@ namespace ULTRAKIT.Loader
             HatLoader.Init();
             SpawnablesInjector.Init();
             UltrakitInputManager.UpdateKeyBinds();
+
+            OptionsLoader.SetKeyBind("Test", "test bind", UnityEngine.KeyCode.G);
         }
     }
 }

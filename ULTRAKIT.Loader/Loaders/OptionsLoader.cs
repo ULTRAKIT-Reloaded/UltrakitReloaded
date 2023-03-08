@@ -12,7 +12,7 @@ namespace ULTRAKIT.Loader.Loaders
 {
     public static class OptionsLoader
     {
-        public static UKKey SetKeyBind(string heading, string name, KeyCode defaultKey)
+        public static UKKeySetting SetKeyBind(string heading, string name, KeyCode defaultKey)
         {
             string id = "keybind." + name.Dehumanize();
             if (Registries.key_registry.ContainsKey(id))
@@ -20,12 +20,12 @@ namespace ULTRAKIT.Loader.Loaders
                 return Registries.key_registry[id];
             }
 
-            UKKey keybind = new UKKey(heading, name, defaultKey);
+            UKKeySetting keybind = new UKKeySetting(heading, name, defaultKey);
             Registries.key_registry.Add(keybind.ID, keybind);
             return keybind;
         }
 
-        public static bool GetKeyBind(string name, out UnityEvent onKeyPressed)
+        /*public static bool GetKeyBind(string name, out UnityEvent onKeyPressed)
         {
             string id = "keybind." + name.Dehumanize();
             if (Registries.key_registry.ContainsKey(id))
@@ -35,6 +35,6 @@ namespace ULTRAKIT.Loader.Loaders
             }
             onKeyPressed = null;
             return false;
-        }
+        }*/
     }
 }

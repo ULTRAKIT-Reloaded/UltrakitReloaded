@@ -108,7 +108,7 @@ namespace ULTRAKIT.Extensions.ObjectClasses
     public class UKKeySetting : UKSetting
     {
         public KeyCode Key { get; internal set; }
-        public UKKeyBinding Binding { get; internal set; }
+        //public UKKeyBinding Binding { get; internal set; }
 
         public UKKeySetting(string heading, string name, KeyCode defaultKey)
         {
@@ -117,7 +117,7 @@ namespace ULTRAKIT.Extensions.ObjectClasses
             Name = name;
             ID = "keybind." + name.Dehumanize();
             Key = defaultKey;
-            Binding = new UKKeyBinding(defaultKey, name);
+            //Binding = new UKKeyBinding(defaultKey, name);
             InputAction action = new InputAction(name, InputActionType.Button);
             Type infoType = ReflectionExt.GetInternalType("BindingInfo");
             ConstructorInfo ctor = infoType.GetType().GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic)[0];
@@ -137,17 +137,17 @@ namespace ULTRAKIT.Extensions.ObjectClasses
         public void SetValue(KeyCode key)
         {
             Key = key;
-            Binding.Key = key;
+            //Binding.Key = key;
             OnValueChanged.Invoke(this);
         }
 
-        public UKKeyBinding GetBinding()
-        {
-            return Binding;
-        }
+        //public UKKeyBinding GetBinding()
+        //{
+        //    return Binding;
+        //}
     }
 
-    public class UKKeyBinding : InputActionState
+    /*public class UKKeyBinding : InputActionState
     {
         public class KeyChangedEvent : UnityEvent<KeyCode> { }
 
@@ -165,5 +165,5 @@ namespace ULTRAKIT.Extensions.ObjectClasses
             info.SetPrivate("Offset", 0);
             info.SetPrivate("DefaultKey", Key);
         }
-    }
+    }*/
 }
