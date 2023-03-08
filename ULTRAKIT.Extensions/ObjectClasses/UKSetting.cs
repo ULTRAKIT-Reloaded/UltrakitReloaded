@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 using Humanizer;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
+using System.Reflection;
 
 namespace ULTRAKIT.Extensions.ObjectClasses
 {
@@ -114,7 +117,16 @@ namespace ULTRAKIT.Extensions.ObjectClasses
             Name = name;
             ID = "keybind." + name.Dehumanize();
             Key = defaultKey;
-            Binding = new UKKeyBinding(defaultKey);
+            Binding = new UKKeyBinding(defaultKey, name);
+            InputAction action = new InputAction(name, InputActionType.Button);
+            Type infoType = ReflectionExt.GetInternalType("BindingInfo");
+            ConstructorInfo ctor = infoType.GetType().GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic)[0];
+            var info = ctor.Invoke(new object[0]);
+            info.SetPrivate("Action", action);
+            info.SetPrivate("Name", name);
+            info.SetPrivate("Offset", 0);
+            info.SetPrivate("DefaultKey", Key);
+            UKLogger.Log(info.GetPrivate<string>("PrefName"));
         }
 
         public KeyCode GetValue()
@@ -137,15 +149,21 @@ namespace ULTRAKIT.Extensions.ObjectClasses
 
     public class UKKeyBinding : InputActionState
     {
-        public class OnBindingChangedEvent : UnityEvent<KeyCode> { }
+        public class KeyChangedEvent : UnityEvent<KeyCode> { }
 
         public KeyCode Key;
         public UnityEvent OnKeyPressed = new UnityEvent();
-        public OnBindingChangedEvent OnBindingChanged = new OnBindingChangedEvent();
+        public KeyChangedEvent OnBindingChanged = new KeyChangedEvent();
 
-        internal UKKeyBinding(KeyCode defaultKey)
+        internal UKKeyBinding(KeyCode defaultKey, string name)
         {
-
+            Key = defaultKey;
+            InputAction action = new InputAction(name, InputActionType.Button);
+            var info = ReflectionExt.GetInternalType("BindingInfo");
+            info.SetPrivate("Action", action);
+            info.SetPrivate("Name", name);
+            info.SetPrivate("Offset", 0);
+            info.SetPrivate("DefaultKey", Key);
         }
     }
 }
