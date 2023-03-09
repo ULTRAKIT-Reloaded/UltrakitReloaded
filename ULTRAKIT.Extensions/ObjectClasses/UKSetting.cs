@@ -108,7 +108,7 @@ namespace ULTRAKIT.Extensions.ObjectClasses
     public class UKKeySetting : UKSetting
     {
         public KeyCode Key { get; internal set; }
-        //public UKKeyBinding Binding { get; internal set; }
+        public InputManager.BindingInfo Binding { get; internal set; }
 
         public UKKeySetting(string heading, string name, KeyCode defaultKey)
         {
@@ -119,14 +119,25 @@ namespace ULTRAKIT.Extensions.ObjectClasses
             Key = defaultKey;
             InputAction action = new InputAction(name, InputActionType.Button);
 
-            Type infoType = ReflectionExt.GetInternalType("InputManager+BindingInfo");
+            // Goodbye evil reflection, you will be missed
+
+            /*Type infoType = ReflectionExt.GetInternalType("InputManager+BindingInfo");
             object info = Activator.CreateInstance(infoType);
 
             info.SetFieldValue("Action", action);
-            info.SetFieldValue("Name", name);
+            info.SetFieldValue("Name", name.Dehumanize());
             info.SetFieldValue("Offset", 0);
             info.SetFieldValue("DefaultKey", defaultKey);
-            UKLogger.Log(info.GetPropertyValue<string>("PrefName"));
+
+            Binding = info;*/
+
+            InputManager.BindingInfo info = new InputManager.BindingInfo();
+            info.Action = action;
+            info.Name = name.Dehumanize();
+            info.Offset = 0;
+            info.DefaultKey = defaultKey;
+
+            Binding = info;
         }
 
         public KeyCode GetValue()

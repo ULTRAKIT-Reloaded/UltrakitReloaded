@@ -5,12 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ULTRAKIT.Extensions.ObjectClasses;
+using ULTRAKIT.Loader.Injectors;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace ULTRAKIT.Loader.Loaders
 {
     public static class OptionsLoader
+    {
+
+    }
+
+    public static class KeybindsLoader
     {
         public static UKKeySetting SetKeyBind(string heading, string name, KeyCode defaultKey)
         {
