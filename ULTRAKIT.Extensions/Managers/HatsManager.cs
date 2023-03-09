@@ -10,6 +10,14 @@ namespace ULTRAKIT.Extensions.Managers
 {
     public class HatsManager : MonoBehaviour
     {
+        public static InputActionState state;
+        // DELETE
+        private void Update()
+        {
+            if (state.WasPerformedThisFrame)
+                UKLogger.Log("PRESSED BUTTON");
+        }
+
         public Dictionary<string, GameObject> hats;
 
         private SeasonalHats sh;

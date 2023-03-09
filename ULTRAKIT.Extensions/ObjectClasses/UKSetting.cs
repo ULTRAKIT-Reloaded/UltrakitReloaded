@@ -118,6 +118,7 @@ namespace ULTRAKIT.Extensions.ObjectClasses
             ID = "keybind." + name.Dehumanize();
             Key = defaultKey;
             InputAction action = new InputAction(name, InputActionType.Button);
+            
 
             // Goodbye evil reflection, you will be missed
 
