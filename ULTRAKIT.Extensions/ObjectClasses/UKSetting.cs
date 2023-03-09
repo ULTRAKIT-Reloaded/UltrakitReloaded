@@ -117,16 +117,16 @@ namespace ULTRAKIT.Extensions.ObjectClasses
             Name = name;
             ID = "keybind." + name.Dehumanize();
             Key = defaultKey;
-            //Binding = new UKKeyBinding(defaultKey, name);
             InputAction action = new InputAction(name, InputActionType.Button);
-            Type infoType = ReflectionExt.GetInternalType("BindingInfo");
-            ConstructorInfo ctor = infoType.GetType().GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic)[0];
-            var info = ctor.Invoke(new object[0]);
-            info.SetPrivate("Action", action);
-            info.SetPrivate("Name", name);
-            info.SetPrivate("Offset", 0);
-            info.SetPrivate("DefaultKey", Key);
-            UKLogger.Log(info.GetPrivate<string>("PrefName"));
+
+            Type infoType = ReflectionExt.GetInternalType("InputManager+BindingInfo");
+            object info = Activator.CreateInstance(infoType);
+
+            info.SetFieldValue("Action", action);
+            info.SetFieldValue("Name", name);
+            info.SetFieldValue("Offset", 0);
+            info.SetFieldValue("DefaultKey", defaultKey);
+            UKLogger.Log(info.GetPropertyValue<string>("PrefName"));
         }
 
         public KeyCode GetValue()

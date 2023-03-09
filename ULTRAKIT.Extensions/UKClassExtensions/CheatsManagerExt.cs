@@ -17,7 +17,7 @@ namespace ULTRAKIT.Extensions
         /// <param name="manager"></param>
         public static void PrintCheatIDs(this CheatsManager manager)
         {
-            foreach (KeyValuePair<String, ICheat> cheat in manager.GetPrivate<Dictionary<String, ICheat>>("idToCheat"))
+            foreach (KeyValuePair<String, ICheat> cheat in manager.GetFieldValue<Dictionary<String, ICheat>>("idToCheat", true))
             {
                 Debug.Log(cheat.Key);
             }
@@ -33,7 +33,7 @@ namespace ULTRAKIT.Extensions
         /// <returns>`true` if the cheat is registered, `false` otherwise.</returns>
         public static bool SetCheatState(this CheatsManager manager, string id, bool enabled)
         {
-            Dictionary<String, ICheat> cheats = manager.GetPrivate<Dictionary<String, ICheat>>("idToCheat");
+            Dictionary<String, ICheat> cheats = manager.GetFieldValue<Dictionary<String, ICheat>>("idToCheat", true);
             if (cheats.ContainsKey(id))
             {
                 manager.WrappedSetState(cheats[id], enabled);

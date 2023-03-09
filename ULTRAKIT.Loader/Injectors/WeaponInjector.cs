@@ -163,10 +163,10 @@ namespace ULTRAKIT.Loader.Injectors
                         wi.weaponIcon = weap.Icons[i];
                         wi.glowIcon = weap.Icons[i];
                         wi.variationColor = i;
-                        wi.SetPrivate("variationColoredMaterials", go.GetComponentsInChildren<Material>().Where(k => k.name.Contains(".var")).ToArray() ?? new Material[0]);
-                        wi.SetPrivate("variationColoredRenderers", go.GetComponentsInChildren<Renderer>().Where(k => k.material.name.Contains(".var")).ToArray() ?? new Renderer[0]);
+                        wi.SetFieldValue("variationColoredMaterials", go.GetComponentsInChildren<Material>().Where(k => k.name.Contains(".var")).ToArray() ?? new Material[0], true);
+                        wi.SetFieldValue("variationColoredRenderers", go.GetComponentsInChildren<Renderer>().Where(k => k.material.name.Contains(".var")).ToArray() ?? new Renderer[0], true);
                         // Likely used for the shop, though the color setting is done manually in the ShopInjector
-                        wi.SetPrivate("variationColoredImages", new Image[0]);
+                        wi.SetFieldValue("variationColoredImages", new Image[0], true);
 
                         // Adds weapons to the style freshness list, which makes freshness functional and keeps the game from throwing a warning every frame
                         var field = typeof(StyleHUD).GetField("weaponFreshness", BindingFlags.NonPublic | BindingFlags.Instance);

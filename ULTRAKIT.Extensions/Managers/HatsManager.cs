@@ -18,9 +18,9 @@ namespace ULTRAKIT.Extensions.Managers
         {
             if (sh == null) sh = GetComponent<SeasonalHats>();
             hats = new Dictionary<string, GameObject>();
-            hats.Add("christmas", sh.GetPrivate<GameObject>("christmas"));
-            hats.Add("halloween", sh.GetPrivate<GameObject>("halloween"));
-            hats.Add("easter", sh.GetPrivate<GameObject>("easter"));
+            hats.Add("christmas", sh.GetFieldValue<GameObject>("christmas", true));
+            hats.Add("halloween", sh.GetFieldValue<GameObject>("halloween", true));
+            hats.Add("easter", sh.GetFieldValue<GameObject>("easter", true));
         }
 
         /// <summary>
