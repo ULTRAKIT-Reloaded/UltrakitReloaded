@@ -8,16 +8,106 @@ using ULTRAKIT.Extensions;
 using ULTRAKIT.Extensions.Managers;
 using ULTRAKIT.Extensions.ObjectClasses;
 using ULTRAKIT.Loader.Loaders;
+using UnityEditor.Events;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace ULTRAKIT.Loader.Injectors
 {
-    public static class OptionsInjector
+    [HarmonyPatch(typeof(CanvasController))]
+    public class OptionsInjector
     {
-        private static Transform Menu = CanvasController.Instance.transform.Find("OptionsMenu");
-        private static GameObject MenuButtonPrefab, ScrollPrefab, SliderPrefab, CheckboxPrefab, PickerPrefab, KeyPrefab;
+        private static GameObject Menu, MenuButtonTemplate, SubmenuTemplate, SliderTemplate, CheckboxTemplate, PickerTemplate, KeyTemplate;
+        private static GameObject NewButton;
 
+        private static List<string> ButtonsToMove;
+        private static List<GameObject> NewMenus;
+
+        [HarmonyPatch("OnEnable"), HarmonyPostfix]
+        static void OnEnablePostfix(CanvasController __instance)
+        {
+            ButtonsToMove = new List<string>() { "Gameplay", "Controls", "Video", "Audio", "HUD", "Assist", "Colors", "Saves" };
+            NewMenus = new List<GameObject>();
+
+            if (Menu == null)
+            {
+                Menu = CanvasController.Instance.transform.Find("OptionsMenu").gameObject;
+                MenuButtonTemplate = Menu.transform.Find("Gameplay").gameObject;
+                SubmenuTemplate = Menu.transform.Find("Gameplay Options").gameObject;
+                SliderTemplate = SubmenuTemplate.transform.Find("Scroll Rect (1)/Contents/Mouse Sensitivity").gameObject;
+                CheckboxTemplate = SubmenuTemplate.transform.Find("Scroll Rect (1)/Contents/Variation Memory").gameObject;
+                PickerTemplate = SubmenuTemplate.transform.Find("Scroll Rect (1)/Contents/Weapon Position").gameObject;
+                KeyTemplate = Menu.transform.Find("Controls Options/Scroll Rect/Contents/Forward").gameObject;
+
+                foreach (string button in ButtonsToMove)
+                {
+                    UKLogger.Log(button);
+                    Transform t = Menu.transform.Find(button);
+                    t.localPosition += new Vector3(0, -35, 0);
+                }
+            }
+            if (NewButton == null)
+                NewButton = CreateMenuButton("Mods");
+            CreateMenuButton("Test Button");
+        }
+
+        static GameObject CreateMenuButton(string name)
+        {
+            GameObject newBtn = GameObject.Instantiate(MenuButtonTemplate, Menu.transform);
+            newBtn.name = name;
+            newBtn.GetComponent<RectTransform>().SetAsFirstSibling();
+            newBtn.transform.Find("Text").GetComponent<Text>().text = name.ToUpper();
+            newBtn.transform.localPosition = new Vector3(-610 - 320, -245, 0);
+
+            GameObject Submenu = CreateSubmenu(name.ToUpper());
+            Submenu.SetActive(false);
+
+            Button btn = newBtn.GetComponent<Button>();
+            btn.onClick.SetPersistentListenerState(0, UnityEventCallState.Off);
+            btn.onClick.AddListener(() =>
+            {
+                SubmenuTemplate.SetActive(false);
+                Submenu.SetActive(true);
+            });
+
+            foreach (string button in ButtonsToMove)
+            {
+                Transform t = Menu.transform.Find(button);
+                t.localPosition += new Vector3(0, 60, 0);
+                t.GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    Submenu.SetActive(false);
+                });
+            }
+            foreach (GameObject menu in NewMenus)
+            {
+                btn.onClick.AddListener(() =>
+                {
+                    menu.SetActive(false);
+                });
+            }
+
+            ButtonsToMove.Add(name);
+            NewMenus.Add(Submenu);
+
+            return newBtn;
+        }
+
+        static GameObject CreateSubmenu(string title)
+        {
+            GameObject sub = GameObject.Instantiate(SubmenuTemplate, Menu.transform);
+            sub.name = "Mod Options";
+            sub.GetComponent<RectTransform>().SetAsFirstSibling();
+            Transform contents = sub.transform.Find("Scroll Rect (1)/Contents");
+            for (int i = 0; i < contents.childCount; i++)
+            {
+                GameObject.Destroy(contents.GetChild(i).gameObject);
+            }
+            sub.transform.Find("Text").GetComponent<Text>().text = $"--{title}--";
+            return sub;
+        }
     }
 
     [HarmonyPatch(typeof(InputManager))]
