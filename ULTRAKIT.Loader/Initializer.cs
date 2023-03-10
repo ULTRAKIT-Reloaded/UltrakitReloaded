@@ -28,6 +28,7 @@ namespace ULTRAKIT.Loader
             SpawnablesInjector.Init();
             UltrakitInputManager.UpdateKeyBinds();
 
+            // DELETE
             KeybindsLoader.SetKeyBind("Test", "test bind", UnityEngine.KeyCode.G);
         }
     }
