@@ -22,6 +22,7 @@ namespace ULTRAKIT.Loader
         /// </summary>
         public static void Initialize()
         {
+
             Harmony harmony = new Harmony("ULTRAKIT.Loader");
             harmony.PatchAll();
             HatLoader.Init();
@@ -29,7 +30,7 @@ namespace ULTRAKIT.Loader
             UltrakitInputManager.UpdateKeyBinds();
 
             // DELETE
-            KeybindsLoader.SetKeyBind("Test", "test bind", UnityEngine.KeyCode.G);
+            OptionsInjector.TestSystem();
         }
     }
 }

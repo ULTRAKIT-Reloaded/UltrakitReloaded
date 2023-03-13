@@ -38,6 +38,7 @@ namespace ULTRAKIT.Loader
 
         // OptionsLoader
         public static List<UKSetting> options_registry = new List<UKSetting>();
+        public static Dictionary<string, GameObject> options_menus = new Dictionary<string, GameObject>();
 
         // Keybinds
         public static Dictionary<string, UKKeySetting> key_registry = new Dictionary<string, UKKeySetting>();
