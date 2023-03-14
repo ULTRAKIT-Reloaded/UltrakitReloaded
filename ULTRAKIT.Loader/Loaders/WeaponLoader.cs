@@ -7,7 +7,6 @@ using UnityEngine;
 using ULTRAKIT.Data;
 using ULTRAKIT.Extensions;
 using HarmonyLib;
-using UMM;
 using ULTRAKIT.Extensions.Data;
 
 namespace ULTRAKIT.Loader.Loaders

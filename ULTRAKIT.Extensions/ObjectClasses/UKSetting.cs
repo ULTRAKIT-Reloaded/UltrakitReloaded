@@ -151,9 +151,6 @@ namespace ULTRAKIT.Extensions.ObjectClasses
             info.DefaultKey = defaultKey;
 
             Binding = info;
-
-            if (InputManager.Instance && InputManager.Instance.Inputs.ContainsKey(info.Name))
-                Key = InputManager.Instance.Inputs[info.Name];
         }
 
         public KeyCode GetValue()

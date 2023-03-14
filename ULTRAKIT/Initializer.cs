@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UMM;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using ULTRAKIT.Extensions;
@@ -14,6 +13,7 @@ using ULTRAKIT.Loader.Injectors;
 using System.Reflection;
 using ULTRAKIT.Extensions.Data;
 using ULTRAKIT.Loader.Loaders;
+using HarmonyLib;
 
 namespace ULTRAKIT.Core
 {
@@ -37,13 +37,34 @@ namespace ULTRAKIT.Core
         public static IEnumerator InitializeComponents()
         {
             // If done before the bundle loads, patched objects don't exist yet and startup fails
-            while (!UKAPI.triedLoadingBundle)
+
+            AssetBundle common = null;
+            while (common == null)
             {
-                yield return new WaitForSeconds(0.2f);
+                AssetLoader.LoadFromLoaded("common", out common);
+                string commonAssetBundlePath = Path.Combine(BepInEx.Paths.GameRootPath, "ULTRAKILL_Data\\StreamingAssets\\common");
+                AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(commonAssetBundlePath);
+                yield return request;
+                int attempts = 0;
+                while (request.assetBundle == null)
+                {
+                    yield return new WaitForSeconds(0.3f);
+                    if (attempts > 5)
+                    {
+                        yield break;
+                    }
+                    request = AssetBundle.LoadFromFileAsync(commonAssetBundlePath);
+                    yield return request;
+                    attempts++;
+                }
+                common = request.assetBundle;
             }
+
             Loader.Initializer.Initialize();
             LoadCommands();
             LoadHats();
+
+            common.Unload(false);
 
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
