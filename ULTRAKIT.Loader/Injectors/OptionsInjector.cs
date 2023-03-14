@@ -216,6 +216,7 @@ namespace ULTRAKIT.Loader.Injectors
             toggle.onValueChanged.AddListener((bool value) =>
             {
                 setting.SetValue(value);
+                SaveData.Save();
             });
 
             toggle.isOn = setting.Value;
@@ -233,6 +234,7 @@ namespace ULTRAKIT.Loader.Injectors
             {
                 setting.SetValue(value);
                 currentValueText.text = value.ToString();
+                SaveData.Save();
             });
 
             slider.value = setting.Value;
@@ -251,6 +253,7 @@ namespace ULTRAKIT.Loader.Injectors
             dropdown.onValueChanged.AddListener((int value) =>
             {
                 setting.SetValue(value);
+                SaveData.Save();
             });
 
             dropdown.value = setting.Value;

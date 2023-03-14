@@ -22,7 +22,7 @@ namespace ULTRAKIT.Loader.Loaders
             string internal_name = Assembly.GetCallingAssembly().GetName().Name + ".checkbox." + name.Dehumanize();
             if (SaveData.data.settings_check.ContainsKey(internal_name))
             {
-                checkbox = SaveData.data.settings_check[internal_name] as UKCheckbox;
+                checkbox = SaveData.data.settings_check[internal_name];
                 Registries.RegisterSetting(checkbox);
                 return checkbox;
             }
@@ -38,7 +38,7 @@ namespace ULTRAKIT.Loader.Loaders
             string internal_name = Assembly.GetCallingAssembly().GetName().Name + ".slider." + name.Dehumanize();
             if (SaveData.data.settings_slide.ContainsKey(internal_name))
             {
-                slider = SaveData.data.settings_slide[internal_name] as UKSlider;
+                slider = SaveData.data.settings_slide[internal_name];
                 Registries.RegisterSetting(slider);
                 return slider;
             }
@@ -54,7 +54,7 @@ namespace ULTRAKIT.Loader.Loaders
             string internal_name = Assembly.GetCallingAssembly().GetName().Name + ".picker." + name.Dehumanize();
             if (SaveData.data.settings_pick.ContainsKey(internal_name))
             {
-                picker = SaveData.data.settings_pick[internal_name] as UKPicker;
+                picker = SaveData.data.settings_pick[internal_name];
                 Registries.RegisterSetting(picker);
                 return picker;
             }
