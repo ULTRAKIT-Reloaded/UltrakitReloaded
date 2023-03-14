@@ -165,7 +165,7 @@ namespace ULTRAKIT.Loader.Injectors
                 CachedModHeader = setting.Section;
             }
 
-            if (CachedHeader != setting.Heading || (CachedMenu != setting.Section && !isModSubmenu))
+            if (!(Initializer.isUMMInstalled && setting.Section == "Controls") && (CachedHeader != setting.Heading || (CachedMenu != setting.Section && !isModSubmenu)))
             {
                 Text t = GameObject.Instantiate(TextTemplate, parent).GetComponent<Text>();
                 t.text = $"--{setting.Heading}--";
@@ -174,7 +174,7 @@ namespace ULTRAKIT.Loader.Injectors
                 CachedHeader = setting.Heading;
                 CachedMenu = setting.Section;
 
-                if (setting.Section == "Controls" && !Initializer.isUMMInstalled)
+                if (setting.Section == "Controls")
                 {
                     Transform lastChild = parent.GetChild(parent.childCount - 1);
                     if (lastChild == t.transform)
