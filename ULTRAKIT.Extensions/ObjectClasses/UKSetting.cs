@@ -53,7 +53,7 @@ namespace ULTRAKIT.Extensions.ObjectClasses
 
     public class UKPicker : UKSetting
     {
-        public string Value { get; internal set; }
+        public int Value { get; internal set; }
         public string[] Options { get; internal set; }
 
         public UKPicker(string section, string heading, string name, string[] options, int startingIndex)
@@ -63,15 +63,15 @@ namespace ULTRAKIT.Extensions.ObjectClasses
             Name = name;
             ID = "picker." + name.Dehumanize();
             Options = options;
-            Value = options[startingIndex];
+            Value = startingIndex;
         }
 
-        public string GetValue()
+        public int GetValue()
         {
             return Value;
         }
 
-        public void SetValue(string value)
+        public void SetValue(int value)
         {
             Value = value;
             OnValueChanged.Invoke(this);

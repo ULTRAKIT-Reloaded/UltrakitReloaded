@@ -37,7 +37,7 @@ namespace ULTRAKIT.Loader
         public static Dictionary<string, Sprite> spawn_sprites = new Dictionary<string, Sprite>();
 
         // OptionsLoader
-        public static List<UKSetting> options_registry = new List<UKSetting>();
+        public static SortedList<string, UKSetting> options_registry = new SortedList<string, UKSetting>();
         public static Dictionary<string, GameObject> options_menus = new Dictionary<string, GameObject>();
 
         // Keybinds

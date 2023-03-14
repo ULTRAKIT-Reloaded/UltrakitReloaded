@@ -28,7 +28,7 @@ namespace ULTRAKIT.Loader.Loaders
 
             UKKeySetting keybind = new UKKeySetting(heading, name, defaultKey);
             Registries.key_registry.Add(keybind.ID, keybind);
-            Registries.options_registry.Add(keybind);
+            Registries.options_registry.Add(keybind.Heading, keybind);
             return keybind;
         }
 

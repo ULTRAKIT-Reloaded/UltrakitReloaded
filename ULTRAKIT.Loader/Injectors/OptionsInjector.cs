@@ -9,6 +9,7 @@ using ULTRAKIT.Extensions;
 using ULTRAKIT.Extensions.Managers;
 using ULTRAKIT.Extensions.ObjectClasses;
 using ULTRAKIT.Loader.Loaders;
+using UnityEditor;
 using UnityEditor.Events;
 using UnityEngine;
 using UnityEngine.Events;
@@ -25,6 +26,9 @@ namespace ULTRAKIT.Loader.Injectors
 
         private static List<string> ButtonsToMove;
         private static List<GameObject> NewMenus;
+        private static string CachedHeader;
+        private static string CachedModHeader;
+        private static string CachedMenu;
 
         [HarmonyPatch("OnEnable"), HarmonyPostfix]
         static void OnEnablePostfix(CanvasController __instance)
@@ -66,7 +70,7 @@ namespace ULTRAKIT.Loader.Injectors
             if (NewButton == null)
                 NewButton = CreateMenuButton("Mods");
             CreateMenuButton("Test Button");
-            foreach (UKSetting setting in Registries.options_registry)
+            foreach (UKSetting setting in Registries.options_registry.Values)
             {
                 CreateSetting(setting);
             }
@@ -142,7 +146,22 @@ namespace ULTRAKIT.Loader.Injectors
             }
             else
                 submenu = Registries.options_menus[setting.Section];
+
             Transform parent = submenu.transform.Find("Scroll Rect (1)/Contents") ?? submenu.transform.Find("Scroll Rect/Contents") ?? submenu.transform.Find("Image");
+
+            if (isModSubmenu && CachedModHeader != setting.Section)
+            {
+                Text t = GameObject.Instantiate(TextTemplate, parent).GetComponent<Text>();
+                t.text = $"--{setting.Section}--";
+                t.fontSize += 6;
+            }
+
+            if (CachedHeader != setting.Heading || (CachedMenu != setting.Section && !isModSubmenu))
+            {
+                GameObject.Instantiate(TextTemplate, parent).GetComponent<Text>().text = $"--{setting.Heading}--";
+                CachedHeader = setting.Heading;
+                CachedMenu = setting.Section;
+            }
 
             Type settingType = setting.GetType();
             if (settingType.IsEquivalentTo(typeof(UKCheckbox)))
@@ -165,22 +184,59 @@ namespace ULTRAKIT.Loader.Injectors
 
         static void CreateCheckbox(UKCheckbox setting, Transform contents)
         {
-            
+            GameObject box = GameObject.Instantiate(CheckboxTemplate, contents);
+            Toggle toggle = box.transform.Find("Toggle").GetComponent<Toggle>();
+
+            toggle.onValueChanged.SetPersistentListenerState(0, UnityEventCallState.Off);
+            toggle.onValueChanged.AddListener((bool value) =>
+            {
+                setting.SetValue(value);
+            });
+
+            box.transform.Find("Text").GetComponent<Text>().text = setting.Name.Humanize();
         }
 
         static void CreateSlider(UKSlider setting, Transform contents)
         {
+            GameObject box = GameObject.Instantiate(SliderTemplate, contents);
+            Slider slider = box.transform.Find("Button/Slider (1)").GetComponent<Slider>();
+            Text currentValueText = slider.transform.Find("Text (2)").GetComponent<Text>();
 
+            slider.onValueChanged.SetPersistentListenerState(0, UnityEventCallState.Off);
+            slider.onValueChanged.AddListener((float value) =>
+            {
+                setting.SetValue(value);
+                currentValueText.text = value.ToString();
+            });
+
+            box.transform.Find("Text").GetComponent<Text>().text = setting.Name.Humanize();
         }
         
         static void CreatePicker(UKPicker setting, Transform contents)
         {
+            GameObject box = GameObject.Instantiate(PickerTemplate, contents);
+            Dropdown dropdown = box.transform.Find("Dropdown").GetComponent<Dropdown>();
 
+            dropdown.ClearOptions();
+            dropdown.AddOptions(setting.Options.ToList());
+
+            dropdown.onValueChanged.SetPersistentListenerState(0, UnityEventCallState.Off);
+            dropdown.onValueChanged.AddListener((int value) =>
+            {
+                setting.SetValue(value);
+            });
+
+            box.transform.Find("Text").GetComponent<Text>().text = setting.Name.Humanize();
         }
 
         static void CreateKey(UKKeySetting setting, Transform contents)
         {
+            GameObject box = GameObject.Instantiate(KeyTemplate, contents);
+            GameObject button = box.transform.Find("W").gameObject;
 
+            button.name = setting.Binding.PrefName;
+
+            box.transform.Find("Text").GetComponent<Text>().text = setting.Name.Humanize();
         }
 
         static void RegisterMenu(string buttonName, GameObject menu)
@@ -198,9 +254,9 @@ namespace ULTRAKIT.Loader.Injectors
             UKSlider slider = new UKSlider("Mods", "Testing Section", "Test Slider", 0f, 1f, 0.2f);
             UKPicker picker = new UKPicker("Mods", "Testing Section", "Test Picker", new string[] { "Option1", "Option2", "Option3" }, 0);
 
-            Registries.options_registry.Add(checkbox);
-            Registries.options_registry.Add(slider);
-            Registries.options_registry.Add(picker);
+            Registries.options_registry.Add(checkbox.Heading, checkbox);
+            Registries.options_registry.Add(slider.Heading, slider);
+            Registries.options_registry.Add(picker.Heading, picker);
 
             KeybindsLoader.SetKeyBind("Test", "test bind", KeyCode.G);
         }
@@ -224,6 +280,19 @@ namespace ULTRAKIT.Loader.Injectors
             __instance.UpdateBindings();
             // DELETE
             KeybindsLoader.GetKeyBind("test bind", out HatsManager.state);
+        }
+    }
+
+    [HarmonyPatch(typeof(ControlsOptions))]
+    public class ControlsOptionsPatch
+    {
+        public static UKKeySetting currentKey;
+
+        [HarmonyPatch("OnGUI"), HarmonyPostfix]
+        static void OnGUIPostix()
+        {
+            if (currentKey != null)
+                currentKey.SetValue(InputManager.instance.Inputs[currentKey.Binding.PrefName]);
         }
     }
 }
