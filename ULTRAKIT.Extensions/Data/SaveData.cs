@@ -357,7 +357,9 @@ namespace ULTRAKIT.Extensions.Data
         public Dictionary<string, int[]> weapon_order;
         public Dictionary<string, int[]> weapon_status;
         public Dictionary<string, bool> weapon_unlock;
-        public Dictionary<string, UKSetting> settings;
+        public Dictionary<string, UKCheckbox> settings_check;
+        public Dictionary<string, UKSlider> settings_slide;
+        public Dictionary<string, UKPicker> settings_pick;
 
         // External Data - Global
         public Dictionary<string, string> g_string_data;
@@ -384,7 +386,9 @@ namespace ULTRAKIT.Extensions.Data
             weapon_order = new Dictionary<string, int[]>(),
             weapon_status = new Dictionary<string, int[]>(),
             weapon_unlock = new Dictionary<string, bool>(),
-            settings = new Dictionary<string, UKSetting>(),
+            settings_check = new Dictionary<string, UKCheckbox>(),
+            settings_slide = new Dictionary<string, UKSlider>(),
+            settings_pick = new Dictionary<string, UKPicker>(),
 
             g_string_data = new Dictionary<string, string>(),
             g_int_data = new Dictionary<string, int>(),

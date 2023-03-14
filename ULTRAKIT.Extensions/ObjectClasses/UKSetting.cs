@@ -10,6 +10,8 @@ using Humanizer;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using System.Reflection;
+using Newtonsoft.Json;
+using ULTRAKIT.Extensions.Data;
 
 namespace ULTRAKIT.Extensions.ObjectClasses
 {
@@ -19,15 +21,21 @@ namespace ULTRAKIT.Extensions.ObjectClasses
     [Serializable]
     public class UKSetting
     {
+        [JsonProperty("OnValueChanged")]
         public SettingChangedEvent OnValueChanged = new SettingChangedEvent();
+        [JsonProperty("Section")]
         public string Section { get; internal set; }
+        [JsonProperty("Heading")]
         public string Heading { get; internal set; }
+        [JsonProperty("Name")]
         public string Name { get; internal set; }
+        [JsonProperty("ID")]
         public string ID { get; internal set; }
     }
 
     public class UKCheckbox : UKSetting
     {
+        [JsonProperty("ValueCheck")]
         public bool Value { get; internal set; }
 
         public UKCheckbox(string section, string heading, string name, bool defaultValue)
@@ -53,7 +61,9 @@ namespace ULTRAKIT.Extensions.ObjectClasses
 
     public class UKPicker : UKSetting
     {
+        [JsonProperty("ValuePick")]
         public int Value { get; internal set; }
+        [JsonProperty("Options")]
         public string[] Options { get; internal set; }
 
         public UKPicker(string section, string heading, string name, string[] options, int startingIndex)
@@ -80,7 +90,9 @@ namespace ULTRAKIT.Extensions.ObjectClasses
 
     public class UKSlider : UKSetting
     {
+        [JsonProperty("ValueSlide")]
         public float Value { get; internal set; }
+        [JsonProperty("Range")]
         public Tuple<float, float> Range { get; internal set; }
 
         public UKSlider(string section, string heading, string name, float min, float max, float defaultValue)
@@ -112,7 +124,7 @@ namespace ULTRAKIT.Extensions.ObjectClasses
 
         public UKKeySetting(string heading, string name, KeyCode defaultKey)
         {
-            Section = "CONTROLS";
+            Section = "Controls";
             Heading = heading;
             Name = name;
             ID = "keybind." + name.Dehumanize();
@@ -139,6 +151,9 @@ namespace ULTRAKIT.Extensions.ObjectClasses
             info.DefaultKey = defaultKey;
 
             Binding = info;
+
+            if (InputManager.Instance && InputManager.Instance.Inputs.ContainsKey(info.Name))
+                Key = InputManager.Instance.Inputs[info.Name];
         }
 
         public KeyCode GetValue()

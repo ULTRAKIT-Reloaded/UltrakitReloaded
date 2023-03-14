@@ -43,5 +43,12 @@ namespace ULTRAKIT.Loader
         // Keybinds
         public static Dictionary<string, UKKeySetting> key_registry = new Dictionary<string, UKKeySetting>();
         public static Dictionary<string, InputActionState> key_states = new Dictionary<string, InputActionState>();
+
+        private static int counter = 0;
+        public static void RegisterSetting(UKSetting setting)
+        {
+            options_registry.Add($"{setting.Heading}{counter}", setting);
+            counter++;
+        }
     }
 }

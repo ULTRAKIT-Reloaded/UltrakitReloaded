@@ -6,9 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ULTRAKIT.Extensions;
+using ULTRAKIT.Extensions.Data;
 using ULTRAKIT.Extensions.Managers;
 using ULTRAKIT.Extensions.ObjectClasses;
 using ULTRAKIT.Loader.Loaders;
+using UMM;
 using UnityEditor;
 using UnityEditor.Events;
 using UnityEngine;
@@ -29,6 +31,7 @@ namespace ULTRAKIT.Loader.Injectors
         private static string CachedHeader;
         private static string CachedModHeader;
         private static string CachedMenu;
+        private static float ControlOffset;
 
         [HarmonyPatch("OnEnable"), HarmonyPostfix]
         static void OnEnablePostfix(CanvasController __instance)
@@ -154,15 +157,32 @@ namespace ULTRAKIT.Loader.Injectors
                 Text t = GameObject.Instantiate(TextTemplate, parent).GetComponent<Text>();
                 t.text = $"--{setting.Section}--";
                 t.fontSize += 6;
+                t.alignment = TextAnchor.MiddleLeft;
+                t.horizontalOverflow = HorizontalWrapMode.Overflow;
             }
 
             if (CachedHeader != setting.Heading || (CachedMenu != setting.Section && !isModSubmenu))
             {
-                GameObject.Instantiate(TextTemplate, parent).GetComponent<Text>().text = $"--{setting.Heading}--";
+                Text t = GameObject.Instantiate(TextTemplate, parent).GetComponent<Text>();
+                t.text = $"--{setting.Heading}--";
+                t.alignment = TextAnchor.MiddleLeft;
+                t.horizontalOverflow = HorizontalWrapMode.Overflow;
                 CachedHeader = setting.Heading;
                 CachedMenu = setting.Section;
-            }
 
+                if (setting.Section == "Controls" && !Initializer.isUMMInstalled)
+                {
+                    Transform lastChild = parent.GetChild(parent.childCount - 1);
+                    if (lastChild == t.transform)
+                        lastChild = parent.GetChild(parent.childCount - 2);
+
+                    RectTransform rect = lastChild.GetComponent<RectTransform>();
+                    float t_offset = rect.sizeDelta.y - 210;
+                    ControlOffset = lastChild.transform.localPosition.y - t_offset;
+
+                    t.transform.localPosition = new Vector3(t.transform.localPosition.x, ControlOffset,  t.transform.localPosition.z);
+                }
+            }
             Type settingType = setting.GetType();
             if (settingType.IsEquivalentTo(typeof(UKCheckbox)))
             {
@@ -176,7 +196,7 @@ namespace ULTRAKIT.Loader.Injectors
             {
                 CreatePicker(setting as UKPicker, parent);
             }
-            if (settingType.IsEquivalentTo(typeof(UKKeySetting)))
+            if (settingType.IsEquivalentTo(typeof(UKKeySetting)) && !Initializer.isUMMInstalled)
             {
                 CreateKey(setting as UKKeySetting, parent);
             }
@@ -193,6 +213,7 @@ namespace ULTRAKIT.Loader.Injectors
                 setting.SetValue(value);
             });
 
+            toggle.isOn = setting.Value;
             box.transform.Find("Text").GetComponent<Text>().text = setting.Name.Humanize();
         }
 
@@ -209,6 +230,7 @@ namespace ULTRAKIT.Loader.Injectors
                 currentValueText.text = value.ToString();
             });
 
+            slider.value = setting.Value;
             box.transform.Find("Text").GetComponent<Text>().text = setting.Name.Humanize();
         }
         
@@ -226,6 +248,7 @@ namespace ULTRAKIT.Loader.Injectors
                 setting.SetValue(value);
             });
 
+            dropdown.value = setting.Value;
             box.transform.Find("Text").GetComponent<Text>().text = setting.Name.Humanize();
         }
 
@@ -234,7 +257,11 @@ namespace ULTRAKIT.Loader.Injectors
             GameObject box = GameObject.Instantiate(KeyTemplate, contents);
             GameObject button = box.transform.Find("W").gameObject;
 
-            button.name = setting.Binding.PrefName;
+            ControlOffset -= box.GetComponent<RectTransform>().sizeDelta.y;
+            box.transform.localPosition = new Vector3(box.transform.localPosition.x, ControlOffset, box.transform.localPosition.z);
+
+            button.name = setting.Binding.Name;
+            button.transform.Find("Text").GetComponent<Text>().text = ControlsOptions.GetKeyName(setting.Key);
 
             box.transform.Find("Text").GetComponent<Text>().text = setting.Name.Humanize();
         }
@@ -250,15 +277,11 @@ namespace ULTRAKIT.Loader.Injectors
         // DELETE
         public static void TestSystem()
         {
-            UKCheckbox checkbox = new UKCheckbox("Mods", "Testing Section", "Test Checkbox", false);
-            UKSlider slider = new UKSlider("Mods", "Testing Section", "Test Slider", 0f, 1f, 0.2f);
-            UKPicker picker = new UKPicker("Mods", "Testing Section", "Test Picker", new string[] { "Option1", "Option2", "Option3" }, 0);
+            OptionsLoader.RegisterCheckbox("Mods", "Testing Section", "Test Checkbox", false);
+            OptionsLoader.RegisterSlider("Mods", "Testing Section", "Test Slider", 0f, 1f, 0.2f);
+            OptionsLoader.RegisterPicker("Mods", "Testing Section", "Test Picker", new string[] { "Option1", "Option2", "Option3" }, 0);
 
-            Registries.options_registry.Add(checkbox.Heading, checkbox);
-            Registries.options_registry.Add(slider.Heading, slider);
-            Registries.options_registry.Add(picker.Heading, picker);
-
-            KeybindsLoader.SetKeyBind("Test", "test bind", KeyCode.G);
+            KeybindsLoader.SetKeyBind("Testing Section", "test bind", KeyCode.G);
         }
     }
 
@@ -269,11 +292,30 @@ namespace ULTRAKIT.Loader.Injectors
         static void OnEnablePostfix(InputManager __instance)
         {
             __instance.bindings = __instance.bindings.AddRangeToArray(Registries.key_registry.Select(n => n.Value.Binding).ToArray());
-            Registries.key_states = Registries.key_registry.ToDictionary(item => item.Key, item => new InputActionState(item.Value.Binding.Action));
+
+            if (Initializer.isUMMInstalled)
+            {
+                Registries.key_states = Registries.key_registry.ToDictionary(item => item.Key, item => UKAPI.GetKeyBind(item.Key, item.Value.Binding.DefaultKey) as InputActionState);
+                foreach (var state in Registries.key_states)
+                {
+                    UKKeyBind binding = UKAPI.GetKeyBind(state.Key);
+                    UKKeySetting setting = Registries.key_registry[state.Key];
+                    if (PrefsManager.Instance.HasKey(setting.Binding.PrefName))
+                        binding.ChangeKeyBind((KeyCode)MonoSingleton<PrefsManager>.Instance.GetInt(setting.Binding.PrefName, (int)setting.Key));
+                    binding.OnBindingChanged.AddListener((KeyCode key) =>
+                    {
+                        setting.SetValue(key);
+                    });
+                }
+            }
+            else
+                Registries.key_states = Registries.key_registry.ToDictionary(item => item.Key, item => new InputActionState(item.Value.Binding.Action));
+
             foreach (UKKeySetting setting in Registries.key_registry.Values)
             {
                 if (!PrefsManager.Instance.HasKey(setting.Binding.PrefName))
                     PrefsManager.instance.prefMap.Add(setting.Binding.PrefName, setting.Binding.DefaultKey);
+
                 setting.Binding.Action.AddBinding().WithGroup("Keyboard");
                 setting.Binding.Action.Enable();
             }

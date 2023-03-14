@@ -10,13 +10,15 @@ using ULTRAKIT.Data;
 using ULTRAKIT.Extensions;
 using ULTRAKIT.Loader.Injectors;
 using ULTRAKIT.Loader.Loaders;
-using UMM;
 using UnityEngine.SceneManagement;
+using BepInEx;
 
 namespace ULTRAKIT.Loader
 {
     public class Initializer
     {
+        public static bool isUMMInstalled = false;
+
         /// <summary>
         /// Internal. Initializes the loaders.
         /// </summary>
