@@ -42,22 +42,27 @@ namespace ULTRAKIT.Core
             while (common == null)
             {
                 AssetLoader.LoadFromLoaded("common", out common);
-                string commonAssetBundlePath = Path.Combine(BepInEx.Paths.GameRootPath, "ULTRAKILL_Data\\StreamingAssets\\common");
-                AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(commonAssetBundlePath);
-                yield return request;
-                int attempts = 0;
-                while (request.assetBundle == null)
+                if (!Plugin.isUMM)
                 {
-                    yield return new WaitForSeconds(0.3f);
-                    if (attempts > 5)
-                    {
-                        yield break;
-                    }
-                    request = AssetBundle.LoadFromFileAsync(commonAssetBundlePath);
+                    string commonAssetBundlePath = Path.Combine(BepInEx.Paths.GameRootPath, "ULTRAKILL_Data\\StreamingAssets\\common");
+                    AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(commonAssetBundlePath);
                     yield return request;
-                    attempts++;
+                    int attempts = 0;
+                    while (request.assetBundle == null)
+                    {
+                        yield return new WaitForSeconds(0.3f);
+                        if (attempts > 5)
+                        {
+                            yield break;
+                        }
+                        request = AssetBundle.LoadFromFileAsync(commonAssetBundlePath);
+                        yield return request;
+                        attempts++;
+                    }
+                    common = request.assetBundle;
                 }
-                common = request.assetBundle;
+                else
+                    yield return new WaitForSeconds(0.3f);
             }
 
             Loader.Initializer.Initialize();

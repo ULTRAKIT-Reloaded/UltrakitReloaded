@@ -9,6 +9,7 @@ using ULTRAKIT.Extensions;
 using ULTRAKIT.Extensions.Data;
 using ULTRAKIT.Extensions.ObjectClasses;
 using ULTRAKIT.Loader.Injectors;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -16,59 +17,57 @@ namespace ULTRAKIT.Loader.Loaders
 {
     public static class OptionsLoader
     {
-        public static UKCheckbox RegisterCheckbox(string section, string heading, string name, bool defaultValue)
+        public static UKCheckbox RegisterCheckbox(string section, string heading, string name, string id, bool defaultValue, bool overwrite = false)
         {
             UKCheckbox checkbox;
-            string internal_name = Assembly.GetCallingAssembly().GetName().Name + ".checkbox." + name.Dehumanize();
-            if (SaveData.data.settings_check.ContainsKey(internal_name))
+            string internal_name = "checkbox." + id.Dehumanize();
+            if (!overwrite && SaveData.data.settings_check.ContainsKey(internal_name))
             {
                 checkbox = SaveData.data.settings_check[internal_name];
                 Registries.RegisterSetting(checkbox);
                 return checkbox;
             }
-            checkbox = new UKCheckbox(section, heading, name, defaultValue);
+            checkbox = new UKCheckbox(section, heading, name, id, defaultValue);
             Registries.RegisterSetting(checkbox);
             SaveData.Internal_SetValue(SaveData.data.settings_check, internal_name, checkbox);
             return checkbox;
         }
 
-        public static UKSlider RegisterSlider(string section, string heading, string name, float min, float max, float defaultValue)
+        public static UKSlider RegisterSlider(string section, string heading, string name, string id, float min, float max, float defaultValue, bool overwrite = false)
         {
             UKSlider slider;
-            string internal_name = Assembly.GetCallingAssembly().GetName().Name + ".slider." + name.Dehumanize();
-            if (SaveData.data.settings_slide.ContainsKey(internal_name))
+            string internal_name = "slider." + id.Dehumanize();
+            if (!overwrite && SaveData.data.settings_slide.ContainsKey(internal_name))
             {
                 slider = SaveData.data.settings_slide[internal_name];
                 Registries.RegisterSetting(slider);
                 return slider;
             }
-            slider = new UKSlider(section, heading, name, min, max, defaultValue);
+            slider = new UKSlider(section, heading, name, id, min, max, defaultValue);
             Registries.RegisterSetting(slider);
             SaveData.Internal_SetValue(SaveData.data.settings_slide, internal_name, slider);
             return slider;
         }
 
-        public static UKPicker RegisterPicker(string section, string heading, string name, string[] options, int defaultIndex)
+        public static UKPicker RegisterPicker(string section, string heading, string name, string id, string[] options, int defaultIndex, bool overwrite = false)
         {
             UKPicker picker;
-            string internal_name = Assembly.GetCallingAssembly().GetName().Name + ".picker." + name.Dehumanize();
-            if (SaveData.data.settings_pick.ContainsKey(internal_name))
+            string internal_name = "picker." + id.Dehumanize();
+            if (!overwrite && SaveData.data.settings_pick.ContainsKey(internal_name))
             {
                 picker = SaveData.data.settings_pick[internal_name];
                 Registries.RegisterSetting(picker);
                 return picker;
             }
-            picker = new UKPicker(section, heading, name, options, defaultIndex);
+            picker = new UKPicker(section, heading, name, id, options, defaultIndex);
             Registries.RegisterSetting(picker);
             SaveData.Internal_SetValue(SaveData.data.settings_pick, internal_name, picker);
             return picker;
         }
 
-        public static bool GetCheckbox(string name, out UKCheckbox checkbox, bool doOverride = false)
+        public static bool GetCheckbox(string id, out UKCheckbox checkbox)
         {
-            string id = name;
-            if (!doOverride)
-                id = Assembly.GetCallingAssembly().GetName().Name + ".checkbox." + name.Dehumanize();
+            id = "checkbox." + id.Dehumanize();
 
             bool success = SaveData.data.settings_check.TryGetValue(id, out checkbox);
             if (success)
@@ -77,11 +76,9 @@ namespace ULTRAKIT.Loader.Loaders
             return false;
         }
 
-        public static bool GetSlider(string name, out UKSlider slider, bool doOverride = false)
+        public static bool GetSlider(string id, out UKSlider slider)
         {
-            string id = name;
-            if (!doOverride)
-                id = Assembly.GetCallingAssembly().GetName().Name + ".slider." + name.Dehumanize();
+            id = "slider." + id.Dehumanize();
 
             bool success = SaveData.data.settings_slide.TryGetValue(id, out slider);
             if (success)
@@ -90,11 +87,9 @@ namespace ULTRAKIT.Loader.Loaders
             return false;
         }
 
-        public static bool GetPicker(string name, out UKPicker picker, bool doOverride = false)
+        public static bool GetPicker(string id, out UKPicker picker)
         {
-            string id = name;
-            if (!doOverride)
-                id = Assembly.GetCallingAssembly().GetName().Name + ".picker." + name.Dehumanize();
+            id = "picker." + id.Dehumanize();
 
             bool success = SaveData.data.settings_pick.TryGetValue(id, out picker);
             if (success)
@@ -102,10 +97,7 @@ namespace ULTRAKIT.Loader.Loaders
             picker = default;
             return false;
         }
-    }
 
-    public static class KeybindsLoader
-    {
         public static UKKeySetting SetKeyBind(string heading, string name, KeyCode defaultKey)
         {
             string id = "keybind." + name.Dehumanize();
@@ -130,6 +122,21 @@ namespace ULTRAKIT.Loader.Loaders
             }
             actionState = null;
             return false;
+        }
+
+        public static void CreateMenu(string name)
+        {
+            Registries.options_menusToAdd.Add(name);
+            if (CanvasController.Instance)
+                OptionsInjector.Rebuild();
+        }
+
+        public static (GameObject button, GameObject menu) GetMenu(string name)
+        {
+            string internal_name = name.Dehumanize();
+            GameObject btn = Registries.options_buttons[internal_name] ?? default;
+            GameObject mn = Registries.options_menus[internal_name] ?? default;
+            return (btn, mn);
         }
     }
 }

@@ -24,15 +24,11 @@ namespace ULTRAKIT.Loader
         /// </summary>
         public static void Initialize()
         {
-
             Harmony harmony = new Harmony("ULTRAKIT.Loader");
             harmony.PatchAll();
             HatLoader.Init();
             SpawnablesInjector.Init();
             UltrakitInputManager.UpdateKeyBinds();
-
-            // DELETE
-            OptionsInjector.TestSystem();
         }
     }
 }

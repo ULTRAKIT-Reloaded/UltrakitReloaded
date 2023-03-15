@@ -39,6 +39,8 @@ namespace ULTRAKIT.Loader
         // OptionsLoader
         public static SortedList<string, UKSetting> options_registry = new SortedList<string, UKSetting>();
         public static Dictionary<string, GameObject> options_menus = new Dictionary<string, GameObject>();
+        public static Dictionary<string, GameObject> options_buttons = new Dictionary<string, GameObject>();
+        public static List<string> options_menusToAdd = new List<string>();
 
         // Keybinds
         public static Dictionary<string, UKKeySetting> key_registry = new Dictionary<string, UKKeySetting>();
@@ -47,7 +49,7 @@ namespace ULTRAKIT.Loader
         private static int counter = 0;
         public static void RegisterSetting(UKSetting setting)
         {
-            options_registry.Add($"{setting.Heading}{counter}", setting);
+            options_registry.Add($"{setting.Section}{setting.Heading}{counter}", setting);
             counter++;
         }
     }

@@ -4,30 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ULTRAKIT.Data;
+using ULTRAKIT.Extensions.ObjectClasses;
 using UnityEngine;
 
 namespace ULTRAKIT.Extensions.Managers
 {
     public class HatsManager : MonoBehaviour
     {
-        public static InputActionState state;
-        // DELETE
-        private void Update()
-        {
-            if (state.WasPerformedThisFrame)
-            {
-                UKLogger.Log("PRESSED BUTTON");
-                Transform enemy = transform;
-                while (enemy.GetComponent<EnemyIdentifier>() == null && enemy.tag != "Player")
-                {
-                    enemy = enemy.parent;
-                }
-                EnemyIdentifier eid = enemy.GetComponentInChildren<EnemyIdentifier>();
-                UKLogger.Log(eid);
-                eid.Explode();
-            }
-        }
-
         public Dictionary<string, GameObject> hats;
 
         private SeasonalHats sh;

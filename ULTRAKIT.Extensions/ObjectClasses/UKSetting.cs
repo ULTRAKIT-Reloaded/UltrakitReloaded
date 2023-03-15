@@ -38,12 +38,12 @@ namespace ULTRAKIT.Extensions.ObjectClasses
         [JsonProperty("ValueCheck")]
         public bool Value { get; internal set; }
 
-        public UKCheckbox(string section, string heading, string name, bool defaultValue)
+        public UKCheckbox(string section, string heading, string name, string id, bool defaultValue)
         {
             Section = section;
             Heading = heading;
             Name = name;
-            ID = "checkbox." + name.Dehumanize();
+            ID = id;
             Value = defaultValue;
         }
 
@@ -66,12 +66,12 @@ namespace ULTRAKIT.Extensions.ObjectClasses
         [JsonProperty("Options")]
         public string[] Options { get; internal set; }
 
-        public UKPicker(string section, string heading, string name, string[] options, int startingIndex)
+        public UKPicker(string section, string heading, string name, string id, string[] options, int startingIndex)
         {
             Section = section;
             Heading = heading;
             Name = name;
-            ID = "picker." + name.Dehumanize();
+            ID = id;
             Options = options;
             Value = startingIndex;
         }
@@ -95,12 +95,12 @@ namespace ULTRAKIT.Extensions.ObjectClasses
         [JsonProperty("Range")]
         public Tuple<float, float> Range { get; internal set; }
 
-        public UKSlider(string section, string heading, string name, float min, float max, float defaultValue)
+        public UKSlider(string section, string heading, string name, string id, float min, float max, float defaultValue)
         {
             Section = section;
             Heading = heading;
             Name = name;
-            ID = "slider." + name.Dehumanize();
+            ID = id;
             Range = new Tuple<float, float>(min, max);
             Value = defaultValue;
         }
@@ -131,6 +131,13 @@ namespace ULTRAKIT.Extensions.ObjectClasses
             Key = defaultKey;
             InputAction action = new InputAction(name, InputActionType.Button);
             
+            InputManager.BindingInfo info = new InputManager.BindingInfo();
+            info.Action = action;
+            info.Name = name.Dehumanize();
+            info.Offset = 0;
+            info.DefaultKey = defaultKey;
+
+            Binding = info;
 
             // Goodbye evil reflection, you will be missed
 
@@ -143,14 +150,6 @@ namespace ULTRAKIT.Extensions.ObjectClasses
             info.SetFieldValue("DefaultKey", defaultKey);
 
             Binding = info;*/
-
-            InputManager.BindingInfo info = new InputManager.BindingInfo();
-            info.Action = action;
-            info.Name = name.Dehumanize();
-            info.Offset = 0;
-            info.DefaultKey = defaultKey;
-
-            Binding = info;
         }
 
         public KeyCode GetValue()
@@ -164,30 +163,5 @@ namespace ULTRAKIT.Extensions.ObjectClasses
             //Binding.Key = key;
             OnValueChanged.Invoke(this);
         }
-
-        //public UKKeyBinding GetBinding()
-        //{
-        //    return Binding;
-        //}
     }
-
-    /*public class UKKeyBinding : InputActionState
-    {
-        public class KeyChangedEvent : UnityEvent<KeyCode> { }
-
-        public KeyCode Key;
-        public UnityEvent OnKeyPressed = new UnityEvent();
-        public KeyChangedEvent OnBindingChanged = new KeyChangedEvent();
-
-        internal UKKeyBinding(KeyCode defaultKey, string name)
-        {
-            Key = defaultKey;
-            InputAction action = new InputAction(name, InputActionType.Button);
-            var info = ReflectionExt.GetInternalType("BindingInfo");
-            info.SetPrivate("Action", action);
-            info.SetPrivate("Name", name);
-            info.SetPrivate("Offset", 0);
-            info.SetPrivate("DefaultKey", Key);
-        }
-    }*/
 }

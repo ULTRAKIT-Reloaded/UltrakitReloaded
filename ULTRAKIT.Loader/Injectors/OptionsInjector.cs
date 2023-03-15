@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Humanizer;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,8 @@ namespace ULTRAKIT.Loader.Injectors
     public class OptionsInjector
     {
         private static GameObject Menu, MenuButtonTemplate, SubmenuTemplate, TextTemplate, SliderTemplate, CheckboxTemplate, PickerTemplate, KeyTemplate;
-        private static GameObject NewButton;
+        public static GameObject NewButton;
+        public static bool Rebuilding = false;
 
         private static List<string> ButtonsToMove;
         private static List<GameObject> NewMenus;
@@ -39,6 +41,7 @@ namespace ULTRAKIT.Loader.Injectors
         {
             ButtonsToMove = new List<string>() { "Gameplay", "Controls", "Video", "Audio", "HUD", "Assist", "Colors", "Saves" };
             NewMenus = new List<GameObject>();
+            ClearCaches();
 
             if (Menu == null)
             {
@@ -75,14 +78,14 @@ namespace ULTRAKIT.Loader.Injectors
 
             if (NewButton == null)
                 NewButton = CreateMenuButton("Mods");
-            CreateMenuButton("Test Button");
+            foreach (string menuToAdd in Registries.options_menusToAdd)
+                CreateMenuButton(menuToAdd);
             foreach (UKSetting setting in Registries.options_registry.Values)
-            {
                 CreateSetting(setting);
-            }
+            Rebuilding = false;
         }
 
-        static GameObject CreateMenuButton(string name)
+        internal static GameObject CreateMenuButton(string name)
         {
             string internal_name = name.Dehumanize();
             GameObject newBtn = GameObject.Instantiate(MenuButtonTemplate, Menu.transform);
@@ -121,7 +124,7 @@ namespace ULTRAKIT.Loader.Injectors
 
             ButtonsToMove.Add(internal_name);
             NewMenus.Add(Submenu);
-
+            RegisterButton(internal_name, newBtn);
             return newBtn;
         }
 
@@ -145,13 +148,15 @@ namespace ULTRAKIT.Loader.Injectors
         {
             GameObject submenu;
             bool isModSubmenu = false;
-            if (!Registries.options_menus.ContainsKey(setting.Section))
+            UKLogger.LogWarning("1");
+            if (!Registries.options_menus.ContainsKey(setting.Section.Dehumanize()))
             {
                 submenu = Registries.options_menus["Mods"];
                 isModSubmenu = true;
             }
             else
-                submenu = Registries.options_menus[setting.Section];
+                submenu = Registries.options_menus[setting.Section.Dehumanize()];
+            UKLogger.LogWarning("2");
 
             Transform parent = submenu.transform.Find("Scroll Rect (1)/Contents") ?? submenu.transform.Find("Scroll Rect/Contents") ?? submenu.transform.Find("Image");
 
@@ -163,7 +168,9 @@ namespace ULTRAKIT.Loader.Injectors
                 t.alignment = TextAnchor.MiddleLeft;
                 t.horizontalOverflow = HorizontalWrapMode.Overflow;
                 CachedModHeader = setting.Section;
+                CachedHeader = null;
             }
+
 
             if (!(Initializer.isUMMInstalled && setting.Section == "Controls") && (CachedHeader != setting.Heading || (CachedMenu != setting.Section && !isModSubmenu)))
             {
@@ -230,6 +237,8 @@ namespace ULTRAKIT.Loader.Injectors
             Text currentValueText = slider.transform.Find("Text (2)").GetComponent<Text>();
 
             slider.onValueChanged.SetPersistentListenerState(0, UnityEventCallState.Off);
+            slider.minValue = setting.Range.Item1;
+            slider.maxValue = setting.Range.Item2;
             slider.onValueChanged.AddListener((float value) =>
             {
                 setting.SetValue(value);
@@ -288,14 +297,41 @@ namespace ULTRAKIT.Loader.Injectors
                 Registries.options_menus[buttonName] = menu;
         }
 
-        // DELETE
-        public static void TestSystem()
+        static void RegisterButton(string buttonName, GameObject button)
         {
-            OptionsLoader.RegisterCheckbox("Mods", "Testing Section", "Test Checkbox", false);
-            OptionsLoader.RegisterSlider("Mods", "Testing Section", "Test Slider", 0f, 1f, 0.2f);
-            OptionsLoader.RegisterPicker("Mods", "Testing Section", "Test Picker", new string[] { "Option1", "Option2", "Option3" }, 0);
+            if (!Registries.options_buttons.ContainsKey(buttonName))
+                Registries.options_buttons.Add(buttonName, button);
+            else
+                Registries.options_buttons[buttonName] = button;
+        }
 
-            KeybindsLoader.SetKeyBind("Testing Section", "test bind", KeyCode.G);
+        static void ClearCaches()
+        {
+            CachedHeader = null;
+            CachedModHeader = null;
+            CachedMenu = null;
+        }
+
+        public static void Rebuild()
+        {
+            UKLogger.LogWarning("Rebuilding options menu");
+            Rebuilding = true;
+            List<GameObject> toDestroy = new List<GameObject>();
+            foreach (GameObject btn in Registries.options_buttons.Values)
+                toDestroy.Add(btn);
+            foreach (GameObject menu in Registries.options_menus.Values)
+                toDestroy.Add(menu);
+            Registries.options_buttons.Clear();
+            Registries.options_menus.Clear();
+            for (int i = 0; i < toDestroy.Count; i++)
+            {
+                GameObject obj = toDestroy[i];
+                obj.SetActive(false);
+                GameObject.Destroy(obj);
+            }
+            Menu = null;
+            NewButton = null;
+            OnEnablePostfix(CanvasController.instance);
         }
     }
 
@@ -318,8 +354,6 @@ namespace ULTRAKIT.Loader.Injectors
                 setting.Binding.Action.Enable();
             }
             __instance.UpdateBindings();
-            // DELETE
-            KeybindsLoader.GetKeyBind("test bind", out HatsManager.state);
         }
     }
 

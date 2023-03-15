@@ -24,6 +24,7 @@ namespace ULTRAKIT.Core
     public class Plugin : BaseUnityPlugin
     {
         public static Plugin plugin;
+        public static bool isUMM = false;
 
         private void Awake()
         {
@@ -32,6 +33,7 @@ namespace ULTRAKIT.Core
             {
                 if (mod.Value.Metadata.GUID == "UMM")
                 {
+                    isUMM = true;
                     Loader.Initializer.isUMMInstalled = true;
                     break;
                 }
