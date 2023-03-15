@@ -162,6 +162,8 @@ namespace ULTRAKIT.Loader.Injectors
 
         static void CreateSetting(UKSetting setting)
         {
+            if (Rebuilding && setting.Section == "Controls") return;
+
             GameObject submenu;
             bool isModSubmenu = false;
             if (!Registries.options_menus.ContainsKey(setting.Section.Dehumanize()))
@@ -184,7 +186,6 @@ namespace ULTRAKIT.Loader.Injectors
                 CachedModHeader = setting.Section;
                 CachedHeader = null;
             }
-
 
             if (!(Initializer.isUMMInstalled && setting.Section == "Controls") && (CachedHeader != setting.Heading || (CachedMenu != setting.Section && !isModSubmenu)))
             {
@@ -368,8 +369,9 @@ namespace ULTRAKIT.Loader.Injectors
 
             OnEnablePostfix(CanvasController.instance);
             KeybindsInjector.SetKeys(InputManager.instance);
-            // UMM Keybinds don't load properly the first scene load for this system, for some reason; see issue https://github.com/Temperz87/ultra-mod-manager/issues/16
-            if (Initializer.isUMMInstalled && !isLoaded && !inMenu)
+            // Keybinds don't refresh properly on the first load of a level after starting the game;
+            // similar issue to requiring two refreshes for guns to load in the proper order
+            if (!isLoaded && !inMenu)
             {
                 isLoaded = true;
                 CanvasController.instance.StartCoroutine(ReloadScene());
