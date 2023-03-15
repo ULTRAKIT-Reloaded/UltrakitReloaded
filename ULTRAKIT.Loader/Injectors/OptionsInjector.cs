@@ -29,6 +29,7 @@ namespace ULTRAKIT.Loader.Injectors
 
         private static List<string> ButtonsToMove;
         private static List<string> VanillaButtons = new List<string>() { "Gameplay", "Controls", "Video", "Audio", "HUD", "Assist", "Colors", "Saves" };
+        private static Dictionary<string, Vector3> OriginalPos = new Dictionary<string, Vector3>();
         private static List<GameObject> NewMenus;
         private static string CachedHeader;
         private static string CachedModHeader;
@@ -61,6 +62,14 @@ namespace ULTRAKIT.Loader.Injectors
                 for (int i = 0; i < ButtonsToMove.Count; i++)
                 {
                     string button = ButtonsToMove[i];
+
+                    if (OriginalPos.Count < 8)
+                    {
+                        Vector3 localPos = Menu.transform.Find(button).localPosition;
+                        Vector3 pos = new Vector3(localPos.x + 320, localPos.y, localPos.z);
+                        OriginalPos.Add(button, pos);
+                    }
+
                     if (button == "Saves")
                         continue;
                     if (button == "Colors")
@@ -322,20 +331,36 @@ namespace ULTRAKIT.Loader.Injectors
             List<string> menuKeys = new List<string>();
 
             foreach (var btn in Registries.options_buttons.Where(n => !VanillaButtons.Contains(n.Key)))
+            {
                 toDestroy.Add(btn.Value);
+                btnKeys.Add(btn.Key);
+            }
             foreach (var menu in Registries.options_menus.Where(n => !VanillaButtons.Contains(n.Key)))
+            {
                 toDestroy.Add(menu.Value);
+                menuKeys.Add(menu.Key);
+            }
+
             for (int i = 0; i < toDestroy.Count; i++)
             {
                 GameObject obj = toDestroy[i];
                 obj.SetActive(false);
                 GameObject.Destroy(obj);
             }
+
             foreach (string key in btnKeys)
                 Registries.options_buttons.Remove(key);
             foreach (string key in menuKeys)
                 Registries.options_menus.Remove(key);
+
             NewButton = null;
+            foreach (var pair in OriginalPos)
+            {
+                Transform btn = Menu.transform.Find(pair.Key);
+                btn.localPosition = pair.Value;
+                btn.GetComponent<Button>().onClick.RemoveAllListeners();
+            }
+
             OnEnablePostfix(CanvasController.instance);
         }
     }
