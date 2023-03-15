@@ -148,7 +148,6 @@ namespace ULTRAKIT.Loader.Injectors
         {
             GameObject submenu;
             bool isModSubmenu = false;
-            UKLogger.LogWarning("1");
             if (!Registries.options_menus.ContainsKey(setting.Section.Dehumanize()))
             {
                 submenu = Registries.options_menus["Mods"];
@@ -156,7 +155,6 @@ namespace ULTRAKIT.Loader.Injectors
             }
             else
                 submenu = Registries.options_menus[setting.Section.Dehumanize()];
-            UKLogger.LogWarning("2");
 
             Transform parent = submenu.transform.Find("Scroll Rect (1)/Contents") ?? submenu.transform.Find("Scroll Rect/Contents") ?? submenu.transform.Find("Image");
 
