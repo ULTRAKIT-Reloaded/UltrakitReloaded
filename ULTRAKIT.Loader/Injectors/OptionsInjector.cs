@@ -28,6 +28,7 @@ namespace ULTRAKIT.Loader.Injectors
         public static bool Rebuilding = false;
 
         private static List<string> ButtonsToMove;
+        private static List<string> VanillaButtons = new List<string>() { "Gameplay", "Controls", "Video", "Audio", "HUD", "Assist", "Colors", "Saves" };
         private static List<GameObject> NewMenus;
         private static string CachedHeader;
         private static string CachedModHeader;
@@ -39,7 +40,8 @@ namespace ULTRAKIT.Loader.Injectors
         [HarmonyPatch("OnEnable"), HarmonyPostfix]
         static void OnEnablePostfix(CanvasController __instance)
         {
-            ButtonsToMove = new List<string>() { "Gameplay", "Controls", "Video", "Audio", "HUD", "Assist", "Colors", "Saves" };
+            ButtonsToMove = new List<string>();
+            ButtonsToMove.AddRange(VanillaButtons);
             NewMenus = new List<GameObject>();
             ClearCaches();
 
@@ -312,22 +314,27 @@ namespace ULTRAKIT.Loader.Injectors
 
         public static void Rebuild()
         {
+            if (!CanvasController.Instance) return;
             UKLogger.LogWarning("Rebuilding options menu");
             Rebuilding = true;
             List<GameObject> toDestroy = new List<GameObject>();
-            foreach (GameObject btn in Registries.options_buttons.Values)
-                toDestroy.Add(btn);
-            foreach (GameObject menu in Registries.options_menus.Values)
-                toDestroy.Add(menu);
-            Registries.options_buttons.Clear();
-            Registries.options_menus.Clear();
+            List<string> btnKeys = new List<string>();
+            List<string> menuKeys = new List<string>();
+
+            foreach (var btn in Registries.options_buttons.Where(n => !VanillaButtons.Contains(n.Key)))
+                toDestroy.Add(btn.Value);
+            foreach (var menu in Registries.options_menus.Where(n => !VanillaButtons.Contains(n.Key)))
+                toDestroy.Add(menu.Value);
             for (int i = 0; i < toDestroy.Count; i++)
             {
                 GameObject obj = toDestroy[i];
                 obj.SetActive(false);
                 GameObject.Destroy(obj);
             }
-            Menu = null;
+            foreach (string key in btnKeys)
+                Registries.options_buttons.Remove(key);
+            foreach (string key in menuKeys)
+                Registries.options_menus.Remove(key);
             NewButton = null;
             OnEnablePostfix(CanvasController.instance);
         }

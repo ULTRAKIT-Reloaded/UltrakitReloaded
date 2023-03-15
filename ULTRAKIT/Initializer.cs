@@ -69,7 +69,8 @@ namespace ULTRAKIT.Core
             LoadCommands();
             LoadHats();
 
-            common.Unload(false);
+            if (!Plugin.isUMM)
+                common.Unload(false);
 
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
