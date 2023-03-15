@@ -16,6 +16,7 @@ using UnityEditor.Events;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace ULTRAKIT.Loader.Injectors
@@ -26,6 +27,7 @@ namespace ULTRAKIT.Loader.Injectors
         private static GameObject Menu, MenuButtonTemplate, SubmenuTemplate, TextTemplate, SliderTemplate, CheckboxTemplate, PickerTemplate, KeyTemplate;
         public static GameObject NewButton;
         public static bool Rebuilding = false;
+        private static bool inMenu;
 
         private static List<string> ButtonsToMove;
         private static List<string> VanillaButtons = new List<string>() { "Gameplay", "Controls", "Video", "Audio", "HUD", "Assist", "Colors", "Saves" };
@@ -41,6 +43,7 @@ namespace ULTRAKIT.Loader.Injectors
         [HarmonyPatch("OnEnable"), HarmonyPostfix]
         static void OnEnablePostfix(CanvasController __instance)
         {
+            inMenu = SceneManager.GetActiveScene().name == "Main Menu";
             ButtonsToMove = new List<string>();
             ButtonsToMove.AddRange(VanillaButtons);
             NewMenus = new List<GameObject>();
@@ -103,7 +106,7 @@ namespace ULTRAKIT.Loader.Injectors
             newBtn.name = internal_name;
             newBtn.GetComponent<RectTransform>().SetAsFirstSibling();
             newBtn.transform.Find("Text").GetComponent<Text>().text = name.ToUpper();
-            newBtn.transform.localPosition = new Vector3(-610 - 320, -245, 0);
+            newBtn.transform.localPosition = new Vector3(inMenu ? -930 : -610, -245, 0);
 
             GameObject Submenu = CreateSubmenu(name);
             Submenu.SetActive(false);
@@ -357,7 +360,7 @@ namespace ULTRAKIT.Loader.Injectors
             foreach (var pair in OriginalPos)
             {
                 Transform btn = Menu.transform.Find(pair.Key);
-                btn.localPosition = pair.Value;
+                btn.localPosition = pair.Value + new Vector3(0, inMenu ? 0 : -35, 0);
                 btn.GetComponent<Button>().onClick.RemoveAllListeners();
             }
 
