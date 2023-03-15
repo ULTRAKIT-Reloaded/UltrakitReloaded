@@ -42,7 +42,6 @@ namespace ULTRAKIT.Loader
             {
                 weapons = GunControl.Instance.slots.Count;
             }
-            UKLogger.Log($"Weapons: {weapons}");
             // How I wish I could make a loop; damn you keycodes
             // I mean I could just make an array of keycodes but that's not really much better
             if (weapons > 6)
@@ -57,51 +56,63 @@ namespace ULTRAKIT.Loader
             }
             if (weapons > 8)
             {
-                Slot9 = Registries.key_states[OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 9", KeyCode.Alpha9).ID];
+                OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 9", KeyCode.Alpha9);
+                OptionsLoader.GetKeyBind("Slot 9", out Slot9);
             }
             if (weapons > 9)
             {
-                Slot10 = Registries.key_states[OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 10", KeyCode.Alpha0).ID];
+                OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 10", KeyCode.Alpha0);
+                OptionsLoader.GetKeyBind("Slot 10", out Slot10);
             }
             if (weapons > 10)
             {
-                Slot11 = Registries.key_states[OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 11", KeyCode.Keypad0).ID];
+                OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 11", KeyCode.Keypad0);
+                OptionsLoader.GetKeyBind("Slot 11", out Slot11);
             }
             if (weapons > 11)
             {
-                Slot12 = Registries.key_states[OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 12", KeyCode.Keypad1).ID];
+                OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 12", KeyCode.Keypad1);
+                OptionsLoader.GetKeyBind("Slot 12", out Slot12);
             }
             if (weapons > 12)
             {
-                Slot13 = Registries.key_states[OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 13", KeyCode.Keypad2).ID];
+                OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 13", KeyCode.Keypad2);
+                OptionsLoader.GetKeyBind("Slot 13", out Slot13);
             }
             if (weapons > 13)
             {
-                Slot14 = Registries.key_states[OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 14", KeyCode.Keypad3).ID];
+                OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 14", KeyCode.Keypad3);
+                OptionsLoader.GetKeyBind("Slot 14", out Slot14);
             }
             if (weapons > 14)
             {
-                Slot15 = Registries.key_states[OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 15", KeyCode.Keypad4).ID];
+                OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 15", KeyCode.Keypad4);
+                OptionsLoader.GetKeyBind("Slot 15", out Slot15);
             }
             if (weapons > 15)
             {
-                Slot16 = Registries.key_states[OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 16", KeyCode.Keypad5).ID];
+                OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 16", KeyCode.Keypad5);
+                OptionsLoader.GetKeyBind("Slot 16", out Slot16);
             }
             if (weapons > 16)
             {
-                Slot17 = Registries.key_states[OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 17", KeyCode.Keypad6).ID];
+                OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 17", KeyCode.Keypad6);
+                OptionsLoader.GetKeyBind("Slot 17", out Slot17);
             }
             if (weapons > 17)
             {
-                Slot18 = Registries.key_states[OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 18", KeyCode.Keypad7).ID];
+                OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 18", KeyCode.Keypad7);
+                OptionsLoader.GetKeyBind("Slot 18", out Slot18);
             }
             if (weapons > 18)
             {
-                Slot19 = Registries.key_states[OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 19", KeyCode.Keypad8).ID];
+                OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 19", KeyCode.Keypad8);
+                OptionsLoader.GetKeyBind("Slot 19", out Slot19);
             }
             if (weapons > 19)
             {
-                Slot20 = Registries.key_states[OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 20", KeyCode.Keypad9).ID];
+                OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 20", KeyCode.Keypad9);
+                OptionsLoader.GetKeyBind("Slot 20", out Slot20);
             }
             OptionsInjector.Rebuild();
         }
