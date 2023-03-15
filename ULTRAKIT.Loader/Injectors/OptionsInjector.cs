@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using Humanizer;
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ namespace ULTRAKIT.Loader.Injectors
         public static GameObject NewButton;
         public static bool Rebuilding = false;
         private static bool inMenu;
+        private static bool isLoaded;
 
         private static List<string> ButtonsToMove;
         private static List<string> VanillaButtons = new List<string>() { "Gameplay", "Controls", "Video", "Audio", "HUD", "Assist", "Colors", "Saves" };
@@ -366,6 +368,20 @@ namespace ULTRAKIT.Loader.Injectors
 
             OnEnablePostfix(CanvasController.instance);
             KeybindsInjector.SetKeys(InputManager.instance);
+            // UMM Keybinds don't load properly the first scene load for this system, for some reason; see issue https://github.com/Temperz87/ultra-mod-manager/issues/16
+            if (Initializer.isUMMInstalled && !isLoaded && !inMenu)
+            {
+                isLoaded = true;
+                CanvasController.instance.StartCoroutine(ReloadScene());
+            }
+        }
+
+        private static IEnumerator ReloadScene()
+        {
+            yield return new WaitForSeconds(0.5f);
+            UKLogger.LogWarning("Reloading active scene");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            yield return null;
         }
     }
 

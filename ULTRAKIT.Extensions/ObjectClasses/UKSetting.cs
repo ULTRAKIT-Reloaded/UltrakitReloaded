@@ -160,7 +160,6 @@ namespace ULTRAKIT.Extensions.ObjectClasses
         public void SetValue(KeyCode key)
         {
             Key = key;
-            //Binding.Key = key;
             OnValueChanged.Invoke(this);
         }
     }

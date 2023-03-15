@@ -13,6 +13,9 @@ namespace ULTRAKIT.Loader
 {
     public static class Registries
     {
+        // Plugin Invoke
+        public static Action<Action, float> Invoke;
+
         // WeaponLoader
         public static Dictionary<string, List<Weapon>> weap_registry = new Dictionary<string, List<Weapon>>();
         public static List<Weapon> weap_allWeapons = new List<Weapon>();

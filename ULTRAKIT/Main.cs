@@ -29,6 +29,7 @@ namespace ULTRAKIT.Core
         private void Awake()
         {
             plugin = this;
+            Registries.Invoke = Invoke;
             foreach (var mod in Chainloader.PluginInfos)
             {
                 if (mod.Value.Metadata.GUID == "UMM")
