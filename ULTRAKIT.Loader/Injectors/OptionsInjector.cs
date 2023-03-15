@@ -365,6 +365,7 @@ namespace ULTRAKIT.Loader.Injectors
             }
 
             OnEnablePostfix(CanvasController.instance);
+            KeybindsInjector.SetKeys(InputManager.instance);
         }
     }
 
@@ -374,7 +375,12 @@ namespace ULTRAKIT.Loader.Injectors
         [HarmonyPatch("OnEnable"), HarmonyPostfix]
         static void OnEnablePostfix(InputManager __instance)
         {
-            __instance.bindings = __instance.bindings.AddRangeToArray(Registries.key_registry.Select(n => n.Value.Binding).ToArray());
+            SetKeys(__instance);
+        }
+
+        public static void SetKeys(InputManager instance)
+        {
+            instance.bindings = instance.bindings.AddRangeToArray(Registries.key_registry.Select(n => n.Value.Binding).Where(s => !instance.bindings.Contains(s)).ToArray());
 
             Registries.key_states = Registries.key_registry.ToDictionary(item => item.Key, item => new InputActionState(item.Value.Binding.Action));
 
@@ -386,7 +392,7 @@ namespace ULTRAKIT.Loader.Injectors
                 setting.Binding.Action.AddBinding().WithGroup("Keyboard");
                 setting.Binding.Action.Enable();
             }
-            __instance.UpdateBindings();
+            instance.UpdateBindings();
         }
     }
 
