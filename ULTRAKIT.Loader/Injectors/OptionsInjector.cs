@@ -31,6 +31,7 @@ namespace ULTRAKIT.Loader.Injectors
         private static bool inMenu;
         private static bool isLoaded;
 
+        // Cry about it
         private static List<string> ButtonsToMove;
         private static List<string> VanillaButtons = new List<string>() { "Gameplay", "Controls", "Video", "Audio", "HUD", "Assist", "Colors", "Saves" };
         private static Dictionary<string, Vector3> OriginalPos = new Dictionary<string, Vector3>();
@@ -45,6 +46,7 @@ namespace ULTRAKIT.Loader.Injectors
         [HarmonyPatch("OnEnable"), HarmonyPostfix]
         static void OnEnablePostfix(CanvasController __instance)
         {
+            // Localposition is the same in main and level menus, but sets differently (i.e. 930 actually results in 610, but only in the main menu)
             inMenu = SceneManager.GetActiveScene().name == "Main Menu";
             ButtonsToMove = new List<string>();
             ButtonsToMove.AddRange(VanillaButtons);
@@ -79,9 +81,11 @@ namespace ULTRAKIT.Loader.Injectors
                         continue;
                     if (button == "Colors")
                     {
+                        RegisterButton(button, Menu.transform.Find(button).gameObject);
                         RegisterMenu(button, Menu.transform.Find("ColorBlindness Options").gameObject);
                         continue;
                     }
+                    RegisterButton(button, Menu.transform.Find(button).gameObject);
                     RegisterMenu(button, Menu.transform.Find($"{button} Options").gameObject);
                 }
 

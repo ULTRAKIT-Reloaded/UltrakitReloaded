@@ -46,8 +46,8 @@ namespace ULTRAKIT.Loader
             // I mean I could just make an array of keycodes but that's not really much better
             if (weapons > 6)
             {
-                OptionsLoader.GetKeyBind("Slot 7", out Slot7);
                 OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 7", KeyCode.Alpha7);
+                OptionsLoader.GetKeyBind("Slot 7", out Slot7);
             }
             if (weapons > 7)
             {

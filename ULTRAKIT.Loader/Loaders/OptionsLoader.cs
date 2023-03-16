@@ -17,6 +17,16 @@ namespace ULTRAKIT.Loader.Loaders
 {
     public static class OptionsLoader
     {
+        /// <summary>
+        /// Registers a custom checkbox to the options menu, loading from save data if present. Overwrite will replace old data with new settings.
+        /// </summary>
+        /// <param name="section"></param>
+        /// <param name="heading"></param>
+        /// <param name="name"></param>
+        /// <param name="id"></param>
+        /// <param name="defaultValue"></param>
+        /// <param name="overwrite"></param>
+        /// <returns>The generated UKCheckbox object</returns>
         public static UKCheckbox RegisterCheckbox(string section, string heading, string name, string id, bool defaultValue, bool overwrite = false)
         {
             UKCheckbox checkbox;
@@ -33,6 +43,18 @@ namespace ULTRAKIT.Loader.Loaders
             return checkbox;
         }
 
+        /// <summary>
+        /// Registers a custom slider to the options menu, loading from save data if present. Overwrite will replace old data with new settings.
+        /// </summary>
+        /// <param name="section"></param>
+        /// <param name="heading"></param>
+        /// <param name="name"></param>
+        /// <param name="id"></param>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <param name="defaultValue"></param>
+        /// <param name="overwrite"></param>
+        /// <returns>The generated UKSlider object</returns>
         public static UKSlider RegisterSlider(string section, string heading, string name, string id, float min, float max, float defaultValue, bool overwrite = false)
         {
             UKSlider slider;
@@ -49,6 +71,17 @@ namespace ULTRAKIT.Loader.Loaders
             return slider;
         }
 
+        /// <summary>
+        /// Registers a custom picker to the options menu, loading from save data if present. Overwrite will replace old data with new settings.
+        /// </summary>
+        /// <param name="section"></param>
+        /// <param name="heading"></param>
+        /// <param name="name"></param>
+        /// <param name="id"></param>
+        /// <param name="options"></param>
+        /// <param name="defaultIndex"></param>
+        /// <param name="overwrite"></param>
+        /// <returns>The generated UKPicker object</returns>
         public static UKPicker RegisterPicker(string section, string heading, string name, string id, string[] options, int defaultIndex, bool overwrite = false)
         {
             UKPicker picker;
@@ -65,6 +98,12 @@ namespace ULTRAKIT.Loader.Loaders
             return picker;
         }
 
+        /// <summary>
+        /// Searches the registry for the specified checkbox, passing it to the 'out' variable if found.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="checkbox"></param>
+        /// <returns>'true' on success, 'false' otherwise.</returns>
         public static bool GetCheckbox(string id, out UKCheckbox checkbox)
         {
             id = "checkbox." + id.Dehumanize();
@@ -76,6 +115,12 @@ namespace ULTRAKIT.Loader.Loaders
             return false;
         }
 
+        /// <summary>
+        /// Searches the registry for the specified slider, passing it to the 'out' variable if found.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="slider"></param>
+        /// <returns>'true' on success, 'false' otherwise.</returns>
         public static bool GetSlider(string id, out UKSlider slider)
         {
             id = "slider." + id.Dehumanize();
@@ -87,6 +132,12 @@ namespace ULTRAKIT.Loader.Loaders
             return false;
         }
 
+        /// <summary>
+        /// Searches the registry for the specified picker, passing it to the 'out' variable if found.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="picker"></param>
+        /// <returns>'true; on success, 'false' otherwise.</returns>
         public static bool GetPicker(string id, out UKPicker picker)
         {
             id = "picker." + id.Dehumanize();
@@ -98,6 +149,13 @@ namespace ULTRAKIT.Loader.Loaders
             return false;
         }
 
+        /// <summary>
+        /// Registers and injects a custom keybind. 
+        /// </summary>
+        /// <param name="heading"></param>
+        /// <param name="name"></param>
+        /// <param name="defaultKey"></param>
+        /// <returns>A UKKeySetting, which can be used to read/set the current key and bind to the OnBindingChanged event.</returns>
         public static UKKeySetting SetKeyBind(string heading, string name, KeyCode defaultKey)
         {
             string id = "keybind." + name.Dehumanize();
@@ -112,10 +170,17 @@ namespace ULTRAKIT.Loader.Loaders
             return keybind;
         }
 
+        /// <summary>
+        /// Retrieves the InputActionState associated with the registered keybind, if it exists.
+        /// If UMM is installed (and the compatibility patch), this will be a UKKeyBind.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="actionState"></param>
+        /// <returns>'true' on success, 'false' otherwise.</returns>
         public static bool GetKeyBind(string name, out InputActionState actionState)
         {
             string id = "keybind." + name.Dehumanize();
-            if (Registries.key_states.ContainsKey(id))
+            if (Registries.key_registry.ContainsKey(id))
             {
                 actionState = Registries.key_states[id];
                 return true;
@@ -124,6 +189,10 @@ namespace ULTRAKIT.Loader.Loaders
             return false;
         }
 
+        /// <summary>
+        /// Registers a custom button and menu for injection into the in-game options menu.
+        /// </summary>
+        /// <param name="name"></param>
         public static void CreateMenu(string name)
         {
             Registries.options_menusToAdd.Add(name);
@@ -131,6 +200,12 @@ namespace ULTRAKIT.Loader.Loaders
                 OptionsInjector.Rebuild();
         }
 
+        /// <summary>
+        /// <para>Retrieves a button and menu pair from the options menu if initialized (includes vanilla and modded menus).</para>
+        /// <para>Vanilla options are: "Gameplay", "Controls", "Video", "Audio", "HUD", "Assist", "Colors", "Saves".</para>
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>A tuple containing the button and menu objects.</returns>
         public static (GameObject button, GameObject menu) GetMenu(string name)
         {
             string internal_name = name.Dehumanize();
