@@ -44,6 +44,8 @@ If you have any questions, feel free to DM `Agent of Nyarlathotep#7519` on Disco
 
 A development roadmap is available in the Projects tab.
 
+The Assembly-CSharp.dll included in /lib is stripped of all code, and has been OK'd by Hakita.
+
 ***For a reference, a basic mod, asset bundle, and unity asset folder are available at https://github.com/ULTRAKIT-Reloaded/UltrakitTestMod***
 
 ***A HatLoader mod to easily drag-and-drop hat bundles into the game is available at https://github.com/ULTRAKIT-Reloaded/HatLoader***
