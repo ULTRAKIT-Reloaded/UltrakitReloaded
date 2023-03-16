@@ -11,7 +11,7 @@
 Download ULTRAKIT Reloaded using [Thunderstore Mod Manager](https://thunderstore.io/c/ultrakill/p/ULTRAKIT/ULTRAKIT_Reloaded/) to automatically install the mod and all required dependencies.
 
 ## COMPATIBILITY WITH UMM
-If UltraModManager is installed, download the [compatibility patch](https://github.com/ULTRAKIT-Reloaded/ULTRAKIT-Reloaded-UMM-Compatibility-Patch/) and place it in plugins, or install it from [Thunderstore]()
+If UltraModManager is installed, download the [compatibility patch](https://github.com/ULTRAKIT-Reloaded/ULTRAKIT-Reloaded-UMM-Compatibility-Patch/) and place it in plugins, or install it from [Thunderstore](https://thunderstore.io/c/ultrakill/p/ULTRAKIT/UKT_UMM_CompatPatch/)
 
 # Editing the config
 The config file is located in the installation directory `BepInEx/config/ULTAKIT.core_module.cfg`. Open the file, edit the values and save. The config file generates after running the game with ULTRAKIT Reloaded installed for the first time, and changes take effect after restarting the game.
