@@ -6,12 +6,16 @@ using System.Threading.Tasks;
 using ULTRAKIT.Data;
 using ULTRAKIT.Extensions;
 using ULTRAKIT.Extensions.Interfaces;
+using ULTRAKIT.Extensions.ObjectClasses;
 using UnityEngine;
 
 namespace ULTRAKIT.Loader
 {
     public static class Registries
     {
+        // Plugin Invoke
+        public static Action<Action, float> Invoke;
+
         // WeaponLoader
         public static Dictionary<string, List<Weapon>> weap_registry = new Dictionary<string, List<Weapon>>();
         public static List<Weapon> weap_allWeapons = new List<Weapon>();
@@ -35,5 +39,21 @@ namespace ULTRAKIT.Loader
         // SpawnablesInjector
         public static Dictionary<string, Sprite> spawn_sprites = new Dictionary<string, Sprite>();
 
+        // OptionsLoader
+        public static SortedList<string, UKSetting> options_registry = new SortedList<string, UKSetting>();
+        public static Dictionary<string, GameObject> options_menus = new Dictionary<string, GameObject>();
+        public static Dictionary<string, GameObject> options_buttons = new Dictionary<string, GameObject>();
+        public static List<string> options_menusToAdd = new List<string>();
+
+        // Keybinds
+        public static Dictionary<string, UKKeySetting> key_registry = new Dictionary<string, UKKeySetting>();
+        public static Dictionary<string, InputActionState> key_states = new Dictionary<string, InputActionState>();
+
+        private static int counter = 0;
+        public static void RegisterSetting(UKSetting setting)
+        {
+            options_registry.Add($"{setting.Section}{setting.Heading}{counter}", setting);
+            counter++;
+        }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UMM;
 using BepInEx;
 using ULTRAKIT.Loader;
 using ULTRAKIT.Extensions;
@@ -15,24 +14,38 @@ using UnityEditor;
 using ULTRAKIT.Loader.Injectors;
 using ULTRAKIT.Data;
 using System.Reflection;
+using ULTRAKIT.Extensions.Data;
+using BepInEx.Bootstrap;
 
 namespace ULTRAKIT.Core
 {
-    [BepInPlugin("ULTRAKIT.core_module", "ULTRAKIT Reloaded", "2.0.1")]
-    [BepInDependency("UMM", "0.5.0")]
+    [BepInPlugin("ULTRAKIT.core_module", "ULTRAKIT Reloaded", "2.1.0")]
+    [BepInDependency("UMM", BepInDependency.DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
         public static Plugin plugin;
+        public static bool isUMM = false;
 
         private void Awake()
         {
             plugin = this;
+            Registries.Invoke = Invoke;
+            foreach (var mod in Chainloader.PluginInfos)
+            {
+                if (mod.Value.Metadata.GUID == "UMM")
+                {
+                    isUMM = true;
+                    Loader.Initializer.isUMMInstalled = true;
+                    break;
+                }
+            }
             Initializer.Init();
         }
 
         // If the mod is disabled while a modded slot was last selected, the game gets angry, so this avoids that
         private static void OnApplicationQuit()
         {
+            SaveData.Save();
             PlayerPrefs.SetInt("CurSlo", 1);
         }
 
