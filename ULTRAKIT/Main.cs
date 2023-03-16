@@ -19,7 +19,7 @@ using BepInEx.Bootstrap;
 
 namespace ULTRAKIT.Core
 {
-    [BepInPlugin("ULTRAKIT.core_module", "ULTRAKIT Reloaded", "2.1.0")]
+    [BepInPlugin("ULTRAKIT.core_module", "ULTRAKIT Reloaded", "2.1.1")]
     [BepInDependency("UMM", BepInDependency.DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
