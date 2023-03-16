@@ -180,7 +180,7 @@ namespace ULTRAKIT.Loader.Loaders
         public static bool GetKeyBind(string name, out InputActionState actionState)
         {
             string id = "keybind." + name.Dehumanize();
-            if (Registries.key_registry.ContainsKey(id))
+            if (Registries.key_states.ContainsKey(id))
             {
                 actionState = Registries.key_states[id];
                 return true;
