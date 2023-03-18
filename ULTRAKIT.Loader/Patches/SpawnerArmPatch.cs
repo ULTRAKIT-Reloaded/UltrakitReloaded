@@ -93,6 +93,23 @@ namespace ULTRAKIT.Loader.Patches
                 cust.offset = Vector3.up * leviHeight * 1.5f;
                 cust.size = 0.25f;
             }
+
+            SkinnedMeshRenderer renderer = __instance.transform.Find("Leviathan_SplineHook_Basic/ArmR").GetComponent<SkinnedMeshRenderer>();
+            renderer.material.color = Color.white;
+            renderer.material.mainTexture = renderer.material.mainTexture;
+        }
+    }
+
+    [HarmonyPatch(typeof(LeviathanTail))]
+    public static class LeviathanTailPatch
+    {
+        [HarmonyPatch("Awake")]
+        [HarmonyPrefix]
+        public static void StartPrefix(LeviathanTail __instance)
+        {
+            SkinnedMeshRenderer renderer = __instance.transform.Find("Leviathan_SplineHook_Basic/ArmR").GetComponent<SkinnedMeshRenderer>();
+            renderer.material.color = Color.white;
+            renderer.material.mainTexture = renderer.material.mainTexture;
         }
     }
 
