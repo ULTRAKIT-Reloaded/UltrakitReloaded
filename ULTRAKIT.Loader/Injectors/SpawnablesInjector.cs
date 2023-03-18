@@ -19,8 +19,8 @@ namespace ULTRAKIT.Loader.Injectors
         public static List<SpawnableObject> _enemies = new List<SpawnableObject>();
         public static bool _init = false;
 
-        private static AssetBundle Act2;
-        private static List<string> Act2Scenes = new List<string>();
+        //private static AssetBundle Act2;
+        //private static List<string> Act2Scenes = new List<string>();
 
         // ULTRAKILL enemies added to the spawner arm by default
         static Dictionary<string, EnemyType> SpawnList = new Dictionary<string, EnemyType>
@@ -58,6 +58,20 @@ namespace ULTRAKIT.Loader.Injectors
 
         private static void PrepLeviathan()
         {
+            GameObject LeviathanBase = GameObject.Instantiate(new GameObject());
+            LeviathanBase.SetActive(false);
+            GameObject.Instantiate(AssetLoader.AssetFind<GameObject>("LeviathanHead.prefab"), LeviathanBase.transform);
+            GameObject.Instantiate(AssetLoader.AssetFind<GameObject>("LeviathanTail Variant.prefab"), LeviathanBase.transform);
+            GameObject.Instantiate(AssetLoader.AssetFind<GameObject>("SplashBig.prefab"), LeviathanBase.transform);
+            LeviathanController controller = LeviathanBase.AddComponent<LeviathanController>();
+            EnemyIdentifier eid = LeviathanBase.AddComponent<EnemyIdentifier>();
+            Statue stat = LeviathanBase.AddComponent<Statue>();
+            SphereCollider collider = LeviathanBase.AddComponent<SphereCollider>();
+            BossHealthBar bar = LeviathanBase.AddComponent<BossHealthBar>();
+            Rigidbody rb = LeviathanBase.AddComponent<Rigidbody>();
+            BossIdentifier bid = LeviathanBase.AddComponent<BossIdentifier>();
+
+            /* OUTA HERE BI- I mean this code is no longer needed, thank you for your service, here's your severence bonus
             // Loads act 2 bundle if it isn't already loaded
             var data = File.ReadAllBytes($@"{Application.productName}_Data\StreamingAssets\acts\act-2");
             if (!AssetLoader.LoadFromLoaded(@"acts/act-2", out Act2))
@@ -72,17 +86,18 @@ namespace ULTRAKIT.Loader.Injectors
             // Sets the scene to finish the process when it loads
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
+            */
         }
 
         public static GameObject GrabEnemy(string enemy)
         {
-            GameObject obj = AssetLoader.AssetFind<GameObject>("common", enemy);
+            GameObject obj = AssetLoader.AssetFind<GameObject>(enemy);
             if (obj != null)
             {
                 SetHealthBar(obj, enemy);
                 return obj;
             }
-            
+            UKLogger.LogWarning("THIS SHOULD NO LONGER RUN");
             obj = BossFind(enemy);
 
             if (obj == null)
@@ -95,6 +110,7 @@ namespace ULTRAKIT.Loader.Injectors
             return obj;
         }
 
+        /* AYO IT'S GONE
         private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             // If the scene loaded isn't part of act 2, unload the bundle (but keep assets pulled from it, such as the leviathan) and remove this function
@@ -134,7 +150,7 @@ namespace ULTRAKIT.Loader.Injectors
                 _init = true;
                 return;
             }
-        }
+        }*/
 
         public static GameObject BossFind(string name)
         {

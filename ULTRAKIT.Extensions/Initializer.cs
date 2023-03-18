@@ -17,6 +17,7 @@ namespace ULTRAKIT.Extensions
         {
             ConfigData.LoadConfig();
             CreateEvents();
+            AssetLoader.Init();
             Harmony harmony = new Harmony("ULTRAKIT.Extensions");
             harmony.PatchAll();
         }

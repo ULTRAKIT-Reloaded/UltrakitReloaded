@@ -1,15 +1,29 @@
-﻿using System;
+﻿using GameConsole.Commands;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using UnityEngine;
 
 namespace ULTRAKIT.Extensions
 {
     public static class AssetLoader
     {
+        public static Dictionary<string, string> ShortToFullAssets = new Dictionary<string, string>();
+
+        internal static void Init()
+        {
+            foreach (string asset in AssetManager.instance.assetDependencies.Keys)
+            {
+                string trim = asset.Split('/').Last();
+                if (!ShortToFullAssets.ContainsKey(trim))
+                    ShortToFullAssets.Add(trim, asset);
+            }
+        }
+
         /// <summary>
         /// Gets all objects of type T from an enumerable of generics.
         /// </summary>
@@ -31,65 +45,31 @@ namespace ULTRAKIT.Extensions
         /// <returns>A Unity Object of type T</returns>
         public static T AssetFind<T>(string name) where T : UnityEngine.Object
         {
-            T result = default;
-            T[] allAssets = Resources.FindObjectsOfTypeAll<T>();
-
-            foreach (T asset in allAssets)
-                if (asset.name == name) result = asset;
-            if (result == default)
-                UKLogger.LogWarning($"Could not find asset {name}");
+            string bundle = AssetManager.Instance.assetDependencies[name];
+            AssetManager.Instance.LoadBundles(new string[1] { bundle });
+            UnityEngine.Object obj = LoadAsset(bundle, name);
+            if (obj == null)
+            {
+                UKLogger.LogError($"Failed to load asset {name}");
+                return null;
+            }
+            if (!(obj is T result))
+            {
+                UKLogger.LogError($"Asset {name} is not a(n) {typeof(T)}");
+                return null;
+            }
             return result;
         }
 
-        /// <summary>
-        /// Searches for an asset of type T with the given name.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="bundle"></param>
-        /// <param name="name"></param>
-        /// <returns>A Unity Object of type T</returns>
-        public static T AssetFind<T>(this AssetBundle bundle, string name) where T : UnityEngine.Object
+        internal static UnityEngine.Object LoadAsset(string bundle, string name)
         {
-            return bundle.LoadAsset<T>(name) ?? default;
-        }
-
-        /// <summary>
-        /// Searches for an asset of type T with the given name in the specified bundle (often "common").
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="bundleName"></param>
-        /// <param name="name"></param>
-        /// <param name="searchActBundles"></param>
-        /// <returns>A Unity Object of type T</returns>
-        public static T AssetFind<T>(string bundleName, string name, bool searchActBundles = false) where T : UnityEngine.Object
-        {
-            AssetBundle bundle;
-            if (LoadFromLoaded(bundleName, out bundle))
+            if (!ShortToFullAssets.ContainsKey(name))
             {
-                return bundle.LoadAsset<T>(name) ?? default;
+                UKLogger.LogWarning($"Asset {name} not found");
+                return null;
             }
-
-            string target = $@"{Application.productName}_Data\StreamingAssets\{bundleName}";
-            string target2 = $@"{Application.productName}_Data\StreamingAssets\acts\{bundleName}";
-            if (File.Exists(target))
-            {
-                var data = File.ReadAllBytes(target);
-                bundle = AssetBundle.LoadFromMemory(data);
-                T asset = bundle.LoadAsset<T>(name) ?? default;
-                bundle.Unload(false);
-                return asset;
-            }
-            if (File.Exists(target2) && searchActBundles)
-            {
-                var data = File.ReadAllBytes(target2);
-                bundle = AssetBundle.LoadFromMemory(data);
-                T asset = bundle.LoadAsset<T>(name) ?? default;
-                bundle.Unload(false);
-                return asset;
-            }
-
-            UKLogger.LogWarning($"Could not find bundle {bundleName} or StreamingAssets file");
-            return default;
+            UnityEngine.Object obj = AssetManager.Instance.loadedBundles[bundle].LoadAsset(ShortToFullAssets[name]);
+            return obj;
         }
 
         /// <summary>
