@@ -43,11 +43,11 @@ namespace ULTRAKIT.Extensions
         /// <typeparam name="T"></typeparam>
         /// <param name="name"></param>
         /// <returns>A Unity Object of type T</returns>
-        public static T AssetFind<T>(string name) where T : UnityEngine.Object
+        public static T AssetFind<T>(string name, bool overridePath = false) where T : UnityEngine.Object
         {
-            string bundle = AssetManager.Instance.assetDependencies[name];
+            string bundle = AssetManager.Instance.assetDependencies[overridePath ? name : ShortToFullAssets[name]];
             AssetManager.Instance.LoadBundles(new string[1] { bundle });
-            UnityEngine.Object obj = LoadAsset(bundle, name);
+            UnityEngine.Object obj = LoadAsset(bundle, name, overridePath);
             if (obj == null)
             {
                 UKLogger.LogError($"Failed to load asset {name}");
@@ -61,14 +61,19 @@ namespace ULTRAKIT.Extensions
             return result;
         }
 
-        internal static UnityEngine.Object LoadAsset(string bundle, string name)
+        internal static UnityEngine.Object LoadAsset(string bundle, string name, bool overridePath)
         {
-            if (!ShortToFullAssets.ContainsKey(name))
+            if (!overridePath && !ShortToFullAssets.ContainsKey(name))
             {
                 UKLogger.LogWarning($"Asset {name} not found");
                 return null;
             }
-            UnityEngine.Object obj = AssetManager.Instance.loadedBundles[bundle].LoadAsset(ShortToFullAssets[name]);
+            if (overridePath && !AssetManager.Instance.assetDependencies.ContainsKey(name))
+            {
+                UKLogger.LogWarning($"Asset {name} not found");
+                return null;
+            }
+            UnityEngine.Object obj = AssetManager.Instance.loadedBundles[bundle].LoadAsset(overridePath ? name : ShortToFullAssets[name]);
             return obj;
         }
 

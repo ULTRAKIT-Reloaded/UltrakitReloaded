@@ -35,6 +35,9 @@ namespace ULTRAKIT.Core
         /// <returns></returns>
         public static IEnumerator InitializeComponents()
         {
+            while (AssetManager.Instance == null)
+                yield return new WaitForSeconds(0.5f);
+
             Extensions.Initializer.Initialize();
             Loader.Initializer.Initialize();
             LoadCommands();
@@ -89,6 +92,7 @@ namespace ULTRAKIT.Core
 
         private static void LoadCheats()
         {
+            if (!CheatsManager.Instance) return;
             CheatsManager.Instance.RegisterCheat(new Cheats.Refresher(), "ULTRAKIT");
             CheatsManager.Instance.RegisterCheat(new Cheats.ActivateHats(), "ULTRAKIT");
         }

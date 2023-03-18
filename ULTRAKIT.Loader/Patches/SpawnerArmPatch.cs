@@ -13,54 +13,6 @@ using UnityEngine.SceneManagement;
 
 namespace ULTRAKIT.Loader.Patches
 {
-    // Prevents the game elements from initializing when loading 5-4 in the background to grab the leviathan
-
-    [HarmonyPatch(typeof(CameraController))]
-    public static class CameraControllerPatch
-    {
-        [HarmonyPatch("Awake")]
-        [HarmonyPrefix]
-        public static bool AwakePrefix()
-        {
-            if (SpawnablesInjector._init)
-                return true;
-            return false;
-        }
-
-        [HarmonyPatch("Start")]
-        [HarmonyPrefix]
-        public static bool StartPrefix()
-        {
-            if (SpawnablesInjector._init)
-                return true;
-            return false;
-        }
-
-        [HarmonyPatch("OnEnable")]
-        [HarmonyPrefix]
-        public static bool OnEnablePrefix()
-        {
-            if (SpawnablesInjector._init)
-                return true;
-            return false;
-        }
-    }
-
-    [HarmonyPatch(typeof(SkyboxEnabler))]
-    public static class SkyboxEnablerPatch
-    {
-        [HarmonyPatch("OnEnable")]
-        [HarmonyPrefix]
-        public static bool OnEnablePrefix()
-        {
-            if (CameraController.Instance)
-                return true;
-            return false;
-        }
-    }
-
-    // End of background loading patching
-
     [HarmonyPatch(typeof(SpawnMenu))]
     public static class SpawnMenuPatch
     {

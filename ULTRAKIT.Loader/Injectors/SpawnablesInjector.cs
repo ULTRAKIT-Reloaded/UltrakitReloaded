@@ -11,9 +11,25 @@ using UnityEditor;
 using ULTRAKIT.Data;
 using ULTRAKIT.Extensions.Data;
 using ULTRAKIT.Extensions.Classes;
+using HarmonyLib;
 
 namespace ULTRAKIT.Loader.Injectors
 {
+    // DELETE
+    public class DEBUGME : MonoBehaviour
+    {
+        private void Start()
+        {
+            UKLogger.Log("Started");
+            UKLogger.Log($"Name: {gameObject.name}");
+            UKLogger.Log($"Children (count {transform.childCount}):");
+            Transform[] childs = transform.ListChildren() as Transform[];
+            foreach (Transform child in childs)
+                UKLogger.Log($"Child: {child.name}");
+            UKLogger.Log("Complete");
+        }
+    }
+
     public static class SpawnablesInjector
     {
         public static List<SpawnableObject> _enemies = new List<SpawnableObject>();
@@ -48,7 +64,7 @@ namespace ULTRAKIT.Loader.Injectors
                 spawnable.type = "Enemy";
                 spawnable.enemyType = pair.Value;
                 spawnable.spawnableType = SpawnableType.SimpleSpawn;
-                spawnable.gameObject = GrabEnemy(pair.Key);
+                spawnable.gameObject = GrabEnemy($"{pair.Key}.prefab");
                 spawnable.preview = new GameObject();
                 spawnable.gridIcon = Registries.spawn_sprites[pair.Key];
 
@@ -58,11 +74,11 @@ namespace ULTRAKIT.Loader.Injectors
 
         private static void PrepLeviathan()
         {
-            GameObject LeviathanBase = GameObject.Instantiate(new GameObject());
+            GameObject LeviathanBase = new GameObject("Leviathan");
             LeviathanBase.SetActive(false);
-            GameObject.Instantiate(AssetLoader.AssetFind<GameObject>("LeviathanHead.prefab"), LeviathanBase.transform);
-            GameObject.Instantiate(AssetLoader.AssetFind<GameObject>("LeviathanTail Variant.prefab"), LeviathanBase.transform);
-            GameObject.Instantiate(AssetLoader.AssetFind<GameObject>("SplashBig.prefab"), LeviathanBase.transform);
+            GameObject head = GameObject.Instantiate(AssetLoader.AssetFind<GameObject>("LeviathanHead.prefab"), LeviathanBase.transform);
+            GameObject tail = GameObject.Instantiate(AssetLoader.AssetFind<GameObject>("LeviathanTail Variant.prefab"), LeviathanBase.transform);
+            GameObject splash = GameObject.Instantiate(AssetLoader.AssetFind<GameObject>("SplashBig.prefab"), LeviathanBase.transform);
             LeviathanController controller = LeviathanBase.AddComponent<LeviathanController>();
             EnemyIdentifier eid = LeviathanBase.AddComponent<EnemyIdentifier>();
             Statue stat = LeviathanBase.AddComponent<Statue>();
@@ -70,6 +86,67 @@ namespace ULTRAKIT.Loader.Injectors
             BossHealthBar bar = LeviathanBase.AddComponent<BossHealthBar>();
             Rigidbody rb = LeviathanBase.AddComponent<Rigidbody>();
             BossIdentifier bid = LeviathanBase.AddComponent<BossIdentifier>();
+
+            controller.head = head.GetComponent<LeviathanHead>();
+            controller.tail = tail.GetComponent<LeviathanTail>();
+            controller.bigSplash = splash;
+            controller.headWeakPoint = head.transform.Find("Leviathan_SplineHook_Basic/Armature/Bone043/Bone001/Heart");
+            controller.tailWeakPoint = tail.transform.Find($"Leviathan_SplineHook_Basic/Armature/{GraphicsUtilities.BonePath(43, 86)}");
+            controller.headPartsParent = head.transform.Find("Leviathan_SplineHook_Basic/Armature/Bone043/Bone044");
+            controller.tailPartsParent = tail.transform.Find("Leviathan_SplineHook_Basic/Armature/Bone043/Bone044");
+            controller.phaseChangeHealth = 100;
+
+            eid.overrideFullName = "Leviathan";
+            eid.bigEnemy = true;
+            eid.damageBuffModifier = 1.5f;
+            eid.enemyClass = EnemyClass.Demon;
+            eid.enemyType = EnemyType.Leviathan;
+            eid.health = 200;
+            eid.healthBuffModifier = 1.5f;
+            eid.speedBuffModifier = 1.5f;
+            eid.unbounceable = true;
+            eid.weakPoint = head.transform.Find("Leviathan_SplineHook_Basic/Armature/Bone043/Bone001/Heart").gameObject;
+
+            stat.affectedByGravity = true;
+            stat.bigBlood = true;
+            stat.extraDamageMultiplier = 3;
+            stat.extraDamageZones = new List<GameObject> { head.transform.Find("Leviathan_SplineHook_Basic/Armature/Bone043/Bone001/Heart").gameObject };
+            stat.health = 200;
+            stat.specialDeath = true;
+
+            bar.bossName = "LEVIATHAN";
+            BossBarManager.HealthLayer b1 = new BossBarManager.HealthLayer();
+            BossBarManager.HealthLayer b2 = new BossBarManager.HealthLayer();
+            b1.health = 100;
+            b2.health = 100;
+            bar.healthLayers = new BossBarManager.HealthLayer[] { b1, b2 };
+
+            rb.isKinematic = true;
+
+            controller.head.shootPoint = head.transform.Find("Leviathan_SplineHook_Basic/Armature/Bone043/Bone001/ShootPoint");
+            controller.head.projectileSpreadAmount = 5;
+            controller.head.tracker = head.transform.Find("Leviathan_SplineHook_Basic/Armature/Bone043/Bone001");
+            controller.head.tailBone = head.transform.Find($"Leviathan_SplineHook_Basic/Armature/{GraphicsUtilities.BonePath(43, 56)}");
+            controller.head.lookAtPlayer = true;
+            controller.head.biteSwingCheck = head.transform.Find("Leviathan_SplineHook_Basic/Armature/Bone043/Bone001/SwingCheck").GetComponent<SwingCheck2>();
+            controller.head.warningFlash = AssetLoader.AssetFind<GameObject>("V2FlashUnparriable.prefab");
+
+            GameObject.DontDestroyOnLoad(LeviathanBase);
+
+            SpawnableObject spawnable = ScriptableObject.CreateInstance<SpawnableObject>();
+                spawnable.identifier = "leviathan";
+                spawnable.spawnableObjectType = SpawnableObject.SpawnableObjectDataType.Enemy;
+                spawnable.objectName = "leviathan";
+                spawnable.type = "Enemy";
+                spawnable.enemyType = EnemyType.Leviathan;
+                spawnable.spawnableType = SpawnableType.SimpleSpawn;
+                spawnable.gameObject = LeviathanBase;
+                //spawnable.gameObject = AssetLoader.AssetFind<GameObject>("LeviathanHead.prefab");
+                spawnable.preview = AssetLoader.AssetFind<GameObject>("Leviathan Preview Variant.prefab");
+                spawnable.gridIcon = Registries.spawn_sprites["Leviathan"];
+
+            SetHealthBar(LeviathanBase, "Leviathan");
+            _enemies.Add(spawnable);
 
             /* OUTA HERE BI- I mean this code is no longer needed, thank you for your service, here's your severence bonus
             // Loads act 2 bundle if it isn't already loaded
