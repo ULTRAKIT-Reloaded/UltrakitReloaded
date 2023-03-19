@@ -52,5 +52,16 @@ namespace ULTRAKIT.Extensions
                 }
             }
         }
+
+        public static string BonePath(int start, int end)
+        {
+            string s = string.Empty;
+            for (int i = start; i <= end; i++)
+            {
+                s += "Bone" + (i < 100 ? "0" + i.ToString() : i.ToString());
+                s += "/";
+            }
+            return s.Substring(0, s.Length - 1);
+        }
     }
 }

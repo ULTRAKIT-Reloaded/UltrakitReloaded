@@ -13,54 +13,6 @@ using UnityEngine.SceneManagement;
 
 namespace ULTRAKIT.Loader.Patches
 {
-    // Prevents the game elements from initializing when loading 5-4 in the background to grab the leviathan
-
-    [HarmonyPatch(typeof(CameraController))]
-    public static class CameraControllerPatch
-    {
-        [HarmonyPatch("Awake")]
-        [HarmonyPrefix]
-        public static bool AwakePrefix()
-        {
-            if (SpawnablesInjector._init)
-                return true;
-            return false;
-        }
-
-        [HarmonyPatch("Start")]
-        [HarmonyPrefix]
-        public static bool StartPrefix()
-        {
-            if (SpawnablesInjector._init)
-                return true;
-            return false;
-        }
-
-        [HarmonyPatch("OnEnable")]
-        [HarmonyPrefix]
-        public static bool OnEnablePrefix()
-        {
-            if (SpawnablesInjector._init)
-                return true;
-            return false;
-        }
-    }
-
-    [HarmonyPatch(typeof(SkyboxEnabler))]
-    public static class SkyboxEnablerPatch
-    {
-        [HarmonyPatch("OnEnable")]
-        [HarmonyPrefix]
-        public static bool OnEnablePrefix()
-        {
-            if (CameraController.Instance)
-                return true;
-            return false;
-        }
-    }
-
-    // End of background loading patching
-
     [HarmonyPatch(typeof(SpawnMenu))]
     public static class SpawnMenuPatch
     {
@@ -141,6 +93,23 @@ namespace ULTRAKIT.Loader.Patches
                 cust.offset = Vector3.up * leviHeight * 1.5f;
                 cust.size = 0.25f;
             }
+
+            SkinnedMeshRenderer renderer = __instance.transform.Find("Leviathan_SplineHook_Basic/ArmR").GetComponent<SkinnedMeshRenderer>();
+            renderer.material.color = Color.white;
+            renderer.material.mainTexture = renderer.material.mainTexture;
+        }
+    }
+
+    [HarmonyPatch(typeof(LeviathanTail))]
+    public static class LeviathanTailPatch
+    {
+        [HarmonyPatch("Awake")]
+        [HarmonyPrefix]
+        public static void StartPrefix(LeviathanTail __instance)
+        {
+            SkinnedMeshRenderer renderer = __instance.transform.Find("Leviathan_SplineHook_Basic/ArmR").GetComponent<SkinnedMeshRenderer>();
+            renderer.material.color = Color.white;
+            renderer.material.mainTexture = renderer.material.mainTexture;
         }
     }
 

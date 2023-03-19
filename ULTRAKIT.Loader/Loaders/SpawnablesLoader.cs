@@ -72,7 +72,7 @@ namespace ULTRAKIT.Loader.Loaders
                 switch (ukSpawnable.type)
                 {
                     case SpawnableObject.SpawnableObjectDataType.Tool: 
-                        spawnable.spawnableType = SpawnableType.ToolHand; 
+                        spawnable.spawnableType = SpawnableType.BuildHand; 
                         tools.Add(spawnable);
                         break;
                     case SpawnableObject.SpawnableObjectDataType.Enemy: 

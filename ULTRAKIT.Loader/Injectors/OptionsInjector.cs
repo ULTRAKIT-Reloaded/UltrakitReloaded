@@ -429,5 +429,5 @@ namespace ULTRAKIT.Loader.Injectors
             if (currentKey != null)
                 currentKey.SetValue(InputManager.instance.Inputs[currentKey.Binding.PrefName]);
         }
-    }
+    }    
 }

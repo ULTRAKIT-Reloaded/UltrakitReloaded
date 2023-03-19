@@ -39,5 +39,13 @@ namespace ULTRAKIT.Extensions
             string callName = Assembly.GetCallingAssembly().GetName().Name;
             Debug.LogError($@"[{callName}] {obj}");
         }
+
+        private static int counter = 0;
+        public static void LogCounter()
+        {
+            string callName = Assembly.GetCallingAssembly().GetName().Name;
+            Debug.LogError($@"[{callName}] {counter}");
+            counter++;
+        }
     }
 }

@@ -25,7 +25,6 @@ namespace ULTRAKIT.Core
         public static void Init()
         {
             ConfigData.config = Plugin.plugin.Config;
-            Extensions.Initializer.Initialize();
             SetSpawnerSprites();
             Plugin.plugin.StartCoroutine(InitializeComponents());
         }
@@ -36,41 +35,13 @@ namespace ULTRAKIT.Core
         /// <returns></returns>
         public static IEnumerator InitializeComponents()
         {
-            // If done before the bundle loads, patched objects don't exist yet and startup fails
+            while (AssetManager.Instance == null)
+                yield return new WaitForSeconds(0.5f);
 
-            AssetBundle common = null;
-            while (common == null)
-            {
-                AssetLoader.LoadFromLoaded("common", out common);
-                if (!Plugin.isUMM)
-                {
-                    string commonAssetBundlePath = Path.Combine(BepInEx.Paths.GameRootPath, "ULTRAKILL_Data\\StreamingAssets\\common");
-                    AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(commonAssetBundlePath);
-                    yield return request;
-                    int attempts = 0;
-                    while (request.assetBundle == null)
-                    {
-                        yield return new WaitForSeconds(0.3f);
-                        if (attempts > 5)
-                        {
-                            yield break;
-                        }
-                        request = AssetBundle.LoadFromFileAsync(commonAssetBundlePath);
-                        yield return request;
-                        attempts++;
-                    }
-                    common = request.assetBundle;
-                }
-                else
-                    yield return new WaitForSeconds(0.3f);
-            }
-
+            Extensions.Initializer.Initialize();
             Loader.Initializer.Initialize();
             LoadCommands();
             LoadHats();
-
-            if (!Plugin.isUMM)
-                common.Unload(false);
 
             SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.sceneUnloaded += OnSceneUnloaded;
@@ -103,12 +74,16 @@ namespace ULTRAKIT.Core
             Sprite levi = GraphicsUtilities.CreateSprite(Properties.Resources.levi_jpg, 128, 128);
             Sprite minos = GraphicsUtilities.CreateSprite(Properties.Resources.minos_jpg, 128, 128);
             Sprite wicked = GraphicsUtilities.CreateSprite(Properties.Resources.wicked_jpg, 128, 128);
+            Sprite d_drone = GraphicsUtilities.CreateSprite(Properties.Resources.d_drone_jpg, 128, 128);
+            Sprite cameye = GraphicsUtilities.CreateSprite(Properties.Resources.cameye_jpg, 128, 128);
 
             Registries.spawn_sprites.Add("DroneFlesh", fpeye);
             Registries.spawn_sprites.Add("DroneSkull Variant", fpface);
             Registries.spawn_sprites.Add("MinosBoss", minos);
             Registries.spawn_sprites.Add("Wicked", wicked);
             Registries.spawn_sprites.Add("Leviathan", levi);
+            Registries.spawn_sprites.Add("Drone Variant", d_drone);
+            Registries.spawn_sprites.Add("DroneFleshCamera Variant", cameye);
         }
 
         // Loaders
@@ -121,6 +96,7 @@ namespace ULTRAKIT.Core
 
         private static void LoadCheats()
         {
+            if (!CheatsManager.Instance) return;
             CheatsManager.Instance.RegisterCheat(new Cheats.Refresher(), "ULTRAKIT");
             CheatsManager.Instance.RegisterCheat(new Cheats.ActivateHats(), "ULTRAKIT");
         }
