@@ -74,12 +74,16 @@ namespace ULTRAKIT.Core
             Sprite levi = GraphicsUtilities.CreateSprite(Properties.Resources.levi_jpg, 128, 128);
             Sprite minos = GraphicsUtilities.CreateSprite(Properties.Resources.minos_jpg, 128, 128);
             Sprite wicked = GraphicsUtilities.CreateSprite(Properties.Resources.wicked_jpg, 128, 128);
+            Sprite d_drone = GraphicsUtilities.CreateSprite(Properties.Resources.d_drone_jpg, 128, 128);
+            Sprite cameye = GraphicsUtilities.CreateSprite(Properties.Resources.cameye_jpg, 128, 128);
 
             Registries.spawn_sprites.Add("DroneFlesh", fpeye);
             Registries.spawn_sprites.Add("DroneSkull Variant", fpface);
             Registries.spawn_sprites.Add("MinosBoss", minos);
             Registries.spawn_sprites.Add("Wicked", wicked);
             Registries.spawn_sprites.Add("Leviathan", levi);
+            Registries.spawn_sprites.Add("Drone Variant", d_drone);
+            Registries.spawn_sprites.Add("DroneFleshCamera Variant", cameye);
         }
 
         // Loaders

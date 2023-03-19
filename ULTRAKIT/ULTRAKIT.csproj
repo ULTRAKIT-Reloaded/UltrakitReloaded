@@ -151,6 +151,8 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Resources\cameye.jpg.bytes" />
+    <None Include="Resources\d_drone.jpg.bytes" />
     <None Include="Resources\fpeye.jpg.bytes" />
     <None Include="Resources\fpface.jpg.bytes" />
     <None Include="Resources\levi.jpg.bytes" />

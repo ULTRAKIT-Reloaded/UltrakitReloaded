@@ -26,6 +26,11 @@ namespace ULTRAKIT.Loader.Injectors
             { "DroneSkull Variant", EnemyType.Drone },
             { "MinosBoss", EnemyType.Minos },
             { "Wicked", EnemyType.Wicked },
+            { "Drone Variant", EnemyType.Drone },
+            { "DroneFleshCamera Variant", EnemyType.Drone }
+            // Same health as miniboss version { "SwordsMachine", EnemyType.Swordsmachine },
+            // Empty fields, needs to be done similar to Leviathan, TODO { "MinosArm" , EnemyType.Minos },
+
         };
 
         public static void Init()
@@ -136,40 +141,8 @@ namespace ULTRAKIT.Loader.Injectors
                 SetHealthBar(obj, enemy);
                 return obj;
             }
-            UKLogger.LogWarning("THIS SHOULD NO LONGER RUN");
-            obj = BossFind(enemy);
-
-            if (obj == null)
-            {
-                UKLogger.LogWarning($"Could not find enemy {enemy}");
-                return null;
-            }
-
-            SetHealthBar(obj, enemy);
-            return obj;
-        }
-
-        public static GameObject BossFind(string name)
-        {
-            //Find set Object in the prefabs
-            GameObject[] Pool = Resources.FindObjectsOfTypeAll<GameObject>();
-            foreach (GameObject obj in Pool)
-            {
-                if (obj.gameObject.name == name && (obj.gameObject.tag == "Enemy" || name == "Wicked"))
-                {
-                    if (!obj.activeSelf) obj.SetActive(true);
-
-                    // Fix lighting
-                    var smrs = obj.GetComponentsInChildren<SkinnedMeshRenderer>(true);
-                    foreach (var item in smrs)
-                    {
-                        item.gameObject.layer = LayerMask.NameToLayer("Outdoors");
-                    }
-                    return obj;
-                }
-            }
-            UKLogger.LogWarning($"Could not find boss {name}");
-            return default;
+            UKLogger.LogWarning($"Could not find enemy {enemy}");
+            return null;
         }
 
         public static void SetHealthBar(GameObject obj, string enemy)

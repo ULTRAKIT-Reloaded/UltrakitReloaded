@@ -63,6 +63,26 @@ namespace ULTRAKIT.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] cameye_jpg {
+            get {
+                object obj = ResourceManager.GetObject("cameye_jpg", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] d_drone_jpg {
+            get {
+                object obj = ResourceManager.GetObject("d_drone_jpg", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] fpeye_jpg {
             get {
                 object obj = ResourceManager.GetObject("fpeye_jpg", resourceCulture);
