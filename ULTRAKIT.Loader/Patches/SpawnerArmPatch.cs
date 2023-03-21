@@ -104,10 +104,38 @@ namespace ULTRAKIT.Loader.Patches
     public static class LeviathanTailPatch
     {
         [HarmonyPatch("Awake")]
-        [HarmonyPrefix]
-        public static void StartPrefix(LeviathanTail __instance)
+        [HarmonyPostfix]
+        public static void AwakePostfix(LeviathanTail __instance)
         {
             SkinnedMeshRenderer renderer = __instance.transform.Find("Leviathan_SplineHook_Basic/ArmR").GetComponent<SkinnedMeshRenderer>();
+            renderer.material.color = Color.white;
+            renderer.material.mainTexture = renderer.material.mainTexture;
+        }
+    }
+
+    [HarmonyPatch(typeof(ComplexSplasher))]
+    public static class LeviathanTeasePatch
+    {
+        [HarmonyPatch("Awake"), HarmonyPostfix]
+        public static void AwakePostfix(ComplexSplasher __instance)
+        {
+            Transform armature = __instance.transform.Find("Leviathan_SplineHook_Basic/ArmR");
+            if (armature == null) return;
+            SkinnedMeshRenderer renderer = armature.GetComponent<SkinnedMeshRenderer>();
+            renderer.material.color = Color.white;
+            renderer.material.mainTexture = renderer.material.mainTexture;
+        }
+    }
+
+    [HarmonyPatch(typeof(ObjectActivator))]
+    public static class LeviathanTeasePatch2
+    {
+        [HarmonyPatch("Start"), HarmonyPostfix]
+        public static void StartPostfix(ObjectActivator __instance)
+        {
+            Transform armature = __instance.transform.Find("Leviathan_HeadFix/Leviathan");
+            if (armature == null) return;
+            SkinnedMeshRenderer renderer = armature.GetComponent<SkinnedMeshRenderer>();
             renderer.material.color = Color.white;
             renderer.material.mainTexture = renderer.material.mainTexture;
         }
