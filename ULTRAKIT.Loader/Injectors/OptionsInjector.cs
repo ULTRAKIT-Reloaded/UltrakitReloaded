@@ -73,7 +73,7 @@ namespace ULTRAKIT.Loader.Injectors
                     if (OriginalPos.Count < 8)
                     {
                         Vector3 localPos = Menu.transform.Find(button).localPosition;
-                        Vector3 pos = new Vector3(localPos.x + 320, localPos.y, localPos.z);
+                        Vector3 pos = new Vector3(-610, localPos.y, localPos.z);
                         OriginalPos.Add(button, pos);
                     }
 
@@ -112,7 +112,7 @@ namespace ULTRAKIT.Loader.Injectors
             newBtn.name = internal_name;
             newBtn.GetComponent<RectTransform>().SetAsFirstSibling();
             newBtn.transform.Find("Text").GetComponent<Text>().text = name.ToUpper();
-            newBtn.transform.localPosition = new Vector3(inMenu ? -930 : -610, -245, 0);
+            newBtn.transform.localPosition = new Vector3(inMenu && !Rebuilding ? -930 : -610, -245, 0);
 
             GameObject Submenu = CreateSubmenu(name);
             Submenu.SetActive(false);
@@ -367,7 +367,7 @@ namespace ULTRAKIT.Loader.Injectors
             foreach (var pair in OriginalPos)
             {
                 Transform btn = Menu.transform.Find(pair.Key);
-                btn.localPosition = pair.Value + new Vector3(0, inMenu ? 0 : -35, 0);
+                btn.localPosition = pair.Value + new Vector3(0, inMenu  && !Rebuilding ? 0 : -35, 0);
                 btn.GetComponent<Button>().onClick.RemoveAllListeners();
             }
 
