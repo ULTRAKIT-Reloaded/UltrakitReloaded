@@ -18,6 +18,7 @@ namespace ULTRAKIT.Loader
     public class Initializer
     {
         public static bool isUMMInstalled = false;
+        public static bool isWaffle = false;
 
         /// <summary>
         /// Internal. Initializes the loaders.

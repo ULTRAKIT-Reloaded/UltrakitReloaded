@@ -27,6 +27,7 @@ namespace ULTRAKIT.Core
     {
         public static Plugin plugin;
         public static bool isUMM = false;
+        public static bool isWaffle = false;
 
         private void Awake()
         {
@@ -37,13 +38,23 @@ namespace ULTRAKIT.Core
             if (ConfigData.FixUnhardened)
                 CopyJson();
             Registries.Invoke = Invoke;
-            foreach (var mod in Chainloader.PluginInfos)
             {
-                if (mod.Value.Metadata.GUID == "UMM")
+                bool queueToBreak = false;
+                foreach (var mod in Chainloader.PluginInfos)
                 {
-                    isUMM = true;
-                    Loader.Initializer.isUMMInstalled = true;
-                    break;
+                    if (mod.Value.Metadata.GUID == "UMM")
+                    {
+                        isUMM = true;
+                        Loader.Initializer.isUMMInstalled = true;
+                        queueToBreak = true;
+                    }
+                    if (mod.Value.Metadata.GUID == "waffle.ultrakill.extraalts")
+                    {
+                        isWaffle = true;
+                        Loader.Initializer.isWaffle = true;
+                        queueToBreak = true;
+                    }
+                    if (queueToBreak) break;
                 }
             }
             Initializer.Init();
