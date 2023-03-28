@@ -37,6 +37,7 @@ namespace ULTRAKIT.Loader.Injectors
         {
             PrepLeviathan();
 
+            // Part that's breaking the bloodstain shader
             foreach (var pair in SpawnList)
             {
                 SpawnableObject spawnable = ScriptableObject.CreateInstance<SpawnableObject>();
@@ -52,6 +53,7 @@ namespace ULTRAKIT.Loader.Injectors
 
                 _enemies.Add(spawnable);
             }
+            //
         }
 
         private static void PrepLeviathan()
