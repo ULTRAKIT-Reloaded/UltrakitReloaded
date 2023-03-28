@@ -21,26 +21,40 @@ using Newtonsoft.Json;
 
 namespace ULTRAKIT.Core
 {
-    [BepInPlugin("ULTRAKIT.core_module", "ULTRAKIT Reloaded", "2.2.2")]
+    [BepInPlugin("ULTRAKIT.core_module", "ULTRAKIT Reloaded", "2.2.3")]
     [BepInDependency("UMM", BepInDependency.DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
         public static Plugin plugin;
         public static bool isUMM = false;
+        public static bool isWaffle = false;
 
         private void Awake()
         {
+            ConfigData.config = Config;
+            ConfigData.LoadConfig();
             //MakeDicts();
             plugin = this;
-            CopyJson();
+            if (ConfigData.FixUnhardened)
+                CopyJson();
             Registries.Invoke = Invoke;
-            foreach (var mod in Chainloader.PluginInfos)
             {
-                if (mod.Value.Metadata.GUID == "UMM")
+                bool queueToBreak = false;
+                foreach (var mod in Chainloader.PluginInfos)
                 {
-                    isUMM = true;
-                    Loader.Initializer.isUMMInstalled = true;
-                    break;
+                    if (mod.Value.Metadata.GUID == "UMM")
+                    {
+                        isUMM = true;
+                        Loader.Initializer.isUMMInstalled = true;
+                        queueToBreak = true;
+                    }
+                    if (mod.Value.Metadata.GUID == "waffle.ultrakill.extraalts")
+                    {
+                        isWaffle = true;
+                        Loader.Initializer.isWaffle = true;
+                        queueToBreak = true;
+                    }
+                    if (queueToBreak) break;
                 }
             }
             Initializer.Init();

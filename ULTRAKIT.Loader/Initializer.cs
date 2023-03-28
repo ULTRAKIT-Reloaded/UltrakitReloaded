@@ -18,6 +18,7 @@ namespace ULTRAKIT.Loader
     public class Initializer
     {
         public static bool isUMMInstalled = false;
+        public static bool isWaffle = false;
 
         /// <summary>
         /// Internal. Initializes the loaders.
@@ -27,7 +28,8 @@ namespace ULTRAKIT.Loader
             Harmony harmony = new Harmony("ULTRAKIT.Loader");
             harmony.PatchAll();
             HatLoader.Init();
-            SpawnablesInjector.Init();
+            // Too early, caused bloodstains to turn into squares
+            //SpawnablesInjector.Init();
             UltrakitInputManager.UpdateKeyBinds();
         }
     }
