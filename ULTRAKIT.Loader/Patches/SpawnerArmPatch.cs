@@ -24,7 +24,7 @@ namespace ULTRAKIT.Loader.Patches
             // The database persists across loads/scenes, so doing otherwise would keep adding spawnables to a list that already has them
             if (!SpawnablesLoader.init)
             {
-                // DELETE
+                // Doing it here does not cause the bloodstains to turn into squares
                 SpawnablesInjector.Init();
 
                 Registries.spawn_spawnablesDatabase.enemies = ___objects.enemies;

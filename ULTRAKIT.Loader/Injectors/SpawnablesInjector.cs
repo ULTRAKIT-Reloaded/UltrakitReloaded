@@ -18,7 +18,6 @@ namespace ULTRAKIT.Loader.Injectors
     public static class SpawnablesInjector
     {
         public static List<SpawnableObject> _enemies = new List<SpawnableObject>();
-        //static GameObject go;
 
         // ULTRAKILL enemies added to the spawner arm by default
         static Dictionary<string, EnemyType> SpawnList = new Dictionary<string, EnemyType>
@@ -36,7 +35,6 @@ namespace ULTRAKIT.Loader.Injectors
 
         public static void Init()
         {
-            //go = AssetLoader.AssetFind<GameObject>("Super Projectile Zombie.prefab");
             PrepLeviathan();
 
             foreach (var pair in SpawnList)

@@ -27,6 +27,7 @@ namespace ULTRAKIT.Loader
             Harmony harmony = new Harmony("ULTRAKIT.Loader");
             harmony.PatchAll();
             HatLoader.Init();
+            // Too early, caused bloodstains to turn into squares
             //SpawnablesInjector.Init();
             UltrakitInputManager.UpdateKeyBinds();
         }
