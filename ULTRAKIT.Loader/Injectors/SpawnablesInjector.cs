@@ -22,8 +22,8 @@ namespace ULTRAKIT.Loader.Injectors
         // ULTRAKILL enemies added to the spawner arm by default
         static Dictionary<string, EnemyType> SpawnList = new Dictionary<string, EnemyType>
         {
-            { "DroneFlesh", EnemyType.Drone },
-            { "DroneSkull Variant", EnemyType.Drone },
+            //{ "DroneFlesh", EnemyType.Drone },
+            //{ "DroneSkull Variant", EnemyType.Drone },
             { "MinosBoss", EnemyType.Minos },
             { "Wicked", EnemyType.Wicked },
             { "Drone Variant", EnemyType.Drone },
@@ -37,7 +37,6 @@ namespace ULTRAKIT.Loader.Injectors
         {
             PrepLeviathan();
 
-            // Part that's breaking the bloodstain shader
             foreach (var pair in SpawnList)
             {
                 SpawnableObject spawnable = ScriptableObject.CreateInstance<SpawnableObject>();
@@ -53,7 +52,6 @@ namespace ULTRAKIT.Loader.Injectors
 
                 _enemies.Add(spawnable);
             }
-            //
         }
 
         private static void PrepLeviathan()
