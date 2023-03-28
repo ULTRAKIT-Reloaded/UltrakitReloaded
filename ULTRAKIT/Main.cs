@@ -30,9 +30,12 @@ namespace ULTRAKIT.Core
 
         private void Awake()
         {
+            ConfigData.config = Config;
+            ConfigData.LoadConfig();
             //MakeDicts();
             plugin = this;
-            CopyJson();
+            if (ConfigData.FixUnhardened)
+                CopyJson();
             Registries.Invoke = Invoke;
             foreach (var mod in Chainloader.PluginInfos)
             {

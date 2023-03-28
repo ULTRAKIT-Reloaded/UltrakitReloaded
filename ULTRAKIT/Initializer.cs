@@ -24,7 +24,6 @@ namespace ULTRAKIT.Core
         /// </summary>
         public static void Init()
         {
-            ConfigData.config = Plugin.plugin.Config;
             SetSpawnerSprites();
             Plugin.plugin.StartCoroutine(InitializeComponents());
         }
