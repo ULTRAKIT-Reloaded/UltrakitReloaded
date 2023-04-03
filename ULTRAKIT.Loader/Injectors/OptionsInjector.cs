@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using ULTRAKIT.Extensions;
 using ULTRAKIT.Extensions.Data;
 using ULTRAKIT.Extensions.Managers;
-using ULTRAKIT.Extensions.ObjectClasses;
+using ULTRAKIT.Extensions.Classes;
 using ULTRAKIT.Loader.Loaders;
 using UnityEditor;
 using UnityEditor.Events;

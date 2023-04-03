@@ -23,6 +23,7 @@ namespace ULTRAKIT.Core
 {
     [BepInPlugin("ULTRAKIT.core_module", "ULTRAKIT Reloaded", "2.2.3")]
     [BepInDependency("UMM", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("waffle.ultrakill.extraalts", BepInDependency.DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
         public static Plugin plugin;
@@ -39,22 +40,18 @@ namespace ULTRAKIT.Core
                 CopyJson();
             Registries.Invoke = Invoke;
             {
-                bool queueToBreak = false;
                 foreach (var mod in Chainloader.PluginInfos)
                 {
                     if (mod.Value.Metadata.GUID == "UMM")
                     {
                         isUMM = true;
                         Loader.Initializer.isUMMInstalled = true;
-                        queueToBreak = true;
                     }
                     if (mod.Value.Metadata.GUID == "waffle.ultrakill.extraalts")
                     {
                         isWaffle = true;
                         Loader.Initializer.isWaffle = true;
-                        queueToBreak = true;
                     }
-                    if (queueToBreak) break;
                 }
             }
             Initializer.Init();

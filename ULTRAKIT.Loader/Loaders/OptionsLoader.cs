@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ULTRAKIT.Extensions;
 using ULTRAKIT.Extensions.Data;
-using ULTRAKIT.Extensions.ObjectClasses;
+using ULTRAKIT.Extensions.Classes;
 using ULTRAKIT.Loader.Injectors;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
