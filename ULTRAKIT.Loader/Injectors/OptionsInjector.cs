@@ -197,6 +197,7 @@ namespace ULTRAKIT.Loader.Injectors
                 t.text = $"--{setting.Heading}--";
                 t.alignment = TextAnchor.MiddleLeft;
                 t.horizontalOverflow = HorizontalWrapMode.Overflow;
+                t.fontSize -= 4;
                 CachedHeader = setting.Heading;
                 CachedMenu = setting.Section;
 

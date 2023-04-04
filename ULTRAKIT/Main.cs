@@ -21,7 +21,7 @@ using Newtonsoft.Json;
 
 namespace ULTRAKIT.Core
 {
-    [BepInPlugin("ULTRAKIT.core_module", "ULTRAKIT Reloaded", "2.2.3")]
+    [BepInPlugin("ULTRAKIT.core_module", "ULTRAKIT Reloaded", "2.2.4")]
     [BepInDependency("UMM", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("waffle.ultrakill.extraalts", BepInDependency.DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
