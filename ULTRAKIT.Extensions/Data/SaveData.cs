@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using ULTRAKIT.Extensions.ObjectClasses;
+using ULTRAKIT.Extensions.Classes;
 using UnityEngine;
 
 namespace ULTRAKIT.Extensions.Data

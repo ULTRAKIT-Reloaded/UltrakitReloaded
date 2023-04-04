@@ -307,8 +307,8 @@ namespace ULTRAKIT.Loader.Injectors
 
             var pageTop = (-10) - (buttonHeight * 4);
             var pageRect = pageGo.GetComponent<RectTransform>();
-            pageRect.offsetMax = new Vector2(-100, -130 + (Initializer.isWaffle ? 0 : buttonHeight * 2));
-            pageRect.offsetMin = new Vector2(-260, -160 + (Initializer.isWaffle ? 0 : buttonHeight * 2));
+            pageRect.offsetMax = new Vector2(-100, -130 + (Initializer.isWaffle ? buttonHeight * 2 : 0));
+            pageRect.offsetMin = new Vector2(-260, -160 + (Initializer.isWaffle ? buttonHeight * 2 : 0));
             // Keeps the button behind popup panels
             pageRect.SetAsFirstSibling();
 

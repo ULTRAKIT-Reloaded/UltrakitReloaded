@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using ULTRAKIT.Extensions;
 using ULTRAKIT.Extensions.Data;
 using ULTRAKIT.Extensions.Managers;
-using ULTRAKIT.Extensions.ObjectClasses;
+using ULTRAKIT.Extensions.Classes;
 using ULTRAKIT.Loader.Loaders;
 using UnityEditor;
 using UnityEditor.Events;
@@ -197,6 +197,7 @@ namespace ULTRAKIT.Loader.Injectors
                 t.text = $"--{setting.Heading}--";
                 t.alignment = TextAnchor.MiddleLeft;
                 t.horizontalOverflow = HorizontalWrapMode.Overflow;
+                t.fontSize -= 4;
                 CachedHeader = setting.Heading;
                 CachedMenu = setting.Section;
 

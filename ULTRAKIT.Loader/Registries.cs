@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using ULTRAKIT.Data;
 using ULTRAKIT.Extensions;
 using ULTRAKIT.Extensions.Interfaces;
-using ULTRAKIT.Extensions.ObjectClasses;
+using ULTRAKIT.Extensions.Classes;
 using UnityEngine;
 
 namespace ULTRAKIT.Loader

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using ULTRAKIT.Data;
 using ULTRAKIT.Extensions;
-using ULTRAKIT.Extensions.ObjectClasses;
+using ULTRAKIT.Extensions.Classes;
 using ULTRAKIT.Loader.Injectors;
 using ULTRAKIT.Loader.Loaders;
 

@@ -13,7 +13,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using ULTRAKIT.Extensions.Data;
 
-namespace ULTRAKIT.Extensions.ObjectClasses
+namespace ULTRAKIT.Extensions.Classes
 {
     [Serializable]
     public class SettingChangedEvent : UnityEvent<UKSetting> { }

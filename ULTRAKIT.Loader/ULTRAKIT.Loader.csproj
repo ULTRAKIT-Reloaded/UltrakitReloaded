@@ -129,6 +129,7 @@
     <Compile Include="Injectors\SpawnablesInjector.cs" />
     <Compile Include="Injectors\WeaponInjector.cs" />
     <Compile Include="Loaders\OptionsLoader.cs" />
+    <Compile Include="Patches\CustomHealthBarPatches.cs" />
     <Compile Include="Registries.cs" />
     <Compile Include="Loaders\SpawnablesLoader.cs" />
     <Compile Include="Patches\SpawnerArmPatch.cs" />

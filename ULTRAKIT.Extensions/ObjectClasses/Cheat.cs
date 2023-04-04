@@ -4,13 +4,15 @@ namespace ULTRAKIT.Extensions.Classes
 {
 	public class Cheat : ICheat
 	{
-		public static Cheat _lastInstance;
+		private static Cheat _lastInstance;
 
 		private bool active;
 
 		public Action EnableScript;
 		public Action DisableScript;
 		public Action UpdateScript;
+
+		public static Cheat Instance => _lastInstance;
 
 		public string LongName { get; set; }
 
