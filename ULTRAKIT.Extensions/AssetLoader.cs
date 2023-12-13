@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.AddressableAssets.ResourceLocators;
 
 namespace ULTRAKIT.Extensions
 {
@@ -14,9 +16,12 @@ namespace ULTRAKIT.Extensions
     {
         public static Dictionary<string, string> ShortToFullAssets = new Dictionary<string, string>();
 
-        internal static void Init()
+        internal static void Init(string unparsedAssetData)
         {
-            foreach (string asset in AssetManager.instance.assetDependencies.Keys)
+            string[] assets = unparsedAssetData.Split(new string[] { "=================================" }, StringSplitOptions.None);
+            assets = assets.Skip(1).Select(s => s.Split('\n')[1]).ToArray();
+            assets = assets.Select(s => s.Substring(6)).ToArray();
+            foreach (string asset in assets)
             {
                 string trim = asset.Split('/').Last();
                 if (!ShortToFullAssets.ContainsKey(trim))
@@ -37,17 +42,14 @@ namespace ULTRAKIT.Extensions
         }
 
         /// <summary>
-        /// <para>Searches through all loaded resources for an asset of type T with the given name.</para>
-        /// <para>[NOTE] It is recommended to use the bundleName overload.</para>
+        /// <para>Loads an asset of type T with the given name.</para>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="name"></param>
         /// <returns>A Unity Object of type T</returns>
-        public static T AssetFind<T>(string name, bool overridePath = false) where T : UnityEngine.Object
+        public static T AssetFind<T>(string name) where T : UnityEngine.Object
         {
-            string bundle = AssetManager.Instance.assetDependencies[overridePath ? name : ShortToFullAssets[name]];
-            AssetManager.Instance.LoadBundles(new string[1] { bundle });
-            UnityEngine.Object obj = LoadAsset(bundle, name, overridePath);
+            UnityEngine.Object obj = LoadAsset(name);
             if (obj == null)
             {
                 UKLogger.LogError($"Failed to load asset {name}");
@@ -61,41 +63,14 @@ namespace ULTRAKIT.Extensions
             return result;
         }
 
-        internal static UnityEngine.Object LoadAsset(string bundle, string name, bool overridePath)
+        internal static UnityEngine.Object LoadAsset(string name)
         {
-            if (!overridePath && !ShortToFullAssets.ContainsKey(name))
-            {
+            if (ShortToFullAssets.ContainsKey(name))
+                name = ShortToFullAssets[name];
+            UnityEngine.Object obj = Addressables.LoadAssetAsync<UnityEngine.Object>(name).WaitForCompletion();
+            if (obj == null)
                 UKLogger.LogWarning($"Asset {name} not found");
-                return null;
-            }
-            if (overridePath && !AssetManager.Instance.assetDependencies.ContainsKey(name))
-            {
-                UKLogger.LogWarning($"Asset {name} not found");
-                return null;
-            }
-            UnityEngine.Object obj = AssetManager.Instance.loadedBundles[bundle].LoadAsset(overridePath ? name : ShortToFullAssets[name]);
             return obj;
-        }
-
-        /// <summary>
-        /// Attempts to retrieve an already-loaded asset bundle, passing it through an `out` variable.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="result"></param>
-        /// <returns>`true` if successful, otherwise false.</returns>
-        public static bool LoadFromLoaded(string name, out AssetBundle result)
-        {
-            result = null;
-            IEnumerable<AssetBundle> loadedBundles = AssetBundle.GetAllLoadedAssetBundles();
-
-            foreach (AssetBundle bundle in loadedBundles)
-                if (bundle.name == name)
-                {
-                    result = bundle;
-                    return true;
-                }
-
-            return false;
         }
     }
 }

@@ -22,7 +22,7 @@ using UnityEngine.UI;
 
 namespace ULTRAKIT.Loader.Injectors
 {
-    [HarmonyPatch(typeof(CanvasController))]
+    /*[HarmonyPatch(typeof(CanvasController))]
     public class OptionsInjector
     {
         private static GameObject Menu, MenuButtonTemplate, SubmenuTemplate, TextTemplate, SliderTemplate, CheckboxTemplate, PickerTemplate, KeyTemplate;
@@ -390,7 +390,7 @@ namespace ULTRAKIT.Loader.Injectors
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             yield return null;
         }
-    }
+    }*/
 
     [HarmonyPatch(typeof(InputManager))]
     public class KeybindsInjector
@@ -430,5 +430,5 @@ namespace ULTRAKIT.Loader.Injectors
             if (currentKey != null)
                 currentKey.SetValue(InputManager.instance.Inputs[currentKey.Binding.PrefName]);
         }
-    }    
+    }
 }

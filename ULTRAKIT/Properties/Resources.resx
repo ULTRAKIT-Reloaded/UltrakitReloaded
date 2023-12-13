@@ -136,6 +136,9 @@
   <data name="minos_jpg" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\minos.jpg.bytes;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="rlocation_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\rlocation_1.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="ultrakit_tophat" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ultrakit_tophat.assetBundle;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

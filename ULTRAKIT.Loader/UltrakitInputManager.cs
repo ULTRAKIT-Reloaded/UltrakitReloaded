@@ -114,7 +114,7 @@ namespace ULTRAKIT.Loader
                 OptionsLoader.SetKeyBind("ULTRAKIT Reloaded", "Slot 20", KeyCode.Keypad9);
                 OptionsLoader.GetKeyBind("Slot 20", out Slot20);
             }
-            OptionsInjector.Rebuild();
+            //OptionsInjector.Rebuild();
         }
     }
 }

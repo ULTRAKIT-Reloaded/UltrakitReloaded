@@ -195,9 +195,9 @@ namespace ULTRAKIT.Loader.Loaders
         /// <param name="name"></param>
         public static void CreateMenu(string name)
         {
-            Registries.options_menusToAdd.Add(name);
+            /*Registries.options_menusToAdd.Add(name);
             if (CanvasController.Instance)
-                OptionsInjector.Rebuild();
+                OptionsInjector.Rebuild();*/
         }
 
         /// <summary>

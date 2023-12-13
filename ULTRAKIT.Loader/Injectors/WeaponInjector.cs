@@ -49,7 +49,7 @@ namespace ULTRAKIT.Loader.Injectors
                             {
                                 case 0: List<GameObject> buffer1 = __instance.revolverPierce.ToList(); buffer1.ReplaceOrAddTo(weapon.Prefab, slot); __instance.revolverPierce = buffer1.ToArray(); SetPref("rev0", weapon.Alt); break;
                                 case 1: List<GameObject> buffer2 = __instance.revolverRicochet.ToList(); buffer2.ReplaceOrAddTo(weapon.Prefab, slot); __instance.revolverRicochet = buffer2.ToArray(); SetPref("rev2", weapon.Alt); break;
-                                case 2: List<GameObject> buffer3 = __instance.revolverBerserker.ToList(); buffer3.ReplaceOrAddTo(weapon.Prefab, slot); __instance.revolverBerserker = buffer3.ToArray(); SetPref("rev1", weapon.Alt); break;
+                                case 2: List<GameObject> buffer3 = __instance.revolverTwirl.ToList(); buffer3.ReplaceOrAddTo(weapon.Prefab, slot); __instance.revolverTwirl = buffer3.ToArray(); SetPref("rev1", weapon.Alt); break;
                             }
                         } break;
                     case WeaponType.Shotgun:
@@ -161,13 +161,14 @@ namespace ULTRAKIT.Loader.Injectors
                         go.SetActive(false);
 
                         go.transform.RenderObject(LayerMask.NameToLayer("AlwaysOnTop"));
-                        
+
                         // Sets the weapon icon to the icon specified in the editor and sets the variation color.
                         // Grabs any variant color materials/renderers by searching for ".var" in the name, gives it an empty array if none found. Necessary to prevent null reference exceptions.
                         var wi = go.AddComponent<WeaponIcon>();
-                        wi.weaponIcon = weap.Icons[i];
-                        wi.glowIcon = weap.Icons[i];
-                        wi.variationColor = i;
+                        wi.weaponDescriptor = ScriptableObject.CreateInstance<WeaponDescriptor>();
+                        wi.weaponDescriptor.icon = weap.Icons[i];
+                        wi.weaponDescriptor.glowIcon = weap.Icons[i];
+                        wi.weaponDescriptor.variationColor = (WeaponVariant)i;
                         wi.SetFieldValue("variationColoredMaterials", go.GetComponentsInChildren<Material>().Where(k => k.name.Contains(".var")).ToArray() ?? new Material[0], true);
                         wi.SetFieldValue("variationColoredRenderers", go.GetComponentsInChildren<Renderer>().Where(k => k.material.name.Contains(".var")).ToArray() ?? new Renderer[0], true);
                         // Likely used for the shop, though the color setting is done manually in the ShopInjector
