@@ -31,7 +31,7 @@ namespace ULTRAKIT.Loader
             // Too early, caused bloodstains to turn into squares
             //SpawnablesInjector.Init();
             UltrakitInputManager.UpdateKeyBinds();
-            OptionsLoader.RegisterCheckbox("ULTRAKIT Reloaded", "Tweaks", "Enable Overhead Health Bars", "ultrakit.healthBars", false);
+            //OptionsLoader.RegisterCheckbox("ULTRAKIT Reloaded", "Tweaks", "Enable Overhead Health Bars", "ultrakit.healthBars", false);
         }
     }
 }

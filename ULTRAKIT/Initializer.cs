@@ -34,10 +34,10 @@ namespace ULTRAKIT.Core
         /// <returns></returns>
         public static IEnumerator InitializeComponents()
         {
-            while (AssetManager.Instance == null)
+            while (AssetHelper.Instance == null)
                 yield return new WaitForSeconds(0.5f);
 
-            Extensions.Initializer.Initialize();
+            Extensions.Initializer.Initialize(Properties.Resources.rlocation_1);
             Loader.Initializer.Initialize();
             LoadCommands();
             LoadHats();

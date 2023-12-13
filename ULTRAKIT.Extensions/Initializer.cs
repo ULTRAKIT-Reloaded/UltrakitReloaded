@@ -13,10 +13,10 @@ namespace ULTRAKIT.Extensions
         /// <summary>
         /// Internal. Initializes the Extensions.
         /// </summary>
-        public static void Initialize()
+        public static void Initialize(string assetFileData)
         {
             CreateEvents();
-            AssetLoader.Init();
+            AssetLoader.Init(assetFileData);
             Harmony harmony = new Harmony("ULTRAKIT.Extensions");
             harmony.PatchAll();
         }

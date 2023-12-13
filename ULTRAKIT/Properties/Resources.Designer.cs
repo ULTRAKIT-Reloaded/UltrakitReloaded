@@ -121,6 +121,26 @@ namespace ULTRAKIT.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PKEY is asset address
+        ///RTYPE is the resource type
+        ///
+        ///FYI: This list is missing some assets.
+        ///
+        ///=================================
+        ///PKEY: assets_assets_assets/animations_26da907a095bff1fc8f413d11a07450a.bundle
+        ///INTID: G:ULTRAKILL/ULTRAKILL_Data/StreamingAssets/aa\StandaloneWindows64\assets_assets_assets/animations.bundle
+        ///RTYPE: IAssetBundleResource
+        ///=================================
+        ///PKEY: assets_assets_assets/fonts_b13ed7f70d146898348f1fbb9c68885e.bundle
+        ///INTID: G:ULTRAKILL/ULTRAKILL_Data/StreamingAssets/aa\Standalone [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string rlocation_1 {
+            get {
+                return ResourceManager.GetString("rlocation_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] ultrakit_tophat {

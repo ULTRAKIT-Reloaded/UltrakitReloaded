@@ -65,9 +65,9 @@ namespace ULTRAKIT.Loader.Injectors
             EnemyIdentifier eid = LeviathanBase.AddComponent<EnemyIdentifier>();
             Statue stat = LeviathanBase.AddComponent<Statue>();
             SphereCollider collider = LeviathanBase.AddComponent<SphereCollider>();
-            BossHealthBar bar = LeviathanBase.AddComponent<BossHealthBar>();
             Rigidbody rb = LeviathanBase.AddComponent<Rigidbody>();
             BossIdentifier bid = LeviathanBase.AddComponent<BossIdentifier>();
+            BossHealthBar bar = LeviathanBase.AddComponent<BossHealthBar>();
 
             controller.head = head.GetComponent<LeviathanHead>();
             controller.tail = tail.GetComponent<LeviathanTail>();
@@ -97,11 +97,11 @@ namespace ULTRAKIT.Loader.Injectors
             stat.specialDeath = true;
 
             bar.bossName = "LEVIATHAN";
-            BossBarManager.HealthLayer b1 = new BossBarManager.HealthLayer();
-            BossBarManager.HealthLayer b2 = new BossBarManager.HealthLayer();
+            HealthLayer b1 = new HealthLayer();
+            HealthLayer b2 = new HealthLayer();
             b1.health = 100;
             b2.health = 100;
-            bar.healthLayers = new BossBarManager.HealthLayer[] { b1, b2 };
+            bar.healthLayers = new HealthLayer[] { b1, b2 };
 
             rb.isKinematic = true;
 
