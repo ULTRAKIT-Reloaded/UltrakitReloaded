@@ -155,12 +155,13 @@ namespace ULTRAKIT.Loader.Injectors
             }
 
             // Sets health bars to remain over the boss's head to avoid covering the entire screen
-            CustomHealthbarPos cust = bhb?.gameObject.AddComponent<CustomHealthbarPos>();
+            // ENEMY POSITION CURRENTLY UNGRABBABLE, HEALTH BARS WILL NOT TRACK
+            /*CustomHealthbarPos cust = bhb?.gameObject.AddComponent<CustomHealthbarPos>();
             if (cust)
             {
                 cust.offset = Vector3.up * 6;
                 cust.enabled = false;
-            }
+            }*/
         }
     }
 }

@@ -11,7 +11,8 @@ using UnityEngine;
 
 namespace ULTRAKIT.Loader.Patches
 {
-    [HarmonyPatch(typeof(BossHealthBar))]
+    // HEALTH BARS CURRENTLY UNTRACKABLE
+    /*[HarmonyPatch(typeof(BossHealthBar))]
     public static class BossHealthBarPatch
     {
         [HarmonyPatch("Awake"), HarmonyPrefix]
@@ -37,7 +38,7 @@ namespace ULTRAKIT.Loader.Patches
                 cust.enabled = true;
             }
         }
-    }
+    }*/
 
     [HarmonyPatch(typeof(MinosBoss))]
     public static class MinosPatch

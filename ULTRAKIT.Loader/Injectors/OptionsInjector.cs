@@ -403,7 +403,7 @@ namespace ULTRAKIT.Loader.Injectors
 
         public static void SetKeys(InputManager instance)
         {
-            instance.bindings = instance.bindings.AddRangeToArray(Registries.key_registry.Select(n => n.Value.Binding).Where(s => !instance.bindings.Contains(s)).ToArray());
+            instance.legacyBindings = instance.legacyBindings.AddRangeToArray(Registries.key_registry.Select(n => n.Value.Binding).Where(s => !instance.legacyBindings.Contains(s)).ToArray());
 
             Registries.key_states = Registries.key_registry.ToDictionary(item => item.Key, item => new InputActionState(item.Value.Binding.Action));
 
@@ -415,16 +415,17 @@ namespace ULTRAKIT.Loader.Injectors
                 setting.Binding.Action.AddBinding().WithGroup("Keyboard");
                 setting.Binding.Action.Enable();
             }
-            instance.UpdateBindings();
+            instance.UpgradeBindings();
         }
     }
+
 
     [HarmonyPatch(typeof(ControlsOptions))]
     public class ControlsOptionsPatch
     {
         public static UKKeySetting currentKey;
 
-        [HarmonyPatch("OnGUI"), HarmonyPostfix]
+        [HarmonyPatch("OnActionChanged"), HarmonyPostfix]
         static void OnGUIPostix()
         {
             if (currentKey != null)
