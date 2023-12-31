@@ -169,16 +169,14 @@ namespace ULTRAKIT.Loader.Injectors
                         wi.weaponDescriptor.icon = weap.Icons[i];
                         wi.weaponDescriptor.glowIcon = weap.Icons[i];
                         wi.weaponDescriptor.variationColor = (WeaponVariant)i;
-                        wi.SetFieldValue("variationColoredMaterials", go.GetComponentsInChildren<Material>().Where(k => k.name.Contains(".var")).ToArray() ?? new Material[0], true);
-                        wi.SetFieldValue("variationColoredRenderers", go.GetComponentsInChildren<Renderer>().Where(k => k.material.name.Contains(".var")).ToArray() ?? new Renderer[0], true);
+                        // BROKEN HERE
+                        //wi.SetFieldValue("variationColoredMaterials", go.GetComponentsInChildren<Material>().Where(k => k.name.Contains(".var")).ToArray() ?? new Material[0], true);
+                        wi.variationColoredRenderers = go.GetComponentsInChildren<Renderer>().Where(k => k.material.name.Contains(".var")).ToArray() ?? new Renderer[0];
                         // Likely used for the shop, though the color setting is done manually in the ShopInjector
-                        wi.SetFieldValue("variationColoredImages", new Image[0], true);
+                        wi.variationColoredImages = new Image[0];
 
                         // Adds weapons to the style freshness list, which makes freshness functional and keeps the game from throwing a warning every frame
-                        var field = typeof(StyleHUD).GetField("weaponFreshness", BindingFlags.NonPublic | BindingFlags.Instance);
-                        Dictionary<GameObject, float> freshnessList = field.GetValue(MonoSingleton<StyleHUD>.Instance) as Dictionary<GameObject, float>;
-                        freshnessList.Add(go, 10f);
-                        field.SetValue(MonoSingleton<StyleHUD>.Instance, freshnessList);
+                        StyleHUD.Instance.weaponFreshness.Add(go, 10f);
 
                         slot.Add(go);
 
@@ -339,6 +337,16 @@ namespace ULTRAKIT.Loader.Injectors
             // Tricks the game into thinking everything is unlocked so you can equip modded variants for vanilla weapons
             if (loadedWeapons.Contains(gear))
                 __result = 1;
+        }
+    }
+
+    [HarmonyPatch(typeof(StyleHUD))]
+    public class StyleHUDPatch
+    {
+        [HarmonyPatch("Start"), HarmonyPrefix]
+        static void StartPrefix(StyleHUD __instance)
+        {
+            __instance.weaponFreshness = new Dictionary<GameObject, float>();
         }
     }
 }

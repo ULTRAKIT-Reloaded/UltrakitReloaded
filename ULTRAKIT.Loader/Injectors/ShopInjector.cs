@@ -8,6 +8,7 @@ using ULTRAKIT.Extensions;
 using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.Events;
+using TMPro;
 
 namespace ULTRAKIT.Loader.Injectors
 {
@@ -110,7 +111,7 @@ namespace ULTRAKIT.Loader.Injectors
             rect.SetAsFirstSibling();
 
             // Base panel is labelled using the first weapon name
-            go.GetComponentInChildren<Text>().text = weap.Names[0].ToUpper();
+            go.GetComponentInChildren<TextMeshProUGUI>().text = weap.Names[0].ToUpper();
 
             go.GetComponent<ShopButton>().deactivated = true;
             go.GetComponent<Button>().onClick.AddListener(() =>
@@ -159,7 +160,7 @@ namespace ULTRAKIT.Loader.Injectors
                 }
 
                 // Searches about four steps down the heirarchy of each variant panel for the equip order text, then sets it to the weapon's saved order data
-                Text[] orderInfo = go.GetComponentsInChildren<Text>().Where(k => k.transform.parent.name == "Order").ToArray();
+                TextMeshProUGUI[] orderInfo = go.GetComponentsInChildren<TextMeshProUGUI>(true).Where(k => k.transform.parent.name == "Order").ToArray();
                 for (int n = 0; n < weap.Variants.Length; n++)
                 {
                     orderInfo[n].text = (weap.equipOrder[n] + 1).ToString();
@@ -172,7 +173,7 @@ namespace ULTRAKIT.Loader.Injectors
         }
 
         static GameObject CreateVariantOption(GameObject panel, Weapon weapon, int i)
-        {
+        { 
             var go = GameObject.Instantiate(variantTemplate, panel.transform);
             var info = go.GetComponent<VariationInfo>();
             info.enabled = false;
@@ -182,7 +183,7 @@ namespace ULTRAKIT.Loader.Injectors
             cbget.variationNumber = i;
 
             // Sets variant name
-            info.transform.Find("Text").GetComponent<Text>().text = weapon.Names[i];
+            info.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = weapon.Names[i];
             // Disables "Already Owned" text - Possible use in future
             info.transform.Find("Text (1)").gameObject.SetActive(false);
 
@@ -239,7 +240,7 @@ namespace ULTRAKIT.Loader.Injectors
             // Top order button
             UnityAction ordU = () =>
             {
-                Text[] orderInfo = info.transform.parent.GetComponentsInChildren<Text>().Where(k => k.transform.parent.name == "Order").ToArray();
+                TextMeshProUGUI[] orderInfo = info.transform.parent.GetComponentsInChildren<TextMeshProUGUI>().Where(k => k.transform.parent.name == "Order").ToArray();
 
                 // Finds the target number (current + 1), sets the weapon currently at the target number to current number, then sets current to the target number
                 int target = (int)Mathf.Repeat(weapon.equipOrder[i] + 1, weapon.Variants.Length);
@@ -257,7 +258,7 @@ namespace ULTRAKIT.Loader.Injectors
             // Bottom order button
             UnityAction ordD = () =>
             {
-                Text[] orderInfo = info.transform.parent.GetComponentsInChildren<Text>().Where(k => k.transform.parent.name == "Order").ToArray();
+                TextMeshProUGUI[] orderInfo = info.transform.parent.GetComponentsInChildren<TextMeshProUGUI>().Where(k => k.transform.parent.name == "Order").ToArray();
 
                 // Finds the target number (current - 1), sets the weapon currently at the target number to current number, then sets current to the target number
                 int target = (int)Mathf.Repeat(weapon.equipOrder[i] - 1, weapon.Variants.Length);
@@ -312,7 +313,7 @@ namespace ULTRAKIT.Loader.Injectors
             // Keeps the button behind popup panels
             pageRect.SetAsFirstSibling();
 
-            pageGo.GetComponentInChildren<Text>().text = $"PAGE {page + 1}";
+            pageGo.GetComponentInChildren<TextMeshProUGUI>().text = $"PAGE {page + 1}";
 
             // Replaces button template function
             pageGo.GetComponent<ShopButton>().deactivated = true;
@@ -331,12 +332,13 @@ namespace ULTRAKIT.Loader.Injectors
             // Loops page if necessary
             page = (int)Mathf.Repeat(page, pages.Count);
 
-            pageButton.GetComponentInChildren<Text>().text = $"PAGE {page + 1}";
+            pageButton.GetComponentInChildren<TextMeshProUGUI>(true).text = $"PAGE {page + 1}";
             var index = 0;
             foreach (var pageList in pages)
             {
                 foreach (var pageObj in pageList)
                 {
+                    // BROKEN HERE
                     pageObj.SetActive(page == index);
                 }
                 index++;
