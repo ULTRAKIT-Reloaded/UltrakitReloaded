@@ -339,8 +339,8 @@ namespace ULTRAKIT.Loader.Injectors
                 foreach (var pageObj in pageList)
                 {
                     // BROKEN HERE
-                    UKLogger.Log(pageObj?.name ?? "null");
-                    pageObj.SetActive(page == index);
+                    if (pageObj != null)
+                        pageObj.SetActive(page == index);
                 }
                 index++;
             }
